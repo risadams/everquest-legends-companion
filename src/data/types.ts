@@ -75,6 +75,40 @@ export interface ProgressionBand {
   roleTips: Partial<Record<'tank' | 'healer' | 'dps' | 'support', string>>;
 }
 
+export type MonsterKind = 'named' | 'raid' | 'notable';
+
+export interface Monster {
+  id: string;
+  name: string;
+  zoneId: string;
+  lvlMin: number;
+  lvlMax: number;
+  kind: MonsterKind;
+  /** where in the zone to find it */
+  where: string;
+  loot?: string[];
+  notes?: string;
+}
+
+export type QuestType = 'turn-in' | 'item' | 'class';
+
+export interface Quest {
+  id: string;
+  name: string;
+  type: QuestType;
+  startZoneId: string;
+  giver: string;
+  levelMin: number;
+  levelMax: number;
+  /** race alignments that can realistically do this quest (faction) */
+  forAlignments: Alignment[];
+  /** class ids this quest is for; empty = everyone */
+  forClasses: string[];
+  summary: string;
+  reward: string;
+  repeatable: boolean;
+}
+
 export interface CharacterProfile {
   id: string;
   name: string;
