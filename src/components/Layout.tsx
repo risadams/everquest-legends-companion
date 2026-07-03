@@ -15,6 +15,7 @@ export default function Layout() {
           <NavLink to="/classes">Races &amp; Classes</NavLink>
           <NavLink to="/bestiary">Bestiary</NavLink>
           <NavLink to="/quests">Quests</NavLink>
+          <NavLink to="/macros">Macros</NavLink>
           <NavLink to="/progression">Progression</NavLink>
           <NavLink to="/character">My Character</NavLink>
         </nav>

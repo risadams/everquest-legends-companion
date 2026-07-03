@@ -55,6 +55,13 @@ export default function Home() {
             actually do.
           </p>
         </Link>
+        <Link to="/macros" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>⌨ Macro Guide</h3>
+          <p className="small muted">
+            Ready-to-build social macros for your combo — including one-button cross-class rotations
+            unique to the 3-class system.
+          </p>
+        </Link>
         <Link to="/progression" className="card" style={{ color: 'inherit' }}>
           <h3 style={{ marginTop: 0 }}>📜 Progression Guide</h3>
           <p className="small muted">

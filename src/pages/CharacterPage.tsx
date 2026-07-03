@@ -270,7 +270,8 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
                 ))}
               </ul>
               <p className="small">
-                <Link to="/bestiary">Full bestiary →</Link> · <Link to="/quests">Quest guide →</Link>
+                <Link to="/bestiary">Full bestiary →</Link> · <Link to="/quests">Quest guide →</Link> ·{' '}
+                <Link to="/macros">Macros for your combo →</Link>
               </p>
             </>
           )}

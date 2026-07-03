@@ -9,6 +9,7 @@ import Progression from './pages/Progression';
 import CharacterPage from './pages/CharacterPage';
 import Bestiary from './pages/Bestiary';
 import Quests from './pages/Quests';
+import Macros from './pages/Macros';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/classes" element={<RacesClasses />} />
             <Route path="/bestiary" element={<Bestiary />} />
             <Route path="/quests" element={<Quests />} />
+            <Route path="/macros" element={<Macros />} />
             <Route path="/progression" element={<Progression />} />
             <Route path="/character" element={<CharacterPage />} />
           </Route>

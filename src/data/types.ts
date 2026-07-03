@@ -109,6 +109,29 @@ export interface Quest {
   repeatable: boolean;
 }
 
+export type MacroCategory =
+  | 'combat'
+  | 'pulling'
+  | 'healing'
+  | 'pet'
+  | 'control'
+  | 'travel'
+  | 'safety';
+
+export interface MacroDef {
+  id: string;
+  name: string;
+  category: MacroCategory;
+  /** any of these classes unlocks the macro; empty = useful for everyone */
+  forClasses: string[];
+  /** if set, ALL of these classes must be in the combo (cross-class synergy) */
+  requiresAll?: string[];
+  /** social window lines, max 5 (the in-game limit) */
+  lines: string[];
+  description: string;
+  tips?: string;
+}
+
 export interface CharacterProfile {
   id: string;
   name: string;
