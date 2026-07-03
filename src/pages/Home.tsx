@@ -41,6 +41,20 @@ export default function Home() {
             coverage before you commit.
           </p>
         </Link>
+        <Link to="/bestiary" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>🐉 Bestiary</h3>
+          <p className="small muted">
+            Nameds, raid dragons, and famous camps — levels, locations, and the loot that made them
+            legends.
+          </p>
+        </Link>
+        <Link to="/quests" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>✉ Quest Guide</h3>
+          <p className="small muted">
+            Repeatable XP turn-ins and the iconic item quests — filtered to what your character can
+            actually do.
+          </p>
+        </Link>
         <Link to="/progression" className="card" style={{ color: 'inherit' }}>
           <h3 style={{ marginTop: 0 }}>📜 Progression Guide</h3>
           <p className="small muted">

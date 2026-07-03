@@ -1,8 +1,10 @@
-import type { CharacterProfile, Role, Zone } from '../data/types';
+import type { CharacterProfile, Monster, Quest, Role, Zone } from '../data/types';
 import { ZONES, ZONE_BY_ID } from '../data/zones';
 import { CLASS_BY_ID } from '../data/classes';
 import { RACE_BY_ID } from '../data/races';
 import { bandForLevel } from '../data/progression';
+import { QUESTS } from '../data/quests';
+import { MONSTERS } from '../data/monsters';
 
 // ── Zone graph ──────────────────────────────────────────────
 
@@ -214,6 +216,70 @@ export function recommendZones(
 
   recs.sort((a, b) => b.score - a.score);
   return recs.slice(0, limit);
+}
+
+// ── Quest & monster recommendations ─────────────────────────
+
+export function questAvailable(quest: Quest, character: CharacterProfile): boolean {
+  const race = RACE_BY_ID[character.raceId];
+  if (!race || !quest.forAlignments.includes(race.alignment)) return false;
+  if (quest.forClasses.length > 0 && !quest.forClasses.some((c) => character.classIds.includes(c)))
+    return false;
+  return true;
+}
+
+export interface QuestRecommendation {
+  quest: Quest;
+  status: 'now' | 'soon' | 'later';
+}
+
+export function recommendQuests(
+  character: CharacterProfile,
+  limit = 6
+): QuestRecommendation[] {
+  const recs: QuestRecommendation[] = [];
+  for (const quest of QUESTS) {
+    if (!questAvailable(quest, character)) continue;
+    let status: QuestRecommendation['status'];
+    if (character.level >= quest.levelMin - 1 && character.level <= quest.levelMax) {
+      status = 'now';
+    } else if (character.level < quest.levelMin - 1 && quest.levelMin - character.level <= 6) {
+      status = 'soon';
+    } else {
+      continue;
+    }
+    recs.push({ quest, status });
+  }
+  recs.sort((a, b) => {
+    if (a.status !== b.status) return a.status === 'now' ? -1 : 1;
+    const am = (a.quest.levelMin + a.quest.levelMax) / 2;
+    const bm = (b.quest.levelMin + b.quest.levelMax) / 2;
+    return Math.abs(am - character.level) - Math.abs(bm - character.level);
+  });
+  return recs.slice(0, limit);
+}
+
+export type MonsterFit = 'target' | 'stretch' | 'trophy' | 'out-of-reach';
+
+/** How a monster relates to a character's level (solo-group scale). */
+export function monsterFit(monster: Monster, level: number): MonsterFit {
+  if (level >= monster.lvlMin && level <= monster.lvlMax + 3) return 'target';
+  if (level >= monster.lvlMin - 4 && level < monster.lvlMin) return 'stretch';
+  if (level > monster.lvlMax + 3) return 'trophy';
+  return 'out-of-reach';
+}
+
+export function huntTargets(character: CharacterProfile, limit = 6): Monster[] {
+  return MONSTERS.filter((m) => {
+    const fit = monsterFit(m, character.level);
+    return fit === 'target' || fit === 'stretch';
+  })
+    .sort((a, b) => {
+      const am = (a.lvlMin + a.lvlMax) / 2;
+      const bm = (b.lvlMin + b.lvlMax) / 2;
+      return Math.abs(am - character.level) - Math.abs(bm - character.level);
+    })
+    .slice(0, limit);
 }
 
 // ── Milestones & summary ────────────────────────────────────

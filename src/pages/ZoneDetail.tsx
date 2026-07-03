@@ -4,7 +4,9 @@ import ZoneMap from '../components/ZoneMap';
 import { FitBadge } from '../components/ZoneCard';
 import { TYPE_LABELS } from '../components/mapUtils';
 import { useCharacters } from '../context/CharacterContext';
-import { levelFit, roleCoverage } from '../lib/advisor';
+import { levelFit, roleCoverage, monsterFit } from '../lib/advisor';
+import { MONSTERS_BY_ZONE, KIND_LABELS } from '../data/monsters';
+import { QUESTS_BY_ZONE } from '../data/quests';
 
 export default function ZoneDetail() {
   const { zoneId } = useParams();
@@ -114,6 +116,67 @@ export default function ZoneDetail() {
                   <li key={d}>{d}</li>
                 ))}
               </ul>
+            </>
+          )}
+
+          {(MONSTERS_BY_ZONE[zone.id] ?? []).length > 0 && (
+            <>
+              <h3>Notable monsters</h3>
+              <table className="data">
+                <thead>
+                  <tr>
+                    <th>Monster</th>
+                    <th>Level</th>
+                    <th>Where / carries</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MONSTERS_BY_ZONE[zone.id].map((m) => (
+                    <tr key={m.id}>
+                      <td>
+                        {m.name}
+                        <div>
+                          <span className={`badge ${m.kind === 'raid' ? 'danger' : m.kind === 'named' ? 'gold' : ''}`}>
+                            {KIND_LABELS[m.kind]}
+                          </span>{' '}
+                          {active && monsterFit(m, active.level) === 'target' && (
+                            <span className="badge good">good target</span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        {m.lvlMin}
+                        {m.lvlMax !== m.lvlMin ? `–${m.lvlMax}` : ''}
+                      </td>
+                      <td className="small">
+                        {m.where}
+                        {m.loot && m.loot.length > 0 && (
+                          <div className="muted">{m.loot.join(' · ')}</div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="small">
+                <Link to="/bestiary">Full bestiary →</Link>
+              </p>
+            </>
+          )}
+
+          {(QUESTS_BY_ZONE[zone.id] ?? []).length > 0 && (
+            <>
+              <h3>Quests starting here</h3>
+              <ul className="tight small">
+                {QUESTS_BY_ZONE[zone.id].map((q) => (
+                  <li key={q.id}>
+                    <strong>{q.name}</strong> (levels {q.levelMin}–{q.levelMax}) — {q.reward}
+                  </li>
+                ))}
+              </ul>
+              <p className="small">
+                <Link to="/quests">Full quest guide →</Link>
+              </p>
             </>
           )}
         </div>

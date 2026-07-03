@@ -7,6 +7,8 @@ import ZoneDetail from './pages/ZoneDetail';
 import RacesClasses from './pages/RacesClasses';
 import Progression from './pages/Progression';
 import CharacterPage from './pages/CharacterPage';
+import Bestiary from './pages/Bestiary';
+import Quests from './pages/Quests';
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
             <Route path="/atlas" element={<Atlas />} />
             <Route path="/atlas/:zoneId" element={<ZoneDetail />} />
             <Route path="/classes" element={<RacesClasses />} />
+            <Route path="/bestiary" element={<Bestiary />} />
+            <Route path="/quests" element={<Quests />} />
             <Route path="/progression" element={<Progression />} />
             <Route path="/character" element={<CharacterPage />} />
           </Route>

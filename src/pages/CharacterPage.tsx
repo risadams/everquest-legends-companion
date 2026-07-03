@@ -4,7 +4,14 @@ import { RACES, RACE_BY_ID } from '../data/races';
 import { CLASSES, CLASS_BY_ID } from '../data/classes';
 import { useCharacters } from '../context/CharacterContext';
 import { newCharacterId } from '../lib/storage';
-import { recommendZones, roleCoverage, nextMilestones } from '../lib/advisor';
+import {
+  recommendZones,
+  roleCoverage,
+  nextMilestones,
+  recommendQuests,
+  huntTargets
+} from '../lib/advisor';
+import { ZONE_BY_ID } from '../data/zones';
 import { bandForLevel } from '../data/progression';
 import { FitBadge } from '../components/ZoneCard';
 import type { CharacterProfile } from '../data/types';
@@ -137,6 +144,8 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
   const coverage = useMemo(() => roleCoverage(character.classIds), [character.classIds]);
   const recs = useMemo(() => recommendZones(character, 8), [character]);
   const milestones = useMemo(() => nextMilestones(character), [character]);
+  const quests = useMemo(() => recommendQuests(character, 6), [character]);
+  const targets = useMemo(() => huntTargets(character, 5), [character]);
   const band = bandForLevel(character.level);
 
   return (
@@ -216,6 +225,56 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
               <li key={m}>{m}</li>
             ))}
           </ul>
+
+          {quests.length > 0 && (
+            <>
+              <h3>Quests worth doing</h3>
+              <ul className="tight small">
+                {quests.map(({ quest, status }) => (
+                  <li key={quest.id}>
+                    <strong>{quest.name}</strong>{' '}
+                    {status === 'now' ? (
+                      <span className="badge good">now</span>
+                    ) : (
+                      <span className="badge">at {quest.levelMin}+</span>
+                    )}{' '}
+                    — {quest.reward}
+                    {ZONE_BY_ID[quest.startZoneId] && (
+                      <span className="muted">
+                        {' '}(<Link to={`/atlas/${quest.startZoneId}`}>
+                          {ZONE_BY_ID[quest.startZoneId].name}
+                        </Link>)
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {targets.length > 0 && (
+            <>
+              <h3>Named mobs to hunt</h3>
+              <ul className="tight small">
+                {targets.map((m) => (
+                  <li key={m.id}>
+                    <strong>{m.name}</strong> (L{m.lvlMin}
+                    {m.lvlMax !== m.lvlMin ? `–${m.lvlMax}` : ''}
+                    {ZONE_BY_ID[m.zoneId] && (
+                      <>
+                        , <Link to={`/atlas/${m.zoneId}`}>{ZONE_BY_ID[m.zoneId].name}</Link>
+                      </>
+                    )}
+                    ){m.loot && m.loot.length > 0 && <> — {m.loot[0]}</>}
+                  </li>
+                ))}
+              </ul>
+              <p className="small">
+                <Link to="/bestiary">Full bestiary →</Link> · <Link to="/quests">Quest guide →</Link>
+              </p>
+            </>
+          )}
+
           <p className="small">
             <Link to="/progression">See the full progression guide →</Link>
           </p>
