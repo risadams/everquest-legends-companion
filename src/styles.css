@@ -1,0 +1,233 @@
+:root {
+  --bg: #161310;
+  --bg-raised: #211c17;
+  --bg-card: #262019;
+  --border: #3b3226;
+  --text: #e8ded0;
+  --text-dim: #a8988a;
+  --gold: #d4a94e;
+  --gold-dim: #9a7c3c;
+  --good: #7fbf7f;
+  --warn: #e0b050;
+  --danger: #d9705e;
+  --accent-blue: #7fa8c9;
+  --radius: 8px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4 {
+  font-family: Georgia, serif;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+button, select, input {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.7rem;
+}
+button {
+  cursor: pointer;
+}
+button:hover {
+  border-color: var(--gold-dim);
+}
+button.primary {
+  background: var(--gold-dim);
+  color: #1a150e;
+  font-weight: bold;
+}
+button.primary:hover {
+  background: var(--gold);
+}
+button.active {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.app-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.4rem;
+}
+.site-header .brand {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.site-header nav {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+}
+.site-header nav a {
+  color: var(--text-dim);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius);
+}
+.site-header nav a.active {
+  color: var(--gold);
+  background: var(--bg-raised);
+}
+.site-header nav a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+.header-spacer {
+  flex: 1;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.9rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.badge.gold { color: var(--gold); border-color: var(--gold-dim); }
+.badge.good { color: var(--good); border-color: var(--good); }
+.badge.warn { color: var(--warn); border-color: var(--warn); }
+.badge.danger { color: var(--danger); border-color: var(--danger); }
+.badge.blue { color: var(--accent-blue); border-color: var(--accent-blue); }
+
+.muted { color: var(--text-dim); }
+.small { font-size: 0.85rem; }
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+table.data th, table.data td {
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+table.data th {
+  color: var(--gold-dim);
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+.zone-map-wrap, .continent-map-wrap {
+  background: #1b1712;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.zone-map-wrap svg, .continent-map-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.9rem 0;
+}
+
+.site-footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.level-band {
+  border-left: 3px solid var(--border);
+  padding: 0.2rem 0 0.2rem 1.1rem;
+  margin-bottom: 1.4rem;
+}
+.level-band.current {
+  border-left-color: var(--gold);
+}
+
+ul.tight {
+  margin: 0.3rem 0;
+  padding-left: 1.2rem;
+}
+ul.tight li {
+  margin-bottom: 0.25rem;
+}
+
+.advice-callout {
+  border: 1px solid var(--gold-dim);
+  background: rgba(212, 169, 78, 0.07);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  margin: 0.8rem 0;
+}

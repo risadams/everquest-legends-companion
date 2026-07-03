@@ -1,0 +1,288 @@
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { RACES, RACE_BY_ID } from '../data/races';
+import { CLASSES, CLASS_BY_ID } from '../data/classes';
+import { useCharacters } from '../context/CharacterContext';
+import { newCharacterId } from '../lib/storage';
+import { recommendZones, roleCoverage, nextMilestones } from '../lib/advisor';
+import { bandForLevel } from '../data/progression';
+import { FitBadge } from '../components/ZoneCard';
+import type { CharacterProfile } from '../data/types';
+
+function CharacterForm({
+  initial,
+  onSave,
+  onCancel
+}: {
+  initial?: CharacterProfile;
+  onSave: (c: CharacterProfile) => void;
+  onCancel?: () => void;
+}) {
+  const [name, setName] = useState(initial?.name ?? '');
+  const [raceId, setRaceId] = useState(initial?.raceId ?? 'human');
+  const [classIds, setClassIds] = useState<string[]>(initial?.classIds ?? []);
+  const [level, setLevel] = useState(initial?.level ?? 1);
+
+  const race = RACE_BY_ID[raceId];
+  const primary = classIds[0];
+
+  function toggleClass(id: string) {
+    setClassIds((prev) => {
+      if (prev.includes(id)) return prev.filter((c) => c !== id);
+      const max = 3;
+      if (prev.length >= max) return prev;
+      // First pick must be a legal primary for the race.
+      if (prev.length === 0 && !race.allowedPrimaryClasses.includes(id)) return prev;
+      return [...prev, id];
+    });
+  }
+
+  const canSave = name.trim().length > 0 && classIds.length >= 1 && level >= 1 && level <= 50;
+
+  return (
+    <div className="card">
+      <h3 style={{ marginTop: 0 }}>{initial ? `Edit ${initial.name}` : 'New character'}</h3>
+      <div className="filter-bar">
+        <input
+          placeholder="Character name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <select
+          value={raceId}
+          onChange={(e) => {
+            setRaceId(e.target.value);
+            setClassIds([]);
+          }}
+        >
+          {RACES.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.name}
+            </option>
+          ))}
+        </select>
+        <label className="small muted">
+          Level{' '}
+          <input
+            type="number"
+            min={1}
+            max={50}
+            value={level}
+            onChange={(e) => setLevel(Math.max(1, Math.min(50, Number(e.target.value) || 1)))}
+            style={{ width: '4.5rem' }}
+          />
+        </label>
+      </div>
+
+      <p className="small muted" style={{ marginBottom: '0.2rem' }}>
+        Classes (pick 1–3; your <strong>first pick is your primary</strong> and must be legal for{' '}
+        {race.name}
+        {level < 10 && classIds.length >= 2
+          ? ' — note: the third class unlocks in-game at level 10'
+          : ''}
+        ):
+      </p>
+      <div className="chip-row">
+        {CLASSES.map((c) => {
+          const selected = classIds.includes(c.id);
+          const isPrimarySlot = classIds.length === 0;
+          const disabled =
+            !selected &&
+            ((isPrimarySlot && !race.allowedPrimaryClasses.includes(c.id)) || classIds.length >= 3);
+          return (
+            <button
+              key={c.id}
+              className={selected ? 'active' : ''}
+              disabled={disabled}
+              style={disabled ? { opacity: 0.35 } : undefined}
+              onClick={() => toggleClass(c.id)}
+            >
+              {selected && classIds[0] === c.id ? '★ ' : ''}
+              {c.name}
+            </button>
+          );
+        })}
+      </div>
+      {primary && (
+        <p className="small muted">
+          Primary: <strong>{CLASS_BY_ID[primary].name}</strong>
+          {classIds.length > 1 &&
+            ` · also ${classIds.slice(1).map((c) => CLASS_BY_ID[c].name).join(' and ')}`}
+        </p>
+      )}
+      <div className="filter-bar">
+        <button
+          className="primary"
+          disabled={!canSave}
+          onClick={() =>
+            onSave({
+              id: initial?.id ?? newCharacterId(),
+              name: name.trim(),
+              raceId,
+              classIds,
+              level
+            })
+          }
+        >
+          Save character
+        </button>
+        {onCancel && <button onClick={onCancel}>Cancel</button>}
+      </div>
+    </div>
+  );
+}
+
+function AdvisorReport({ character }: { character: CharacterProfile }) {
+  const race = RACE_BY_ID[character.raceId];
+  const coverage = useMemo(() => roleCoverage(character.classIds), [character.classIds]);
+  const recs = useMemo(() => recommendZones(character, 8), [character]);
+  const milestones = useMemo(() => nextMilestones(character), [character]);
+  const band = bandForLevel(character.level);
+
+  return (
+    <div>
+      <h2>
+        Advisor: {character.name}, level {character.level} {race?.name}{' '}
+        <span className="muted small">
+          ({character.classIds.map((c) => CLASS_BY_ID[c]?.name).join(' / ')})
+        </span>
+      </h2>
+
+      <div className="advice-callout">
+        <strong>Right now ({band.title.toLowerCase()}):</strong> {band.focus}
+      </div>
+
+      <div className="two-col">
+        <div>
+          <h3>Where to hunt</h3>
+          <table className="data">
+            <thead>
+              <tr>
+                <th>Zone</th>
+                <th>Levels</th>
+                <th>Fit</th>
+                <th>Why / watch out</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recs.map((r) => (
+                <tr key={r.zone.id}>
+                  <td>
+                    <Link to={`/atlas/${r.zone.id}`}>{r.zone.name}</Link>
+                    {r.hops !== null && r.hops <= 2 && (
+                      <span className="badge" style={{ marginLeft: '0.4rem' }}>near home</span>
+                    )}
+                  </td>
+                  <td>
+                    {r.zone.levelMin}–{r.zone.levelMax}
+                  </td>
+                  <td>
+                    <FitBadge fit={r.fit} />
+                  </td>
+                  <td className="small">
+                    {r.reasons[0]}
+                    {r.warnings.length > 0 && (
+                      <div className="muted">⚠ {r.warnings.join(' · ')}</div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Your build</h3>
+          <ul className="tight small">
+            {coverage.advice.map((a) => (
+              <li key={a}>{a}</li>
+            ))}
+          </ul>
+          {race && (
+            <>
+              <h3>Home turf</h3>
+              <p className="small">
+                You began at <Link to={`/atlas/${race.startingZoneId}`}>{race.startingCity}</Link>.{' '}
+                {race.alignment === 'evil'
+                  ? 'As an evil-aligned race, expect guards in good cities (Qeynos, the Faydwer cities, Erudin, Rivervale, Halas) to attack on sight — trade in Freeport’s tunnels or your own city.'
+                  : race.alignment === 'good'
+                    ? 'Good cities across Norrath welcome you; steer clear of Neriak, Grobb, Oggok, and Paineel.'
+                    : 'Neutral factions open most cities to you — a real luxury for shopping and banking.'}
+              </p>
+            </>
+          )}
+          <h3>Next milestones</h3>
+          <ul className="tight small">
+            {milestones.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+          <p className="small">
+            <Link to="/progression">See the full progression guide →</Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function CharacterPage() {
+  const { characters, active, setActiveId, upsert, remove } = useCharacters();
+  const [editing, setEditing] = useState<CharacterProfile | null>(null);
+  const [creating, setCreating] = useState(characters.length === 0);
+
+  return (
+    <div>
+      <h1>My Character</h1>
+      <p className="muted">
+        Set up your race, class trio, and level — every page of this app personalizes itself to the
+        active character.
+      </p>
+
+      <div className="filter-bar">
+        {characters.map((c) => (
+          <button
+            key={c.id}
+            className={active?.id === c.id ? 'active' : ''}
+            onClick={() => setActiveId(c.id)}
+          >
+            {c.name} · L{c.level}
+          </button>
+        ))}
+        <button className="primary" onClick={() => { setCreating(true); setEditing(null); }}>
+          + New character
+        </button>
+        {active && (
+          <>
+            <button onClick={() => { setEditing(active); setCreating(false); }}>
+              Edit {active.name}
+            </button>
+            <button
+              onClick={() => {
+                if (confirm(`Delete ${active.name}?`)) remove(active.id);
+              }}
+            >
+              Delete
+            </button>
+          </>
+        )}
+      </div>
+
+      {(creating || editing) && (
+        <CharacterForm
+          initial={editing ?? undefined}
+          onSave={(c) => {
+            upsert(c);
+            setCreating(false);
+            setEditing(null);
+          }}
+          onCancel={() => {
+            setCreating(false);
+            setEditing(null);
+          }}
+        />
+      )}
+
+      {active && !creating && !editing && <AdvisorReport character={active} />}
+    </div>
+  );
+}
