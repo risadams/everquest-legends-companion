@@ -44,17 +44,11 @@ export default function ZoneDetail() {
         {fit && <FitBadge fit={fit} />}
       </div>
 
-      <div className="two-col">
-        <div>
-          <ZoneMap zone={zone} />
-          <p className="small muted">
-            Schematic map — landmark positions are illustrative, exits point toward their true
-            direction of travel.
-          </p>
-        </div>
-        <div>
-          {zone.notes && <p>{zone.notes}</p>}
+      <ZoneMap zone={zone} />
 
+      <div className="two-col" style={{ marginTop: '1rem' }}>
+        <div>
+          {zone.notes && <p style={{ marginTop: 0 }}>{zone.notes}</p>}
           {active && fit && (
             <div className="advice-callout small">
               <strong>{active.name}’s outlook:</strong>{' '}
@@ -75,7 +69,24 @@ export default function ZoneDetail() {
             </div>
           )}
 
-          <h3>Hunting grounds</h3>
+          <h3>Connections</h3>
+          <div className="chip-row">
+            {zone.connections.map((cid) => {
+              const c = ZONE_BY_ID[cid];
+              if (!c) return null;
+              return (
+                <Link key={cid} to={`/atlas/${cid}`} className="badge blue">
+                  {c.name}
+                </Link>
+              );
+            })}
+            {zone.connections.length === 0 && (
+              <span className="muted small">Reached by teleport only.</span>
+            )}
+          </div>
+        </div>
+        <div>
+          <h3 style={{ marginTop: 0 }}>Hunting grounds</h3>
           <table className="data">
             <thead>
               <tr>
@@ -105,22 +116,6 @@ export default function ZoneDetail() {
               </ul>
             </>
           )}
-
-          <h3>Connections</h3>
-          <div className="chip-row">
-            {zone.connections.map((cid) => {
-              const c = ZONE_BY_ID[cid];
-              if (!c) return null;
-              return (
-                <Link key={cid} to={`/atlas/${cid}`} className="badge blue">
-                  {c.name}
-                </Link>
-              );
-            })}
-            {zone.connections.length === 0 && (
-              <span className="muted small">Reached by teleport only.</span>
-            )}
-          </div>
         </div>
       </div>
     </div>

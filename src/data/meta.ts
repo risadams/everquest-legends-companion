@@ -8,5 +8,6 @@ export const DISCLAIMER =
 export const SOURCES = [
   { label: 'Official site', url: 'https://everquestlegends.com/' },
   { label: 'EQL Wiki', url: 'https://eqlwiki.com/' },
-  { label: 'EQProgression Legends FAQ', url: 'https://www.eqprogression.com/legends/faq/' }
+  { label: 'EQProgression Legends FAQ', url: 'https://www.eqprogression.com/legends/faq/' },
+  { label: 'Zone map data by Brewall', url: 'https://www.eqmaps.info/' }
 ];

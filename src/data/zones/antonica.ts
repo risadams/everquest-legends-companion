@@ -586,7 +586,7 @@ export const ANTONICA_ZONES: Zone[] = [
     type: 'dungeon',
     levelMin: 30,
     levelMax: 50,
-    connections: ['upper-guk'],
+    connections: ['upper-guk', 'innothule'],
     hotspots: [
       { name: 'Dead-side camps', levels: '30-45' },
       { name: 'Frenzied ghoul & ghoul lord', levels: '45-50', note: 'Legendary loot camps' }
