@@ -15,6 +15,15 @@ export default function Home() {
       <p className="muted">
         An unofficial atlas, class guide, and leveling advisor for{' '}
         <strong>EverQuest Legends</strong> — the reimagined classic Norrath, launching July 28, 2026.
+        Open source on{' '}
+        <a
+          href="https://github.com/risadams/everquest-legends-companion"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>{' '}
+        — issues and data corrections welcome.
       </p>
 
       {active ? (
