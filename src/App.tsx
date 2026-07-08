@@ -16,6 +16,7 @@ import Handbook from './pages/Handbook';
 import Factions from './pages/Factions';
 import ClassDetail from './pages/ClassDetail';
 import ClassIndex from './pages/ClassIndex';
+import Lore from './pages/Lore';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/abilities" element={<Abilities />} />
             <Route path="/travel" element={<Travel />} />
             <Route path="/handbook" element={<Handbook />} />
+            <Route path="/lore" element={<Lore />} />
             <Route path="/progression" element={<Progression />} />
             <Route path="/character" element={<CharacterPage />} />
           </Route>

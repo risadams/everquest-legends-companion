@@ -19,6 +19,7 @@ Set up your character (race, class trio, level) once, and every page personalize
 - **🌀 Travel Guide** — the complete port network (druid rings/circles, wizard gates/portals, evacs, planar ports) plus the new Rituals system, color-coded by what your combo can cast at its current level.
 - **📖 Systems Handbook** — AAs from level 1, Exaltation gear customization, tradeskill rules and formulas, instances & picks, deities, and loadout gear sets.
 - **⚖ Faction Guide** — 19 significant classic-era factions with home zones, raise methods, rivalries, and banker gotchas, personalized to your race (home turf vs. KOS risk) — plus EQL's faction-achievement and race-unlock changes.
+- **🕯 Lore & History** — the five ages of Norrath as a timeline, all 16 gods with domains and followers (linked to their visitable planes), 13 figures of note behind the zones, and a personalized "your place in the world" origin for your race.
 - **📜 Progression Guide** — a band-by-band roadmap from the newbie yard to the planar endgame at 50.
 - **🧭 Personal Advisor** — ranked hunting zones (level fit + walking distance from your home city + build durability + faction warnings), build analysis, quests worth doing now, named mobs in reach, and next milestones.
 - **Installable PWA** — works offline, full map data included (~5.5 MB), multiple characters stored locally in your browser.
@@ -50,6 +51,7 @@ The game is in beta and data will shift. Everything lives in typed, hand-editabl
 | `src/data/abilities.ts` | stances & invocations |
 | `src/data/travel.ts` | port network & travel spells |
 | `src/data/factions.ts` | faction guide |
+| `src/data/lore.ts` | lore guide: eras, deities, figures, race origins |
 | `src/data/classdata/*.json` | per-class spells, skills, AAs (generated — see below) |
 | `src/data/progression.ts` | level-band leveling guide |
 

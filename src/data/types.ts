@@ -162,6 +162,36 @@ export interface CombatAbility {
   tips?: string;
 }
 
+export interface LoreEra {
+  id: string;
+  name: string;
+  /** loose in-world period label, e.g. "the dawn of Norrath" */
+  period: string;
+  summary: string;
+  events: string[];
+}
+
+export interface Deity {
+  id: string;
+  name: string;
+  epithet: string;
+  alignment: Alignment;
+  domain: string;
+  blurb: string;
+  /** who typically kneels at this altar */
+  followers: string;
+  /** the deity's plane, when it's a visitable zone */
+  planeZoneId?: string;
+}
+
+export interface LoreFigure {
+  id: string;
+  name: string;
+  title: string;
+  zoneId?: string;
+  blurb: string;
+}
+
 export interface Faction {
   id: string;
   name: string;

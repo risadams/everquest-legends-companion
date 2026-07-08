@@ -106,6 +106,13 @@ export default function Home() {
             loadouts — the systems the manual never shipped for.
           </p>
         </Link>
+        <Link to="/lore" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>🕯 Lore &amp; History</h3>
+          <p className="small muted">
+            Five ages of Norrath, sixteen gods, and the kings, dragons, and villains behind the
+            zones — plus your race’s place in the story.
+          </p>
+        </Link>
         <Link to="/progression" className="card" style={{ color: 'inherit' }}>
           <h3 style={{ marginTop: 0 }}>📜 Progression Guide</h3>
           <p className="small muted">

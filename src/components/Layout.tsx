@@ -36,7 +36,8 @@ const GROUPS: NavGroup[] = [
     label: 'Guides',
     items: [
       { to: '/progression', label: 'Progression' },
-      { to: '/handbook', label: 'Systems Handbook' }
+      { to: '/handbook', label: 'Systems Handbook' },
+      { to: '/lore', label: 'Lore & History' }
     ]
   }
 ];

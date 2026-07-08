@@ -136,6 +136,18 @@ try {
   check('spell-only planes show wizard-port caption', planesText.includes('reached by wizard port'));
   await page.screenshot({ path: join(SHOTS, 's8-parchment-atlas.png') });
 
+  // Lore page
+  await page.goto(`${BASE}/#/lore`, { waitUntil: 'networkidle0' });
+  const eras = await page.$$eval('[data-era]', (els) => els.length);
+  const deities = await page.$$eval('[data-deity]', (els) => els.length);
+  const figures = await page.$$eval('[data-figure]', (els) => els.length);
+  check('lore timeline shows the five ages', eras === 5, `${eras} eras`);
+  check('lore lists all 16 gods', deities === 16, `${deities} deities`);
+  check('lore lists figures of note', figures >= 12, `${figures} figures`);
+  const loreText = await page.evaluate(() => document.body.innerText);
+  check('your-place section present', loreText.includes('Your place in the world'));
+  await page.screenshot({ path: join(SHOTS, 's17-lore.png') });
+
   // Nav wiring: grouped dropdowns
   await page.goto(`${BASE}/#/`, { waitUntil: 'networkidle0' });
   const navText = await page.evaluate(() =>

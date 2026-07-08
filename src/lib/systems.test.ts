@@ -3,6 +3,7 @@ import { ABILITIES, STANCES, INVOCATIONS, CASTER_GROUPS } from '../data/abilitie
 import { TRAVEL_SPELLS } from '../data/travel';
 import { FACTIONS, FACTION_BY_ID } from '../data/factions';
 import { RACES } from '../data/races';
+import { LORE_ERAS, LORE_DEITIES, LORE_FIGURES, RACE_LORE } from '../data/lore';
 import { ZONE_BY_ID } from '../data/zones';
 import { CLASS_BY_ID } from '../data/classes';
 import { abilityUnlocked, scalingCount, scalingNote } from './abilities';
@@ -134,6 +135,45 @@ describe('faction data integrity', () => {
       FACTIONS.some((f) => f.homeZoneIds.includes(race.startingZoneId))
     );
     expect(covered.length).toBeGreaterThanOrEqual(11);
+  });
+});
+
+describe('lore data integrity', () => {
+  it('covers the five classic ages in order, ending in the present', () => {
+    expect(LORE_ERAS.length).toBe(5);
+    expect(LORE_ERAS[0].id).toBe('age-of-scale');
+    expect(LORE_ERAS[4].id).toBe('age-of-turmoil');
+    for (const era of LORE_ERAS) {
+      expect(era.events.length, era.id).toBeGreaterThan(0);
+    }
+  });
+
+  it('has all 16 deities and their planes reference real zones', () => {
+    expect(LORE_DEITIES.length).toBe(16);
+    const ids = new Set<string>();
+    for (const d of LORE_DEITIES) {
+      expect(ids.has(d.id), `duplicate deity ${d.id}`).toBe(false);
+      ids.add(d.id);
+      if (d.planeZoneId) {
+        expect(ZONE_BY_ID[d.planeZoneId], `${d.id} plane ${d.planeZoneId}`).toBeDefined();
+      }
+    }
+    expect(LORE_DEITIES.filter((d) => d.planeZoneId).length).toBe(3); // Fear, Hate, Sky
+  });
+
+  it('figures reference real zones', () => {
+    for (const f of LORE_FIGURES) {
+      if (f.zoneId) {
+        expect(ZONE_BY_ID[f.zoneId], `${f.id} zone ${f.zoneId}`).toBeDefined();
+      }
+    }
+    expect(LORE_FIGURES.length).toBeGreaterThanOrEqual(12);
+  });
+
+  it('every playable race has an origin note', () => {
+    for (const r of RACES) {
+      expect(RACE_LORE[r.id], `no race lore for ${r.id}`).toBeDefined();
+    }
   });
 });
 
