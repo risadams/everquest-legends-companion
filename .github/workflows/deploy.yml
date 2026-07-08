@@ -25,9 +25,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      # Custom domain (eql.quest) serves from the root.
       - run: npm run build
         env:
-          BASE_PATH: /everquest-legends-companion/
+          BASE_PATH: /
       - uses: actions/configure-pages@v5
         with:
           enablement: true

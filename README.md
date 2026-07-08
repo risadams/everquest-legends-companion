@@ -4,7 +4,7 @@ An unofficial fan-made companion app for **[EverQuest Legends](https://everquest
 
 Set up your character (race, class trio, level) once, and every page personalizes itself: where to hunt, what to kill, which quests pay, and the exact hotbuttons to build before you pull.
 
-**Live app:** https://risadams.github.io/everquest-legends-companion/
+**Live app:** https://eql.quest
 
 ![Zone atlas with real map geometry](docs/screenshot-atlas.png)
 
