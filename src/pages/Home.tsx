@@ -5,26 +5,40 @@ import { CLASS_BY_ID } from '../data/classes';
 import { recommendZones, nextMilestones } from '../lib/advisor';
 import { bandForLevel } from '../data/progression';
 import { FitBadge } from '../components/ZoneCard';
+import BrandMark from '../components/BrandMark';
 
 export default function Home() {
   const { active } = useCharacters();
 
   return (
     <div>
-      <h1>EQL Companion</h1>
-      <p className="muted">
-        An unofficial atlas, class guide, and leveling advisor for{' '}
-        <strong>EverQuest Legends</strong> — the reimagined classic Norrath, launching July 28, 2026.
-        Open source on{' '}
-        <a
-          href="https://github.com/risadams/everquest-legends-companion"
-          target="_blank"
-          rel="noreferrer"
-        >
-          GitHub
-        </a>{' '}
-        — issues and data corrections welcome.
-      </p>
+      <section className="hero">
+        <BrandMark size={88} />
+        <h1>EQL Companion</h1>
+        <p className="hero-tag muted">
+          An unofficial atlas, class compendium, and leveling advisor for{' '}
+          <strong>EverQuest Legends</strong> — the reimagined classic Norrath.
+        </p>
+        <p className="hero-sub small muted">
+          Launching July 28, 2026 · open source on{' '}
+          <a
+            href="https://github.com/risadams/everquest-legends-companion"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>{' '}
+          · issues and data corrections welcome
+        </p>
+        <div className="hero-cta">
+          <Link to="/character" className="btn primary">
+            Create your character
+          </Link>
+          <Link to="/atlas" className="btn">
+            Browse the atlas
+          </Link>
+        </div>
+      </section>
 
       {active ? (
         <ActiveDashboard />

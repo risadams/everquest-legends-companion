@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useCharacters } from '../context/CharacterContext';
 import { RACE_BY_ID } from '../data/races';
 import { DATA_VERSION, DISCLAIMER, SOURCES } from '../data/meta';
+import BrandMark from './BrandMark';
 
 interface NavItem {
   to: string;
@@ -77,10 +78,13 @@ function NavGroupMenu({ group }: { group: NavGroup }) {
 
 export default function Layout() {
   const { characters, active, setActiveId } = useCharacters();
+  const location = useLocation();
   return (
     <div className="app-shell">
       <header className="site-header">
-        <span className="brand">⚔ EQL Companion</span>
+        <Link to="/" className="brand">
+          <BrandMark /> EQL Companion
+        </Link>
         <nav>
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/atlas">Atlas</NavLink>
@@ -105,7 +109,9 @@ export default function Layout() {
           </select>
         )}
       </header>
-      <Outlet />
+      <main className="page" key={location.pathname}>
+        <Outlet />
+      </main>
       <footer className="site-footer">
         <p>{DISCLAIMER}</p>
         <p>

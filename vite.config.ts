@@ -11,13 +11,16 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}']
+      },
       manifest: {
         name: 'EQL Companion — EverQuest Legends Atlas & Advisor',
         short_name: 'EQL Companion',
         description:
           'Zone atlas, race & class guide, and leveling advisor for EverQuest Legends',
-        theme_color: '#161310',
-        background_color: '#161310',
+        theme_color: '#14100b',
+        background_color: '#14100b',
         display: 'standalone',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },

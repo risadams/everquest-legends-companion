@@ -1,17 +1,42 @@
+/* ── Brand type: Cinzel (self-hosted, variable weight) ─────── */
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('./assets/fonts/cinzel-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('./assets/fonts/cinzel-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
-  --bg: #161310;
-  --bg-raised: #211c17;
-  --bg-card: #262019;
-  --border: #3b3226;
-  --text: #e8ded0;
-  --text-dim: #a8988a;
-  --gold: #d4a94e;
-  --gold-dim: #9a7c3c;
-  --good: #7fbf7f;
-  --warn: #e0b050;
-  --danger: #d9705e;
-  --accent-blue: #7fa8c9;
+  --bg: #14100b;
+  --bg-raised: #241c13;
+  --bg-card: #271e15;
+  --border: #443729;
+  --text: #f0e8d9;
+  --text-dim: #b6a593;
+  --gold: #e0b25e;
+  --gold-dim: #a9853f;
+  --gold-deep: #6d5628;
+  --good: #8cc98c;
+  --warn: #e6b854;
+  --danger: #e07a66;
+  --accent-blue: #8db3d4;
   --radius: 8px;
+  --font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
+  --font-body: Georgia, 'Times New Roman', serif;
   color-scheme: dark;
 }
 
@@ -21,17 +46,43 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(1100px 420px at 50% -180px, rgba(224, 178, 94, 0.06), transparent 70%),
+    var(--bg);
   color: var(--text);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-body);
   line-height: 1.55;
 }
 
 h1, h2, h3, h4 {
-  font-family: Georgia, serif;
   color: var(--gold);
   letter-spacing: 0.02em;
   line-height: 1.25;
+}
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.045em;
+}
+h3, h4 {
+  font-family: var(--font-body);
+}
+h1 {
+  font-size: 2rem;
+}
+/* engraved rule under page titles */
+h1::after {
+  content: '';
+  display: block;
+  width: 88px;
+  height: 3px;
+  margin-top: 0.4rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-deep) 70%, transparent);
+}
+/* page intros read at a comfortable measure */
+h1 + p {
+  max-width: 74ch;
 }
 
 a {
@@ -53,6 +104,7 @@ button, select, input {
 }
 button {
   cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 button:hover {
   border-color: var(--gold-dim);
@@ -86,10 +138,19 @@ button.active {
   margin-bottom: 1.4rem;
 }
 .site-header .brand {
-  font-size: 1.25rem;
-  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   color: var(--gold);
   white-space: nowrap;
+}
+.site-header a.brand:hover {
+  text-decoration: none;
+  color: var(--gold);
 }
 .site-header nav {
   display: flex;
@@ -148,6 +209,18 @@ button.active {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  animation: menu-in 0.14s ease-out;
+  transform-origin: top;
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .nav-menu a {
   padding: 0.4rem 0.7rem;
@@ -159,6 +232,14 @@ button.active {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem 1.2rem;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+/* clickable cards lift gently */
+a.card:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: var(--gold-dim);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .card-grid {
@@ -334,4 +415,91 @@ ul.tight li {
   border-radius: var(--radius);
   padding: 0.8rem 1rem;
   margin: 0.8rem 0;
+}
+
+/* ── Page transitions ───────────────────────────────────────── */
+main.page {
+  animation: page-in 0.28s ease-out;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Home masthead ──────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 2.4rem 1rem 1.2rem;
+  animation: page-in 0.4s ease-out;
+}
+.hero .brand-mark {
+  filter: drop-shadow(0 4px 14px rgba(224, 178, 94, 0.25));
+}
+.hero h1 {
+  font-size: clamp(2.1rem, 5vw, 3rem);
+  margin: 0.6rem 0 0.3rem;
+  letter-spacing: 0.06em;
+}
+.hero h1::after {
+  width: 150px;
+  margin: 0.5rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.hero .hero-tag {
+  max-width: 46rem;
+  margin: 0.8rem auto 0.2rem;
+  font-size: 1.08rem;
+}
+.hero .hero-sub {
+  margin: 0.2rem auto 1.2rem;
+}
+.hero-cta {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* link styled as an engraved button */
+a.btn {
+  display: inline-block;
+  padding: 0.55rem 1.25rem;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.07em;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease,
+    color 0.15s ease, box-shadow 0.15s ease;
+}
+a.btn:hover {
+  text-decoration: none;
+  border-color: var(--gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+a.btn.primary {
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  border-color: var(--gold);
+  color: #1c1509;
+  font-weight: 700;
+}
+a.btn.primary:hover {
+  background: linear-gradient(180deg, #eec06e, var(--gold));
+}
+
+/* ── Motion accessibility ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

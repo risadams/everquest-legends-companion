@@ -50,19 +50,26 @@ function png(size, pixelFn) {
   ]);
 }
 
-const BG = [0x16, 0x13, 0x10, 255];
-const GOLD = [0xd4, 0xa9, 0x4e, 255];
+// Compass rose on deep ink — matches the BrandMark and the atlas maps.
+const BG = [0x14, 0x10, 0x0b, 255];
+const GOLD = [0xe0, 0xb2, 0x5e, 255];
+const GOLD_DIM = [0xa9, 0x85, 0x3f, 255];
 
 function icon(x, y, size) {
   const c = size / 2;
-  const d = Math.abs(x - c) + Math.abs(y - c); // diamond distance
-  const outer = size * 0.38;
-  const ring = size * 0.045;
-  const inner = size * 0.22;
-  const dot = size * 0.065;
-  if (Math.hypot(x - c, y - c) < dot) return BG;
-  if (d < inner) return GOLD;
-  if (d > outer - ring && d < outer) return GOLD;
+  const dx = x - c;
+  const dy = y - c;
+  const r = Math.hypot(dx, dy);
+  const th = Math.atan2(dy, dx);
+  const R = size * 0.38;
+  // four cardinal spikes, four smaller intercardinal spikes
+  const cardinal = R * (0.14 + 0.86 * Math.pow(Math.abs(Math.cos(2 * th)), 5));
+  const diagonal = 0.66 * R * (0.2 + 0.8 * Math.pow(Math.abs(Math.sin(2 * th)), 5));
+  if (r < size * 0.04) return BG; // hub
+  if (r < cardinal) return GOLD;
+  if (r < diagonal) return GOLD_DIM;
+  const ringOuter = size * 0.46;
+  if (r > ringOuter - size * 0.028 && r < ringOuter) return GOLD_DIM;
   return BG;
 }
 
