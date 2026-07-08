@@ -99,7 +99,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['innothule'],
     hotspots: [{ name: 'Swamp newbie grounds (Innothule side)', levels: '1-6' }],
     notes: 'Troll mudhole on the edge of the Innothule Swamp.',
-    mapX: 52, mapY: 82
+    mapX: 57, mapY: 81
   },
   {
     id: 'oggok',
@@ -112,7 +112,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['feerrott'],
     hotspots: [{ name: 'Feerrott newbie grounds', levels: '1-6' }],
     notes: 'Ogre stronghold in a box canyon off the Feerrott.',
-    mapX: 34, mapY: 78
+    mapX: 30, mapY: 71
   },
   // ── Northwest: Qeynos region ───────────────────────────────
   {
@@ -562,7 +562,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['The froglok king’s patrols near Guk’s mouth'],
     notes: 'Fetid swamp between Grobb and the ruins of Guk.',
-    mapX: 48, mapY: 78
+    mapX: 51, mapY: 78
   },
   {
     id: 'upper-guk',
@@ -578,7 +578,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Water passages — know your air supply', 'Trains to the zone line are constant'],
     notes: 'The living half of the sunken froglok city.',
-    mapX: 46, mapY: 84
+    mapX: 49, mapY: 86
   },
   {
     id: 'lower-guk',
@@ -595,7 +595,7 @@ export const ANTONICA_ZONES: Zone[] = [
     dangers: ['Undead see invis', 'The deepest camps require a coordinated escape plan'],
     notes:
       'The undead depths of Guk — the most famous XP-and-loot dungeon of the classic era.',
-    mapX: 44, mapY: 90
+    mapX: 41, mapY: 91
   },
   {
     id: 'feerrott',
@@ -627,7 +627,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['The maze funnels trains directly onto you', 'Deep temple mobs cast fear'],
     notes: 'Ziggurat temple of the god of fear, held by fanatic lizardmen.',
-    mapX: 44, mapY: 78
+    mapX: 46, mapY: 70
   },
   // ── The Rathe region ──────────────────────────────────────
   {

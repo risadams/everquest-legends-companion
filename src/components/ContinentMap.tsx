@@ -133,13 +133,18 @@ export default function ContinentMap({
     );
 
     // ── place all labels without overlaps ────────────────────
-    // Markers are obstacles from the start; zones are labeled top-to-bottom.
-    const placed: Box[] = zones.map((z) => ({
-      x1: sx(z.mapX) - 9,
-      y1: sy(z.mapY) - 9,
-      x2: sx(z.mapX) + 9,
-      y2: sy(z.mapY) + 9
-    }));
+    // Markers are obstacles from the start, as are the corners covered by
+    // the compass rose (top-right) and title cartouche (bottom-left).
+    const placed: Box[] = [
+      { x1: W - 92, y1: 4, x2: W - 4, y2: 88 },
+      { x1: 4, y1: H - 44, x2: 190, y2: H - 4 },
+      ...zones.map((z) => ({
+        x1: sx(z.mapX) - 9,
+        y1: sy(z.mapY) - 9,
+        x2: sx(z.mapX) + 9,
+        y2: sy(z.mapY) + 9
+      }))
+    ];
 
     const labels = new Map<string, Candidate & { sub: string }>();
     const ordered = [...zones].sort((a, b) => sy(a.mapY) - sy(b.mapY) || sx(a.mapX) - sx(b.mapX));
@@ -155,6 +160,10 @@ export default function ContinentMap({
           { anchor: 'middle', tx: x, ty: y + 22 }, // below
           { anchor: 'start', tx: x + 13, ty: y - 2 }, // right
           { anchor: 'end', tx: x - 13, ty: y - 2 }, // left
+          { anchor: 'start', tx: x + 11, ty: y - 16 }, // upper-right
+          { anchor: 'end', tx: x - 11, ty: y - 16 }, // upper-left
+          { anchor: 'start', tx: x + 11, ty: y + 14 }, // lower-right
+          { anchor: 'end', tx: x - 11, ty: y + 14 }, // lower-left
           { anchor: 'middle', tx: x, ty: y - 38 }, // farther above
           { anchor: 'middle', tx: x, ty: y + 36 } // farther below
         ],
@@ -180,19 +189,17 @@ export default function ContinentMap({
         Math.cos(ang) > 0.3 ? 'start' : Math.cos(ang) < -0.3 ? 'end' : 'middle';
       const flip = along === 'start' ? 'end' : along === 'end' ? 'start' : 'middle';
       const baseY = ey + (Math.sin(ang) > 0.3 ? 12 : Math.sin(ang) < -0.3 ? -6 : 4);
-      const cand = place(
-        [
-          { anchor: along, tx: ex, ty: baseY },
-          { anchor: along, tx: ex, ty: baseY + 14 },
-          { anchor: along, tx: ex, ty: baseY - 14 },
-          { anchor: flip, tx: ex, ty: baseY },
-          { anchor: flip, tx: ex, ty: baseY + 14 }
-        ],
-        width,
-        9,
-        3,
-        placed
-      );
+      // fan out along the stub and vertically until a free spot appears
+      const cands: Candidate[] = [];
+      for (const dist of [0, 22]) {
+        const px = ex + Math.cos(ang) * dist;
+        const py = baseY + Math.sin(ang) * dist;
+        for (const dy of [0, 14, -14, 28]) {
+          cands.push({ anchor: along, tx: px, ty: py + dy });
+          cands.push({ anchor: flip, tx: px, ty: py + dy });
+        }
+      }
+      const cand = place(cands, width, 9, 3, placed);
       return { from, to, x, y, ex, ey, label, ...cand };
     });
 
@@ -289,8 +296,6 @@ export default function ContinentMap({
           const color = levelColor(z);
           const hl = highlightIds?.has(z.id);
           const label = labels.get(z.id)!;
-          const subAnchorX =
-            label.anchor === 'middle' ? label.tx : label.anchor === 'start' ? label.tx : label.tx;
           return (
             <Link key={z.id} to={`/atlas/${z.id}`}>
               <g style={{ cursor: 'pointer' }}>
@@ -316,7 +321,7 @@ export default function ContinentMap({
                   {z.name}
                 </text>
                 <text
-                  x={subAnchorX}
+                  x={label.tx}
                   y={label.ty + 12}
                   textAnchor={label.anchor}
                   fill="#6a563b"
