@@ -51,7 +51,7 @@ export const PLANES_ZONES: Zone[] = [
     ],
     dangers: ['Falling off an island drops you out of the plane', 'Strict progression — islands unlock in order'],
     notes:
-      'Floating islands above Norrath, reached by teleport. The most structured raid content of the classic era.',
+      'Floating islands above Norrath, reached by teleport. The most structured raid content of the classic era. EQL: class quest turn-ins here use Wind Runes (a different rune per quest within a class — stock up), replacing the old class-specific runes.',
     mapX: 70, mapY: 15
   }
 ];

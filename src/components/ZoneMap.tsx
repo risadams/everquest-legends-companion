@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import type { Zone } from '../data/types';
 import { ZONE_BY_ID } from '../data/zones';
 import SchematicZoneMap from './SchematicZoneMap';
+import MapDecor from './MapDecor';
 
 // ── Imported Brewall map data (eqmaps.info) ─────────────────
 
@@ -38,19 +39,24 @@ interface ZoneMapData {
 
 const mapModules = import.meta.glob('../data/maps/*.json');
 
-// ── Color handling for the dark theme ───────────────────────
-// Brewall maps are authored for light in-game backgrounds; near-black
-// walls become parchment, chromatic colors are lightened preserving hue.
+// ── Ink palette for the parchment sheet ─────────────────────
+// Brewall maps are authored for light in-game backgrounds, which suits the
+// parchment: near-black walls become sepia ink, and colors too pale to read
+// on paper are darkened preserving hue.
+
+const INK = '#3f3120';
+const PARCHMENT = '#f0e4c8';
+const EXIT_BLUE = '#245c8f';
 
 function displayColor([r, g, b]: number[] | [number, number, number]): string {
   const max = Math.max(r, g, b);
-  if (max < 70) return '#c9b992';
+  if (max < 70) return INK;
   const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-  if (lum < 110) {
-    const k = Math.min(3.2, 118 / Math.max(1, lum));
-    r = Math.min(255, Math.round(r * k + 28));
-    g = Math.min(255, Math.round(g * k + 28));
-    b = Math.min(255, Math.round(b * k + 28));
+  if (lum > 150) {
+    const k = 150 / lum;
+    r = Math.round(r * k);
+    g = Math.round(g * k);
+    b = Math.round(b * k);
   }
   return `rgb(${r},${g},${b})`;
 }
@@ -244,7 +250,7 @@ function RealZoneMap({ zone, data }: { zone: Zone; data: ZoneMapData }) {
             />
           ))}
           {visiblePoints.map((p, i) => {
-            const color = p.target ? '#7fa8c9' : displayColor(p.c);
+            const color = p.target ? EXIT_BLUE : displayColor(p.c);
             const text = p.target ? p.t.replace(/^to\s+/i, '→ ') : p.t;
             return (
               <g
@@ -260,8 +266,8 @@ function RealZoneMap({ zone, data }: { zone: Zone; data: ZoneMapData }) {
                   fontSize={fs * (p.s >= 3 ? 1 : 0.8)}
                   fontFamily="Georgia, serif"
                   paintOrder="stroke"
-                  stroke="#161310"
-                  strokeWidth={fs * 0.16}
+                  stroke={PARCHMENT}
+                  strokeWidth={fs * 0.18}
                   style={p.target ? { textDecoration: 'underline' } : undefined}
                 >
                   {text}
@@ -270,6 +276,10 @@ function RealZoneMap({ zone, data }: { zone: Zone; data: ZoneMapData }) {
             );
           })}
         </svg>
+        <MapDecor
+          title={zone.name}
+          subtitle={zone.type === 'city' ? 'City' : `Levels ${zone.levelMin}–${zone.levelMax}`}
+        />
       </div>
       <p className="small muted" style={{ marginTop: '0.35rem' }}>
         Drag to pan · scroll to zoom · blue underlined markers jump to the connected zone. Map data
@@ -304,7 +314,7 @@ export default function ZoneMap({ zone }: { zone: Zone }) {
   if (!data)
     return (
       <div className="zone-map-wrap" style={{ aspectRatio: '4 / 3', display: 'grid', placeItems: 'center' }}>
-        <span className="muted">Loading map…</span>
+        <span style={{ color: '#6a563b', fontFamily: 'Georgia, serif' }}>Unrolling the map…</span>
       </div>
     );
   return <RealZoneMap key={zone.id} zone={zone} data={data} />;

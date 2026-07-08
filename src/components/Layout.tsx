@@ -1,7 +1,78 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useCharacters } from '../context/CharacterContext';
 import { RACE_BY_ID } from '../data/races';
 import { DATA_VERSION, DISCLAIMER, SOURCES } from '../data/meta';
+
+interface NavItem {
+  to: string;
+  label: string;
+}
+interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+const GROUPS: NavGroup[] = [
+  {
+    label: 'World',
+    items: [
+      { to: '/travel', label: 'Travel Guide' },
+      { to: '/bestiary', label: 'Bestiary' },
+      { to: '/quests', label: 'Quest Guide' },
+      { to: '/factions', label: 'Factions' }
+    ]
+  },
+  {
+    label: 'Classes',
+    items: [
+      { to: '/classes', label: 'Races & Classes' },
+      { to: '/spells', label: 'Spells & Skills' },
+      { to: '/abilities', label: 'Stances & Invocations' },
+      { to: '/macros', label: 'Macro Guide' }
+    ]
+  },
+  {
+    label: 'Guides',
+    items: [
+      { to: '/progression', label: 'Progression' },
+      { to: '/handbook', label: 'Systems Handbook' }
+    ]
+  }
+];
+
+function NavGroupMenu({ group }: { group: NavGroup }) {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => setOpen(false), [location]);
+
+  const active = group.items.some(
+    (i) => location.pathname === i.to || location.pathname.startsWith(`${i.to}/`)
+  );
+
+  return (
+    <div className="nav-group" onMouseLeave={() => setOpen(false)}>
+      <button
+        className={active ? 'active' : ''}
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        onMouseEnter={() => setOpen(true)}
+      >
+        {group.label} <span aria-hidden="true">▾</span>
+      </button>
+      {open && (
+        <div className="nav-menu" role="menu">
+          {group.items.map((i) => (
+            <NavLink key={i.to} to={i.to} role="menuitem">
+              {i.label}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Layout() {
   const { characters, active, setActiveId } = useCharacters();
@@ -12,11 +83,9 @@ export default function Layout() {
         <nav>
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/atlas">Atlas</NavLink>
-          <NavLink to="/classes">Races &amp; Classes</NavLink>
-          <NavLink to="/bestiary">Bestiary</NavLink>
-          <NavLink to="/quests">Quests</NavLink>
-          <NavLink to="/macros">Macros</NavLink>
-          <NavLink to="/progression">Progression</NavLink>
+          {GROUPS.map((g) => (
+            <NavGroupMenu key={g.label} group={g} />
+          ))}
           <NavLink to="/character">My Character</NavLink>
         </nav>
         <span className="header-spacer" />

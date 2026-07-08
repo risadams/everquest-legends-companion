@@ -132,6 +132,64 @@ export interface MacroDef {
   tips?: string;
 }
 
+export type AbilityKind = 'stance' | 'invocation';
+
+/** class groups referenced by stance/invocation scaling formulas */
+export type CasterGroup = 'int' | 'wis' | 'pure-caster';
+
+export interface AbilityScaling {
+  group: CasterGroup;
+  /** 'additional' = group count − 1 (min 0); 'every' = full group count */
+  counting: 'additional' | 'every';
+  /** numeric form: value = base + per × n, rendered with unit */
+  label?: string;
+  base?: number;
+  per?: number;
+  unit?: string;
+  /** prose form: '{n}' is replaced with the computed count */
+  template?: string;
+}
+
+export interface CombatAbility {
+  id: string;
+  name: string;
+  kind: AbilityKind;
+  /** class ids that unlock this ability (any one in the combo suffices) */
+  forClasses: string[];
+  effect: string;
+  cost: string;
+  scaling?: AbilityScaling[];
+  tips?: string;
+}
+
+export interface Faction {
+  id: string;
+  name: string;
+  /** zones where this faction's NPCs are centered (first = primary home) */
+  homeZoneIds: string[];
+  description: string;
+  /** notable ways to raise standing */
+  raise: string[];
+  /** faction ids whose standing suffers when you help this one (and vice versa) */
+  rivals?: string[];
+  warning?: string;
+}
+
+export type TravelKind = 'gate' | 'port' | 'evac' | 'utility';
+
+export interface TravelSpell {
+  id: string;
+  name: string;
+  kind: TravelKind;
+  targets: 'self' | 'group' | 'ally';
+  /** classes that can scribe it, with the level required */
+  classes: { classId: string; level: number }[];
+  /** destination zone; omitted for bind-point and utility spells */
+  destZoneId?: string;
+  reagent?: string;
+  note?: string;
+}
+
 export interface CharacterProfile {
   id: string;
   name: string;

@@ -404,14 +404,15 @@ export const ANTONICA_ZONES: Zone[] = [
     continent: 'antonica',
     type: 'dungeon',
     levelMin: 8,
-    levelMax: 20,
+    levelMax: 28,
     connections: ['west-commonlands'],
     hotspots: [
       { name: 'First floor crypts', levels: '8-12' },
-      { name: 'Locked lower floors', levels: '12-20', note: 'Bring a rogue or a key' }
+      { name: 'Locked lower floors', levels: '12-20', note: 'Bring a rogue or a key' },
+      { name: 'The new deepest halls', levels: '22-28', note: 'EQL: high-level dark elf population added May 2026, ruled by Baron Telyx V`Zher' }
     ],
-    dangers: ['Undead see through regular invisibility', 'Locked doors can trap the unprepared'],
-    notes: 'A plague-ridden crypt beneath West Commonlands. Paladin and cleric heaven.',
+    dangers: ['Undead see through regular invisibility', 'Locked doors can trap the unprepared', 'The new deep population is far above the classic zone level'],
+    notes: 'A plague-ridden crypt beneath West Commonlands. Paladin and cleric heaven. EQL: every door is pickable with lockpicks — but they are not all the doors you may remember.',
     mapX: 50, mapY: 50
   },
   // ── Neriak / Lavastorm region ─────────────────────────────

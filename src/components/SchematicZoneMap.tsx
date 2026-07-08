@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Zone } from '../data/types';
 import { ZONE_BY_ID } from '../data/zones';
 import { seededRandom, typeFill, levelColor } from './mapUtils';
+import MapDecor from './MapDecor';
 
 const W = 460;
 const H = 340;
@@ -95,8 +96,8 @@ export default function SchematicZoneMap({ zone }: { zone: Zone }) {
   return (
     <div className="zone-map-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Schematic map of ${zone.name}`}>
-        <path d={path} fill={typeFill(zone.type)} stroke="#5a4c34" strokeWidth={2.5} />
-        <path d={path} fill="none" stroke="#3b3226" strokeWidth={7} opacity={0.35} />
+        <path d={path} fill={typeFill(zone.type)} stroke="#6b5334" strokeWidth={2.2} />
+        <path d={path} fill="none" stroke="#8a6d3f" strokeWidth={7} opacity={0.25} />
 
         {terrain.map((t, i) =>
           t.kind < 0.5 ? (
@@ -104,40 +105,37 @@ export default function SchematicZoneMap({ zone }: { zone: Zone }) {
               key={i}
               d={`M ${t.x - 5} ${t.y + 3} L ${t.x} ${t.y - 5} L ${t.x + 5} ${t.y + 3}`}
               fill="none"
-              stroke="#4a4030"
+              stroke="#8a6d3f"
               strokeWidth={1.2}
-              opacity={0.7}
+              opacity={0.55}
             />
           ) : (
-            <circle key={i} cx={t.x} cy={t.y} r={1.4} fill="#4a4030" opacity={0.6} />
+            <circle key={i} cx={t.x} cy={t.y} r={1.4} fill="#8a6d3f" opacity={0.5} />
           )
         )}
-
-        <text x={CX} y={30} textAnchor="middle" fill="#d4a94e" fontSize={19} fontFamily="Georgia, serif">
-          {zone.name}
-        </text>
-        <text x={CX} y={48} textAnchor="middle" fill="#a8988a" fontSize={11} fontFamily="Georgia, serif">
-          {zone.type === 'city' ? 'City' : `Levels ${zone.levelMin}–${zone.levelMax}`}
-        </text>
-
-        <g transform={`translate(${W - 34}, 44)`} stroke="#7a6a4c" fill="#7a6a4c">
-          <line x1={0} y1={12} x2={0} y2={-12} strokeWidth={1.2} />
-          <path d="M 0 -12 L -4 -4 L 4 -4 Z" />
-          <text x={0} y={-16} textAnchor="middle" fontSize={10} stroke="none">N</text>
-        </g>
 
         {spots.map(({ hotspot, x, y }, i) => (
           <g key={i}>
             <path
               d={`M ${x} ${y - 6} L ${x + 6} ${y} L ${x} ${y + 6} L ${x - 6} ${y} Z`}
               fill={levelColor(zone)}
-              stroke="#161310"
+              stroke="#3f3120"
               strokeWidth={1}
             />
-            <text x={x} y={y - 10} textAnchor="middle" fill="#e8ded0" fontSize={11} fontFamily="Georgia, serif">
+            <text
+              x={x}
+              y={y - 10}
+              textAnchor="middle"
+              fill="#3a2c1c"
+              fontSize={11}
+              fontFamily="Georgia, serif"
+              paintOrder="stroke"
+              stroke="#f0e4c8"
+              strokeWidth={2.4}
+            >
               {hotspot.name}
             </text>
-            <text x={x} y={y + 18} textAnchor="middle" fill="#a8988a" fontSize={9.5}>
+            <text x={x} y={y + 18} textAnchor="middle" fill="#6a563b" fontSize={9.5}>
               {hotspot.levels}
             </text>
           </g>
@@ -156,15 +154,18 @@ export default function SchematicZoneMap({ zone }: { zone: Zone }) {
           return (
             <Link key={neighbor.id} to={`/atlas/${neighbor.id}`}>
               <g style={{ cursor: 'pointer' }}>
-                <line x1={inside.x} y1={inside.y} x2={x} y2={y} stroke="#7a6a4c" strokeWidth={2} strokeDasharray="3 3" />
-                <circle cx={x} cy={y} r={6} fill="#161310" stroke="#d4a94e" strokeWidth={1.8} />
+                <line x1={inside.x} y1={inside.y} x2={x} y2={y} stroke="#8a6d3f" strokeWidth={2} strokeDasharray="3 3" />
+                <circle cx={x} cy={y} r={6} fill="#f0e4c8" stroke="#7b5f38" strokeWidth={1.8} />
                 <text
                   x={lp.x + (anchor === 'end' ? -10 : anchor === 'start' ? 10 : 0)}
                   y={lp.y + (Math.sin(angle) > 0.4 ? 18 : Math.sin(angle) < -0.4 ? -10 : 4)}
                   textAnchor={anchor}
-                  fill="#7fa8c9"
+                  fill="#245c8f"
                   fontSize={11}
                   fontFamily="Georgia, serif"
+                  paintOrder="stroke"
+                  stroke="#f0e4c8"
+                  strokeWidth={2.4}
                 >
                   {neighbor.name}
                 </text>
@@ -173,6 +174,10 @@ export default function SchematicZoneMap({ zone }: { zone: Zone }) {
           );
         })}
       </svg>
+      <MapDecor
+        title={zone.name}
+        subtitle={zone.type === 'city' ? 'City' : `Levels ${zone.levelMin}–${zone.levelMax}`}
+      />
     </div>
   );
 }

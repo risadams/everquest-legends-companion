@@ -1,4 +1,4 @@
-export const DATA_VERSION = '0.1.0 — preorder-beta data (July 2026)';
+export const DATA_VERSION = '0.3.0 — preorder-beta data (July 2026)';
 
 export const DISCLAIMER =
   'EverQuest Legends is in beta and launches July 28, 2026 — zone levels, class rules, and race lists may change. ' +

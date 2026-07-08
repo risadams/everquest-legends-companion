@@ -35,16 +35,16 @@ export const TYPE_LABELS: Record<Zone['type'], string> = {
   plane: 'Plane'
 };
 
-/** Fill tint for the zone-map interior by zone type. */
+/** Fill tint for the schematic zone interior by type (on parchment). */
 export function typeFill(type: Zone['type']): string {
   switch (type) {
     case 'city':
-      return '#2b251b';
+      return '#e9dcb6';
     case 'dungeon':
-      return '#231d20';
+      return '#ddc9a2';
     case 'plane':
-      return '#241f2b';
+      return '#e5d2bc';
     default:
-      return '#212619';
+      return '#e4d8ac';
   }
 }

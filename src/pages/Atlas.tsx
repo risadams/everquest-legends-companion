@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { Continent, ZoneType } from '../data/types';
 import { ZONES, CONTINENTS, CONTINENT_LABELS } from '../data/zones';
 import ContinentMap from '../components/ContinentMap';
@@ -80,6 +81,31 @@ export default function Atlas() {
       {active && highlights && (
         <p className="small muted">Gold rings mark zones the advisor recommends for {active.name}.</p>
       )}
+
+      <div className="advice-callout small" style={{ marginTop: '0.8rem' }}>
+        <strong>Crossing the world:</strong> blue ⚓/✦ markers on the map are departures to other
+        continents and planes — click them to follow the route.
+        <ul style={{ margin: '0.3rem 0 0', paddingLeft: '1.1rem' }}>
+          <li>
+            <strong>⚓ Antonica ⇄ Faydwer:</strong> boat from the Freeport docks across{' '}
+            <Link to="/atlas/ocean-of-tears">Ocean of Tears</Link> to{' '}
+            <Link to="/atlas/butcherblock">Butcherblock Mountains</Link>.
+          </li>
+          <li>
+            <strong>⚓ Antonica ⇄ Odus:</strong> boat from the <Link to="/atlas/qeynos">Qeynos</Link>{' '}
+            docks across <Link to="/atlas/eruds-crossing">Erud’s Crossing</Link> to{' '}
+            <Link to="/atlas/erudin">Erudin</Link>.
+          </li>
+          <li>
+            <strong>✦ The Planes:</strong> <Link to="/atlas/plane-of-fear">Fear</Link> has a
+            physical portal in the <Link to="/atlas/feerrott">Feerrott</Link>;{' '}
+            <Link to="/atlas/plane-of-hate">Hate</Link> and{' '}
+            <Link to="/atlas/plane-of-sky">Sky</Link> are wizard-port only (reagent required) — or
+            any leveled wizard via a Ritual. Faster overland travel: druid rings, wizard spires,
+            and evacs in the <Link to="/travel">Travel Guide</Link>.
+          </li>
+        </ul>
+      </div>
 
       <div className="card-grid" style={{ marginTop: '1rem' }}>
         {zones.map((z) => (

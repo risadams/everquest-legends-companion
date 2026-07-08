@@ -46,8 +46,8 @@ export default function Home() {
         <Link to="/classes" className="card" style={{ color: 'inherit' }}>
           <h3 style={{ marginTop: 0 }}>⚔ Races &amp; Classes</h3>
           <p className="small muted">
-            15 races, 16 classes, and the 3-class system. Explore combos and check your trio’s role
-            coverage before you commit.
+            15 races, 16 classes, and the 3-class system — with full per-class spell lists, skill
+            caps, and AA tables harvested from the EQL Wiki.
           </p>
         </Link>
         <Link to="/bestiary" className="card" style={{ color: 'inherit' }}>
@@ -69,6 +69,41 @@ export default function Home() {
           <p className="small muted">
             Ready-to-build social macros for your combo — including one-button cross-class rotations
             unique to the 3-class system.
+          </p>
+        </Link>
+        <Link to="/spells" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>✨ Spells &amp; Skills</h3>
+          <p className="small muted">
+            Every class’s full spell book, skill caps, and AA tables — with auto-granted vs.
+            vendor vs. drop sources for all ~1,500 spells.
+          </p>
+        </Link>
+        <Link to="/factions" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>⚖ Faction Guide</h3>
+          <p className="small muted">
+            The significant classic-era factions — who to raise, who it costs you, and which
+            cities are safe for your race. Now with EQL faction achievements.
+          </p>
+        </Link>
+        <Link to="/abilities" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>🛡 Stances &amp; Invocations</h3>
+          <p className="small muted">
+            EQL’s combat modes decoded — which of the 9 stances and 9 invocations your trio
+            unlocks, with the multiclass scaling computed for your combo.
+          </p>
+        </Link>
+        <Link to="/travel" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>🌀 Travel Guide</h3>
+          <p className="small muted">
+            The full port network — druid rings, wizard gates, evacs, and the new Rituals system —
+            colored by what your combo can cast today.
+          </p>
+        </Link>
+        <Link to="/handbook" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>📖 Systems Handbook</h3>
+          <p className="small muted">
+            AAs from level 1, Exaltation gear customization, tradeskill rules, deities, and
+            loadouts — the systems the manual never shipped for.
           </p>
         </Link>
         <Link to="/progression" className="card" style={{ color: 'inherit' }}>

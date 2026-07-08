@@ -113,6 +113,47 @@ button.active {
   flex: 1;
 }
 
+/* grouped nav dropdowns */
+.nav-group {
+  position: relative;
+}
+.nav-group > button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: var(--text-dim);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius);
+}
+.nav-group > button:hover {
+  color: var(--text);
+  background: none;
+  border: none;
+}
+.nav-group > button.active {
+  color: var(--gold);
+  background: var(--bg-raised);
+}
+.nav-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  min-width: 12.5rem;
+  padding: 0.3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+}
+.nav-menu a {
+  padding: 0.4rem 0.7rem;
+  white-space: nowrap;
+}
+
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -179,16 +220,63 @@ table.data th {
   .two-col { grid-template-columns: 1fr; }
 }
 
+/* ── Parchment map presentation ─────────────────────────────
+   Maps render as aged parchment sheets: warm paper gradient, a fibrous
+   turbulence grain (inline SVG data URI), and a soft edge vignette.
+   Ink colors for the geometry live in the map components. */
 .zone-map-wrap, .continent-map-wrap {
-  background: #1b1712;
-  border: 1px solid var(--border);
+  position: relative;
+  border: 1px solid #7b5f38;
   border-radius: var(--radius);
   overflow: hidden;
+  background-image:
+    radial-gradient(ellipse at center, rgba(74, 52, 26, 0) 52%, rgba(74, 52, 26, 0.22) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.32 0 0 0 0 0.24 0 0 0 0 0.13 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(140deg, #f1e5c8 0%, #ead9b4 55%, #e0cc9f 100%);
 }
 .zone-map-wrap svg, .continent-map-wrap svg {
   display: block;
   width: 100%;
   height: auto;
+}
+.map-frame {
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(90, 64, 32, 0.55);
+  outline: 1px solid rgba(90, 64, 32, 0.28);
+  outline-offset: 3px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.zone-map-wrap svg.map-compass, .continent-map-wrap svg.map-compass {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 62px;
+  height: 62px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+.map-cartouche {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  padding: 0.15rem 0.75rem;
+  background: rgba(243, 232, 205, 0.92);
+  border: 1px solid #7b5f38;
+  box-shadow: 0 0 0 2px rgba(243, 232, 205, 0.92), 0 0 0 3px rgba(123, 95, 56, 0.55);
+  color: #3a2c1c;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+.map-cartouche-sub {
+  font-variant: normal;
+  font-size: 0.8rem;
+  color: #6a563b;
+  letter-spacing: 0.02em;
 }
 
 .filter-bar {

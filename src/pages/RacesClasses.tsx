@@ -117,6 +117,9 @@ export default function RacesClasses() {
                     ))}
                   </ul>
                 </details>
+                <p className="small" style={{ margin: '0.4rem 0 0' }}>
+                  <Link to={`/classes/${c.id}`}>Spells, skills &amp; AAs →</Link>
+                </p>
               </div>
             ))}
           </div>

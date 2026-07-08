@@ -10,11 +10,15 @@ Set up your character (race, class trio, level) once, and every page personalize
 
 ## Features
 
-- **🗺 Atlas** — all 67 launch zones across Antonica, Faydwer, Odus, and the Planes with level ranges, hunting camps, dangers, and connection graphs. Zone maps render real geometry from [Brewall's EverQuest maps](https://www.eqmaps.info/) with pan/zoom, POI label filtering, multi-district city maps, and clickable zone-line exits.
-- **⚔ Races & Classes** — 15 races, 16 classes, and a combo explorer that grades any trio of EQL's 3-class system for role coverage (tank / healer / CC / pull / pets).
+- **🗺 Atlas** — all 67 launch zones across Antonica, Faydwer, Odus, and the Planes with level ranges, hunting camps, dangers, and connection graphs. Zone maps render real geometry from [Brewall's EverQuest maps](https://www.eqmaps.info/) as **aged parchment charts** — sepia ink, paper grain, compass rose, and title cartouche in the spirit of the classic [EQ Atlas](https://eqatlas.ca/atlas.html) — with pan/zoom, POI label filtering, multi-district city maps, and clickable zone-line exits.
+- **⚔ Races & Classes** — 15 races, 16 classes, and a combo explorer that grades any trio of EQL's 3-class system for role coverage (tank / healer / CC / pull / pets). Every class links to a **detail page with its full spell/song list** (~1,500 spells harvested from the EQL Wiki — auto-granted vs. vendor vs. drop/quest sources), **skill tables** (trained vs. auto, caps through and past 50), and **complete AA tables** (class, archetype, general, and special).
 - **🐉 Bestiary** — 106 curated named monsters, raid targets, and famous camps with levels, locations, and the loot that made them legends.
 - **✉ Quest Guide** — repeatable XP turn-ins and iconic item quests, gated by level, race alignment (trolls need not apply to Qeynos), and class.
 - **⌨ Macro Guide** — 41 classic social macros, including one-button cross-class rotations only possible with multiclassing (shaman slow → shadow knight lifetap, one hotkey).
+- **🛡 Stances & Invocations** — all 9 melee stances and 9 magic invocations (EQL's replacement for disciplines), filtered to your trio with the multiclass scaling formulas computed for your combo.
+- **🌀 Travel Guide** — the complete port network (druid rings/circles, wizard gates/portals, evacs, planar ports) plus the new Rituals system, color-coded by what your combo can cast at its current level.
+- **📖 Systems Handbook** — AAs from level 1, Exaltation gear customization, tradeskill rules and formulas, instances & picks, deities, and loadout gear sets.
+- **⚖ Faction Guide** — 19 significant classic-era factions with home zones, raise methods, rivalries, and banker gotchas, personalized to your race (home turf vs. KOS risk) — plus EQL's faction-achievement and race-unlock changes.
 - **📜 Progression Guide** — a band-by-band roadmap from the newbie yard to the planar endgame at 50.
 - **🧭 Personal Advisor** — ranked hunting zones (level fit + walking distance from your home city + build durability + faction warnings), build analysis, quests worth doing now, named mobs in reach, and next milestones.
 - **Installable PWA** — works offline, full map data included (~5.5 MB), multiple characters stored locally in your browser.
@@ -43,9 +47,23 @@ The game is in beta and data will shift. Everything lives in typed, hand-editabl
 | `src/data/races.ts` / `classes.ts` | races, classes, legal primary classes, roles |
 | `src/data/monsters.ts` / `quests.ts` | bestiary and quest guide |
 | `src/data/macros.ts` | macro guide |
+| `src/data/abilities.ts` | stances & invocations |
+| `src/data/travel.ts` | port network & travel spells |
+| `src/data/factions.ts` | faction guide |
+| `src/data/classdata/*.json` | per-class spells, skills, AAs (generated — see below) |
 | `src/data/progression.ts` | level-band leveling guide |
 
 Run `npm test` after editing — integrity tests verify every cross-reference (zone connections, class ids, map coverage).
+
+### Refreshing spells, skills & AAs
+
+Per-class spell lists, skill caps, and AA tables are harvested from the [EQL Wiki](https://eqlwiki.com/) class pages and the Alternate Advancement page:
+
+```bash
+node scripts/import-classdata.mjs
+```
+
+This regenerates `src/data/classdata/*.json` (one lazy-loaded chunk per class plus `shared-aa.json`). Re-run it whenever the wiki gets a content pass — sparse classes (e.g. Ranger skills) fill in automatically as editors do.
 
 ### Refreshing map geometry
 
@@ -60,7 +78,7 @@ This regenerates `src/data/maps/*.json` (one lazy-loaded chunk per zone).
 
 ## Verification scripts
 
-`scripts/verify-app.mjs`, `verify-maps.mjs`, `verify-guides.mjs`, and `verify-macros.mjs` drive the built app in headless Chrome (via `puppeteer-core` and a local Chrome install) and assert end-to-end behavior — run any of them against `npm run preview`:
+`scripts/verify-app.mjs`, `verify-maps.mjs`, `verify-guides.mjs`, `verify-macros.mjs`, and `verify-systems.mjs` drive the built app in headless Chrome (via `puppeteer-core` and a local Chrome install) and assert end-to-end behavior — run any of them against `npm run preview`:
 
 ```bash
 node scripts/verify-app.mjs http://localhost:4173 ./shots
