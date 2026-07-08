@@ -4,12 +4,78 @@ import type { Continent, Zone } from '../data/types';
 import { ZONES, ZONE_BY_ID, CONTINENT_LABELS } from '../data/zones';
 import { levelColor } from './mapUtils';
 import MapDecor from './MapDecor';
-
 const W = 720;
 const H = 540;
 const PAD_X = 70;
 const PAD_TOP = 40;
 const PAD_BOTTOM = 40;
+
+// Stylized vector coastlines drawn in the same 0–100 coordinate space as the
+// zone nodes, so land and markers scale together and can never drift apart.
+// Shapes follow classic Norrath geography; the Planes have no earthly coast.
+interface Coast {
+  land: string[];
+  /** decorative sea squiggles: [x, y] midpoints in 0–100 space */
+  waves?: Array<[number, number]>;
+}
+
+const COASTLINES: Partial<Record<Continent, Coast>> = {
+  antonica: {
+    land: [
+      // mainland, clockwise from the northwest
+      `M 20 16
+       Q 22 8 30 5 Q 36 2 40 6 Q 43 10 48 10
+       Q 55 8 62 10 Q 70 10 73 15 Q 76 20 73 26
+       Q 70 30 72 35 Q 74 42 71 47 Q 69 52 64 55
+       Q 62 60 63 66 Q 66 74 71 82 Q 74 91 67 95
+       Q 59 99 52 96 Q 45 98 41 93 Q 36 95 33 89
+       Q 27 84 25 77 Q 20 72 20 65 Q 15 60 14 52
+       Q 9 47 10 40 Q 10 33 13 28 Q 14 20 20 16 Z`
+    ],
+    waves: [
+      [82, 30], [86, 60], [79, 75], [10, 70], [6, 25], [42, 3], [88, 12]
+    ]
+  },
+  faydwer: {
+    land: [
+      // west lobe (Butcherblock) joined to the greater eastern mass
+      `M 10 40
+       Q 8 30 15 25 Q 22 20 30 21 Q 36 15 44 14
+       Q 50 8 57 11 Q 64 10 70 15 Q 80 17 85 25
+       Q 89 32 85 40 Q 87 48 82 54 Q 82 62 77 68
+       Q 74 76 68 73 Q 60 72 55 66 Q 46 68 40 66
+       Q 32 72 27 68 Q 20 72 16 64 Q 10 58 12 50
+       Q 9 46 10 40 Z`
+    ],
+    waves: [[8, 78], [30, 85], [60, 86], [90, 65], [92, 12], [12, 10]]
+  },
+  odus: {
+    land: [
+      // Odus mainland
+      `M 37 24
+       Q 43 18 51 21 Q 58 22 59 30 Q 57 36 58 42
+       Q 62 50 62 58 Q 66 64 64 72 Q 62 82 53 86
+       Q 45 90 39 84 Q 32 82 30 74 Q 26 66 29 56
+       Q 28 44 31 36 Q 32 28 37 24 Z`,
+      // Kerra Isle
+      `M 14 56 Q 18 51 23 54 Q 27 58 24 63 Q 20 68 15 65 Q 11 61 14 56 Z`
+    ],
+    waves: [[76, 24], [84, 56], [70, 84], [10, 30], [8, 80], [44, 8]]
+  }
+};
+
+function WaveMark({ x, y }: { x: number; y: number }) {
+  return (
+    <path
+      d={`M ${x - 2.2} ${y} q 1.1 -1 2.2 0 q 1.1 1 2.2 0`}
+      fill="none"
+      stroke="#a98f5f"
+      strokeWidth={1.4}
+      opacity={0.55}
+      vectorEffect="non-scaling-stroke"
+    />
+  );
+}
 
 // ── Label collision avoidance ────────────────────────────────
 // Every label (zone names, departure links, port captions) claims a box.
@@ -83,8 +149,8 @@ function place(
   return c;
 }
 
-const nameWidth = (s: string) => s.length * 6.3; // ~Georgia 11.5px
-const smallWidth = (s: string) => s.length * 5.6; // ~Georgia 10.5px
+const nameWidth = (s: string) => s.length * 6.9; // ~Georgia bold 11.5px
+const smallWidth = (s: string) => s.length * 6.4; // ~Georgia bold 10.5px
 
 export default function ContinentMap({
   continent,
@@ -93,20 +159,30 @@ export default function ContinentMap({
   continent: Continent;
   highlightIds?: Set<string>;
 }) {
+  const coast = COASTLINES[continent];
+
   const { zones, edges, departures, spellOnlyLabels, labels, sx, sy } = useMemo(() => {
     const zones = ZONES.filter((z) => z.continent === continent);
     const onCont = new Set(zones.map((z) => z.id));
-    // Auto-fit this continent's coordinate extents to the viewport.
-    const xs = zones.map((z) => z.mapX);
-    const ys = zones.map((z) => z.mapY);
-    const minX = Math.min(...xs);
-    const maxX = Math.max(...xs);
-    const minY = Math.min(...ys);
-    const maxY = Math.max(...ys);
-    const spanX = Math.max(1, maxX - minX);
-    const spanY = Math.max(1, maxY - minY);
-    const sx = (v: number) => PAD_X + ((v - minX) / spanX) * (W - PAD_X * 2);
-    const sy = (v: number) => PAD_TOP + ((v - minY) / spanY) * (H - PAD_TOP - PAD_BOTTOM);
+    let sx: (v: number) => number;
+    let sy: (v: number) => number;
+    if (coast) {
+      // coastline continents: node coords share the coastline's 0–100 space
+      sx = (v: number) => (v / 100) * W;
+      sy = (v: number) => (v / 100) * H;
+    } else {
+      // no coast (the Planes): auto-fit the coordinate extents to the viewport
+      const xs = zones.map((z) => z.mapX);
+      const ys = zones.map((z) => z.mapY);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const spanX = Math.max(1, maxX - minX);
+      const spanY = Math.max(1, maxY - minY);
+      sx = (v: number) => PAD_X + ((v - minX) / spanX) * (W - PAD_X * 2);
+      sy = (v: number) => PAD_TOP + ((v - minY) / spanY) * (H - PAD_TOP - PAD_BOTTOM);
+    }
     const seen = new Set<string>();
     const edges: Array<[Zone, Zone]> = [];
     const rawDepartures: Array<{ from: Zone; to: Zone }> = [];
@@ -223,11 +299,27 @@ export default function ContinentMap({
     });
 
     return { zones, edges, departures, spellOnlyLabels, labels, sx, sy };
-  }, [continent]);
+  }, [continent, coast]);
 
   return (
     <div className="continent-map-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Map of ${continent}`}>
+        {coast && (
+          <g transform={`scale(${W / 100} ${H / 100})`}>
+            {coast.land.map((d, i) => (
+              <g key={i}>
+                {/* shoreline glow, then land, then inked coast */}
+                <path d={d} fill="none" stroke="#c3ab7c" strokeWidth={9} opacity={0.55} vectorEffect="non-scaling-stroke" />
+                <path d={d} fill="#e1d2a2" />
+                <path d={d} fill="none" stroke="#6b5334" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+                <path d={d} fill="none" stroke="#8a6d3f" strokeWidth={5} opacity={0.25} vectorEffect="non-scaling-stroke" />
+              </g>
+            ))}
+            {coast.waves?.map(([x, y], i) => (
+              <WaveMark key={i} x={x} y={y} />
+            ))}
+          </g>
+        )}
         {edges.map(([a, b]) => (
           <line
             key={`${a.id}-${b.id}`}
@@ -236,9 +328,9 @@ export default function ContinentMap({
             x2={sx(b.mapX)}
             y2={sy(b.mapY)}
             stroke="#8a6d3f"
-            strokeWidth={1.6}
+            strokeWidth={1.7}
             strokeDasharray="5 4"
-            opacity={0.8}
+            opacity={0.85}
           />
         ))}
         {departures.map((d) => (
@@ -258,12 +350,13 @@ export default function ContinentMap({
                 x={d.tx}
                 y={d.ty}
                 textAnchor={d.anchor}
-                fill="#245c8f"
+                fill="#1d4d7a"
                 fontSize={10.5}
                 fontFamily="Georgia, serif"
+                fontWeight="bold"
                 paintOrder="stroke"
                 stroke="#f0e4c8"
-                strokeWidth={2.4}
+                strokeWidth={3}
                 style={{ textDecoration: 'underline' }}
               >
                 {d.label}
@@ -311,12 +404,13 @@ export default function ContinentMap({
                   x={label.tx}
                   y={label.ty}
                   textAnchor={label.anchor}
-                  fill="#3a2c1c"
+                  fill="#2e2113"
                   fontSize={11.5}
                   fontFamily="Georgia, serif"
+                  fontWeight="bold"
                   paintOrder="stroke"
                   stroke="#f0e4c8"
-                  strokeWidth={2.6}
+                  strokeWidth={3.2}
                 >
                   {z.name}
                 </text>
@@ -324,8 +418,11 @@ export default function ContinentMap({
                   x={label.tx}
                   y={label.ty + 12}
                   textAnchor={label.anchor}
-                  fill="#6a563b"
+                  fill="#59462c"
                   fontSize={9}
+                  paintOrder="stroke"
+                  stroke="#f0e4c8"
+                  strokeWidth={2.4}
                 >
                   {label.sub}
                 </text>

@@ -124,6 +124,13 @@ try {
   await page.goto(`${BASE}/#/atlas`, { waitUntil: 'networkidle0' });
   await new Promise((r) => setTimeout(r, 400));
   check('continent map has decor', Boolean(await page.$('.continent-map-wrap .map-compass')));
+  const legendText = await page.evaluate(
+    () => document.querySelector('[data-map-legend]')?.textContent ?? ''
+  );
+  check(
+    'map legend explains shapes, colors, and routes',
+    legendText.includes('dungeon / plane') && legendText.includes('Levels 1–9') && legendText.includes('zone line')
+  );
   const atlasText = await page.evaluate(() => document.body.innerText);
   check('crossing-the-world panel present', atlasText.includes('Crossing the world'));
   check('boat departure marker on Antonica map', atlasText.includes('⚓ Butcherblock Mountains · Faydwer'));

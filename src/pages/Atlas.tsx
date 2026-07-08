@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Continent, ZoneType } from '../data/types';
 import { ZONES, CONTINENTS, CONTINENT_LABELS } from '../data/zones';
 import ContinentMap from '../components/ContinentMap';
+import MapLegend from '../components/MapLegend';
 import ZoneCard from '../components/ZoneCard';
 import { useCharacters } from '../context/CharacterContext';
 import { levelFit, recommendZones } from '../lib/advisor';
@@ -78,8 +79,11 @@ export default function Atlas() {
       </div>
 
       <ContinentMap continent={continent} highlightIds={highlights} />
+      <MapLegend />
       {active && highlights && (
-        <p className="small muted">Gold rings mark zones the advisor recommends for {active.name}.</p>
+        <p className="small muted" style={{ margin: '0.3rem 0 0' }}>
+          Gold rings mark zones the advisor recommends for {active.name}.
+        </p>
       )}
 
       <div className="advice-callout small" style={{ marginTop: '0.8rem' }}>

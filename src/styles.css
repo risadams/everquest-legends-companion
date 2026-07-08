@@ -376,6 +376,30 @@ table.data th {
   letter-spacing: 0.02em;
 }
 
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  margin: 0.6rem 0 0.2rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+.map-legend-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+}
+.map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;

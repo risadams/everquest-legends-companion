@@ -14,7 +14,7 @@ export const FAYDWER_ZONES: Zone[] = [
     hotspots: [{ name: 'Platform city & lifts', levels: '1-5' }],
     dangers: ['The fall from the platforms is famous and fatal'],
     notes: 'Wood elf city built in the canopy of Greater Faydark.',
-    mapX: 36, mapY: 40
+    mapX: 47, mapY: 30
   },
   {
     id: 'felwithe',
@@ -27,7 +27,7 @@ export const FAYDWER_ZONES: Zone[] = [
     connections: ['greater-faydark'],
     hotspots: [{ name: 'Marble gates newbie yard (GFay side)', levels: '1-5' }],
     notes: 'Gleaming high elf capital tucked against the eastern cliffs of Greater Faydark.',
-    mapX: 55, mapY: 38
+    mapX: 79, mapY: 28
   },
   {
     id: 'kaladim',
@@ -40,7 +40,7 @@ export const FAYDWER_ZONES: Zone[] = [
     connections: ['butcherblock'],
     hotspots: [{ name: 'Mine gates newbie yard (Butcherblock side)', levels: '1-5' }],
     notes: 'Dwarven mine-city carved into the Butcherblock Mountains.',
-    mapX: 22, mapY: 52
+    mapX: 16, mapY: 44
   },
   {
     id: 'ak-anon',
@@ -53,7 +53,7 @@ export const FAYDWER_ZONES: Zone[] = [
     connections: ['steamfont'],
     hotspots: [{ name: 'Clockwork gates (Steamfont side)', levels: '1-5' }],
     notes: 'Gnomish clockwork city beneath the Steamfont Mountains.',
-    mapX: 74, mapY: 34
+    mapX: 73, mapY: 66
   },
   // ── Forests & mountains ───────────────────────────────────
   {
@@ -70,7 +70,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['Perpetual twilight under the canopy — bring light if human'],
     notes: 'The great elven forest; the busiest newbie zone on Faydwer.',
-    mapX: 40, mapY: 45
+    mapX: 55, mapY: 26
   },
   {
     id: 'crushbone',
@@ -87,7 +87,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['Massive trains to the zone line are a rite of passage'],
     notes: 'The orc keep of Clan Crushbone — Faydwer’s definitive first dungeon.',
-    mapX: 42, mapY: 28
+    mapX: 53, mapY: 17
   },
   {
     id: 'lesser-faydark',
@@ -103,7 +103,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['The equestrielle and brownie scouts slaughter the unwary'],
     notes: 'Twisted fey woodland between the great forest and Mistmoore’s valley.',
-    mapX: 55, mapY: 55
+    mapX: 33, mapY: 38
   },
   {
     id: 'steamfont',
@@ -120,7 +120,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['Meldrath’s mad clockworks', 'Harpies near the windmills'],
     notes: 'Windmill-dotted foothills around Ak’Anon; gnome starting grounds.',
-    mapX: 68, mapY: 40
+    mapX: 73, mapY: 54
   },
   {
     id: 'butcherblock',
@@ -136,7 +136,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['The docks draw wandering aggro — wait for the boat carefully'],
     notes: 'Mountain passes between Kaladim and the sea; Faydwer’s boat dock to Antonica.',
-    mapX: 30, mapY: 58
+    mapX: 14, mapY: 33
   },
   // ── Dungeons ──────────────────────────────────────────────
   {
@@ -153,7 +153,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['Deep water hides Kedge Keep’s guardians', 'Steep cliffs ring the crater'],
     notes: 'Flooded volcanic crater whose waters conceal Kedge Keep.',
-    mapX: 30, mapY: 72
+    mapX: 22, mapY: 56
   },
   {
     id: 'unrest',
@@ -170,7 +170,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['Ghouls paralyze', 'The house floods with adds when a pull goes wrong'],
     notes: 'Haunted manor above Dagnor’s Cauldron — the classic undead XP dungeon of the 20s.',
-    mapX: 38, mapY: 74
+    mapX: 28, mapY: 49
   },
   {
     id: 'kedge-keep',
@@ -186,7 +186,7 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['ENTIRELY UNDERWATER — breath gear or magic is mandatory', 'Disorienting 3D tunnels'],
     notes: 'A fully submerged fortress — bring underwater breathing or a froglok’s lungs.',
-    mapX: 26, mapY: 80
+    mapX: 24, mapY: 64
   },
   {
     id: 'mistmoore',
@@ -203,6 +203,6 @@ export const FAYDWER_ZONES: Zone[] = [
     ],
     dangers: ['Gargoyles see through invisibility', 'Deep pulls bring the whole castle'],
     notes: 'The vampire lord Mayong Mistmoore’s gothic castle in a hidden valley.',
-    mapX: 62, mapY: 62
+    mapX: 40, mapY: 57
   }
 ];

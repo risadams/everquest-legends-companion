@@ -12,7 +12,7 @@ export const ODUS_ZONES: Zone[] = [
     connections: ['toxxulia', 'eruds-crossing'],
     hotspots: [{ name: 'Docks & city library', levels: '1-5' }],
     notes: 'Gleaming city of the Erudites; boats sail to Qeynos across Erud’s Crossing.',
-    mapX: 45, mapY: 25
+    mapX: 52, mapY: 31
   },
   {
     id: 'paineel',
@@ -25,7 +25,7 @@ export const ODUS_ZONES: Zone[] = [
     connections: ['toxxulia', 'the-hole', 'the-warrens'],
     hotspots: [{ name: 'Heretic newbie grounds', levels: '1-6' }],
     notes: 'City of the heretic Erudites, built above the yawning pit of The Hole.',
-    mapX: 55, mapY: 58
+    mapX: 45, mapY: 72
   },
   {
     id: 'toxxulia',
@@ -41,7 +41,7 @@ export const ODUS_ZONES: Zone[] = [
     ],
     dangers: ['Dense fog and winding paths — easy to get lost'],
     notes: 'Murky forest covering southern Odus between the two Erudite cities.',
-    mapX: 48, mapY: 42
+    mapX: 45, mapY: 52
   },
   {
     id: 'kerra-isle',
@@ -57,7 +57,7 @@ export const ODUS_ZONES: Zone[] = [
     ],
     notes:
       'Island home of the cat-folk off the Odus coast. In EverQuest Legends this is the Kerran starting zone.',
-    mapX: 25, mapY: 55
+    mapX: 20, mapY: 60
   },
   {
     id: 'eruds-crossing',
@@ -73,7 +73,7 @@ export const ODUS_ZONES: Zone[] = [
     ],
     dangers: ['Jumping ship mid-crossing strands you with the sharks'],
     notes: 'The sea lane between Odus and Antonica, broken by a volcanic kerran isle.',
-    mapX: 70, mapY: 20
+    mapX: 82, mapY: 36
   },
   {
     id: 'the-warrens',
@@ -89,7 +89,7 @@ export const ODUS_ZONES: Zone[] = [
     ],
     dangers: ['Fast respawns — do not overextend'],
     notes: 'Kobold warren linking Paineel to the Stonebrunt Mountains.',
-    mapX: 52, mapY: 70
+    mapX: 53, mapY: 80
   },
   {
     id: 'stonebrunt',
@@ -105,7 +105,7 @@ export const ODUS_ZONES: Zone[] = [
     ],
     dangers: ['Steep cliffs; the peaks hold far older things'],
     notes: 'Misty green mountains of eastern Odus, reached through the Warrens.',
-    mapX: 48, mapY: 82
+    mapX: 63, mapY: 73
   },
   {
     id: 'the-hole',
@@ -121,6 +121,6 @@ export const ODUS_ZONES: Zone[] = [
     ],
     dangers: ['The initial drop — plan your entry and your exit', 'Everything sees invis'],
     notes: 'The ruins of Old Paineel, sunk into a pit that reaches toward the Underfoot. Endgame dungeon.',
-    mapX: 60, mapY: 66
+    mapX: 32, mapY: 79
   }
 ];

@@ -17,7 +17,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     notes:
       'Western human capital. Home to humans and half elves; boat service to Erudin departs from the docks.',
-    mapX: 7, mapY: 32
+    mapX: 14, mapY: 43
   },
   {
     id: 'surefall-glade',
@@ -30,7 +30,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['qeynos-hills'],
     hotspots: [{ name: 'Grove newbie area', levels: '1-5' }],
     notes: 'Hidden ranger and druid enclave behind a waterfall off Qeynos Hills.',
-    mapX: 9, mapY: 22
+    mapX: 13, mapY: 32
   },
   {
     id: 'halas',
@@ -43,7 +43,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['everfrost'],
     hotspots: [{ name: 'Icebound newbie yard (Everfrost side)', levels: '1-5' }],
     notes: 'Barbarian city on the frozen shores north of Everfrost Peaks.',
-    mapX: 22, mapY: 6
+    mapX: 35, mapY: 8
   },
   {
     id: 'rivervale',
@@ -56,7 +56,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['misty-thicket', 'kithicor'],
     hotspots: [{ name: 'Misty Thicket wall yard', levels: '1-8' }],
     notes: 'Halfling burrow-town between the Misty Thicket and haunted Kithicor Forest.',
-    mapX: 56, mapY: 28
+    mapX: 40, mapY: 37
   },
   {
     id: 'freeport',
@@ -73,7 +73,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     notes:
       'Eastern human port city, tolerant of most races. Boats sail across the Ocean of Tears to Butcherblock on Faydwer.',
-    mapX: 70, mapY: 42
+    mapX: 66, mapY: 49
   },
   {
     id: 'neriak',
@@ -86,7 +86,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['nektulos'],
     hotspots: [{ name: 'Foreign Quarter & Nektulos yard', levels: '1-5' }],
     notes: 'Subterranean dark elf city carved beneath the Nektulos Forest.',
-    mapX: 74, mapY: 28
+    mapX: 67, mapY: 30
   },
   {
     id: 'grobb',
@@ -99,7 +99,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['innothule'],
     hotspots: [{ name: 'Swamp newbie grounds (Innothule side)', levels: '1-6' }],
     notes: 'Troll mudhole on the edge of the Innothule Swamp.',
-    mapX: 57, mapY: 81
+    mapX: 64, mapY: 90
   },
   {
     id: 'oggok',
@@ -112,7 +112,7 @@ export const ANTONICA_ZONES: Zone[] = [
     connections: ['feerrott'],
     hotspots: [{ name: 'Feerrott newbie grounds', levels: '1-6' }],
     notes: 'Ogre stronghold in a box canyon off the Feerrott.',
-    mapX: 30, mapY: 71
+    mapX: 42, mapY: 71
   },
   // ── Northwest: Qeynos region ───────────────────────────────
   {
@@ -129,7 +129,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Undead and werewolves roam after dark near Fippy’s hill'],
     notes: 'Rolling farmland east of Qeynos; the classic western newbie zone.',
-    mapX: 12, mapY: 28
+    mapX: 18, mapY: 37
   },
   {
     id: 'blackburrow',
@@ -147,7 +147,7 @@ export const ANTONICA_ZONES: Zone[] = [
     dangers: ['The chasm — falling drops you into deep, angry water', 'Trains up the spiral ramps'],
     notes:
       'Gnoll warren connecting Qeynos Hills to Everfrost. The definitive first dungeon for western starters.',
-    mapX: 16, mapY: 22
+    mapX: 23, mapY: 30
   },
   {
     id: 'everfrost',
@@ -164,7 +164,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Ice giants patrol the eastern reaches', 'Mammoths hit far harder than they look'],
     notes: 'Frozen tundra south of Halas; barbarian starting grounds.',
-    mapX: 20, mapY: 12
+    mapX: 33, mapY: 16
   },
   {
     id: 'permafrost',
@@ -181,7 +181,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Vox’s chamber — the dragon sees through everything', 'Tight corridors make trains lethal'],
     notes: 'Frozen goblin citadel and home of the dragon Lady Vox.',
-    mapX: 27, mapY: 10
+    mapX: 40, mapY: 13
   },
   // ── The Karanas ────────────────────────────────────────────
   {
@@ -198,7 +198,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['A long, empty run — bind before crossing'],
     notes: 'Vast farmland plain; the western gateway to the Karanas.',
-    mapX: 20, mapY: 32
+    mapX: 17, mapY: 48
   },
   {
     id: 'north-karana',
@@ -214,7 +214,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Griffins patrol the open plain and hit like bosses'],
     notes: 'Open plains at the crossroads of the Karanas.',
-    mapX: 30, mapY: 28
+    mapX: 27, mapY: 43
   },
   {
     id: 'east-karana',
@@ -230,7 +230,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['The Rathe ridgeline spawns high-level giants'],
     notes: 'Rugged highlands rising toward Highpass Hold.',
-    mapX: 40, mapY: 28
+    mapX: 38, mapY: 46
   },
   {
     id: 'south-karana',
@@ -247,7 +247,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Roaming hill giants one-shot mid-level characters'],
     notes: 'Enormous savanna dotted with aviak towers and gnoll dens.',
-    mapX: 30, mapY: 42
+    mapX: 28, mapY: 56
   },
   {
     id: 'splitpaw',
@@ -263,7 +263,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Narrow tunnels, fast respawns'],
     notes: 'Gnoll-held burrow beneath South Karana.',
-    mapX: 28, mapY: 48
+    mapX: 24, mapY: 61
   },
   // ── Highpass corridor ──────────────────────────────────────
   {
@@ -280,7 +280,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Cliff falls along the pass'],
     notes: 'Fortified mountain pass linking the Karanas to the eastern lands.',
-    mapX: 46, mapY: 32
+    mapX: 50, mapY: 33
   },
   {
     id: 'highkeep',
@@ -296,7 +296,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Killing guards ruins useful faction'],
     notes: 'Keep-turned-dungeon above Highpass; the goblin basement is legendary XP.',
-    mapX: 48, mapY: 26
+    mapX: 53, mapY: 28
   },
   {
     id: 'kithicor',
@@ -315,7 +315,7 @@ export const ANTONICA_ZONES: Zone[] = [
       'Cross by day or hug the road at speed'
     ],
     notes: 'A cursed forest: trivial by day, deadly by night.',
-    mapX: 52, mapY: 36
+    mapX: 54, mapY: 42
   },
   // ── Rivervale region ───────────────────────────────────────
   {
@@ -331,7 +331,7 @@ export const ANTONICA_ZONES: Zone[] = [
       { name: 'Beyond the wall: goblins & bixies', levels: '5-10' }
     ],
     notes: 'Halfling farmland split by a great wall; safe west, wilder east.',
-    mapX: 62, mapY: 26
+    mapX: 44, mapY: 29
   },
   {
     id: 'runnyeye',
@@ -347,7 +347,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Evil eyes in the depths', 'Connects two regions — trains flow both ways'],
     notes: 'Goblin citadel bridging Misty Thicket and the Gorge of King Xorbb.',
-    mapX: 58, mapY: 20
+    mapX: 47, mapY: 39
   },
   {
     id: 'gorge-of-king-xorbb',
@@ -363,7 +363,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Evil eyes cast harsh spells and see invis'],
     notes: 'Ravine of minotaurs and beholders between East Karana and Runnyeye.',
-    mapX: 50, mapY: 22
+    mapX: 46, mapY: 22
   },
   // ── The Commonlands & Freeport region ─────────────────────
   {
@@ -380,7 +380,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Dervish cutthroat camps', 'Griffins wander in from the east'],
     notes: 'Open plains west of Freeport’s trade road.',
-    mapX: 52, mapY: 44
+    mapX: 55, mapY: 47
   },
   {
     id: 'east-commonlands',
@@ -396,7 +396,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Occasional griffin patrols on the plain'],
     notes: 'Freeport’s front yard and the busiest trade road in Norrath.',
-    mapX: 60, mapY: 44
+    mapX: 60, mapY: 49
   },
   {
     id: 'befallen',
@@ -413,7 +413,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Undead see through regular invisibility', 'Locked doors can trap the unprepared', 'The new deep population is far above the classic zone level'],
     notes: 'A plague-ridden crypt beneath West Commonlands. Paladin and cleric heaven. EQL: every door is pickable with lockpicks — but they are not all the doors you may remember.',
-    mapX: 50, mapY: 50
+    mapX: 52, mapY: 52
   },
   // ── Neriak / Lavastorm region ─────────────────────────────
   {
@@ -430,7 +430,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Perpetual gloom — humans need light sources'],
     notes: 'Dark pine forest sheltering the entrance to Neriak.',
-    mapX: 68, mapY: 32
+    mapX: 62, mapY: 35
   },
   {
     id: 'lavastorm',
@@ -446,7 +446,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Lava is instantly lethal — watch your footing'],
     notes: 'Volcanic wastes hiding the entrances to Najena and the Solusek dungeons.',
-    mapX: 74, mapY: 20
+    mapX: 62, mapY: 20
   },
   {
     id: 'najena',
@@ -462,7 +462,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Locked doors — carry the keys or a lockpicker'],
     notes: 'The wizard Najena’s magma dungeon of elementals and dark elves.',
-    mapX: 78, mapY: 26
+    mapX: 67, mapY: 24
   },
   {
     id: 'soluseks-eye',
@@ -478,7 +478,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Lava channels throughout', 'Long, mazelike — easy to get lost'],
     notes: 'Sprawling volcanic tunnels of fire goblins above Nagafen’s domain.',
-    mapX: 78, mapY: 16
+    mapX: 66, mapY: 15
   },
   {
     id: 'nagafens-lair',
@@ -495,7 +495,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Lord Nagafen — the definitive classic raid dragon', 'Fire giants patrol wide loops'],
     notes: 'The deep halls beneath Solusek’s Eye, ruled by the great red dragon.',
-    mapX: 82, mapY: 20
+    mapX: 71, mapY: 19
   },
   // ── The Ro deserts ────────────────────────────────────────
   {
@@ -513,7 +513,7 @@ export const ANTONICA_ZONES: Zone[] = [
     dangers: ['Sand giants wander up from the south at times'],
     notes:
       'Northern desert of Ro below Freeport. In EverQuest Legends, the Iksar begin here at a shoreline encampment.',
-    mapX: 66, mapY: 52
+    mapX: 59, mapY: 58
   },
   {
     id: 'oasis',
@@ -529,7 +529,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Sand giants patrol the dunes', 'Specter isle is deadlier than it looks'],
     notes: 'Lush wetland in the desert’s heart — perpetual hunting party central.',
-    mapX: 62, mapY: 62
+    mapX: 57, mapY: 69
   },
   {
     id: 'south-ro',
@@ -545,7 +545,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Sand giants and cyclopes roam the deep desert'],
     notes: 'Scorched southern desert running down to the Innothule Swamp.',
-    mapX: 58, mapY: 72
+    mapX: 53, mapY: 78
   },
   // ── The southern swamps ───────────────────────────────────
   {
@@ -562,7 +562,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['The froglok king’s patrols near Guk’s mouth'],
     notes: 'Fetid swamp between Grobb and the ruins of Guk.',
-    mapX: 51, mapY: 78
+    mapX: 58, mapY: 83
   },
   {
     id: 'upper-guk',
@@ -578,7 +578,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Water passages — know your air supply', 'Trains to the zone line are constant'],
     notes: 'The living half of the sunken froglok city.',
-    mapX: 49, mapY: 86
+    mapX: 52, mapY: 85
   },
   {
     id: 'lower-guk',
@@ -595,7 +595,7 @@ export const ANTONICA_ZONES: Zone[] = [
     dangers: ['Undead see invis', 'The deepest camps require a coordinated escape plan'],
     notes:
       'The undead depths of Guk — the most famous XP-and-loot dungeon of the classic era.',
-    mapX: 41, mapY: 91
+    mapX: 47, mapY: 90
   },
   {
     id: 'feerrott',
@@ -611,7 +611,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Spectres at the broken bridge', 'The Fear portal stone — do not touch it early'],
     notes: 'Overgrown jungle swamp hiding the temple of Cazic-Thule and the portal to Fear.',
-    mapX: 40, mapY: 74
+    mapX: 28, mapY: 72
   },
   {
     id: 'cazic-thule',
@@ -627,7 +627,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['The maze funnels trains directly onto you', 'Deep temple mobs cast fear'],
     notes: 'Ziggurat temple of the god of fear, held by fanatic lizardmen.',
-    mapX: 46, mapY: 70
+    mapX: 33, mapY: 78
   },
   // ── The Rathe region ──────────────────────────────────────
   {
@@ -646,7 +646,7 @@ export const ANTONICA_ZONES: Zone[] = [
     dangers: ['Hill giants flatten anyone under ~28 outside the newbie valley'],
     notes:
       'Giant-strewn peaks south of the lake. In EverQuest Legends, Frogloks begin at a protected camp here.',
-    mapX: 35, mapY: 66
+    mapX: 32, mapY: 60
   },
   {
     id: 'lake-rathetear',
@@ -662,7 +662,7 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Deepwater sharks', 'Occasional giant wanders from the Rathes'],
     notes: 'Great mountain lake connecting the southern jungles to the Karana plains.',
-    mapX: 33, mapY: 56
+    mapX: 33, mapY: 67
   },
   {
     id: 'arena',
@@ -675,7 +675,7 @@ export const ANTONICA_ZONES: Zone[] = [
     excludeFromAdvisor: true,
     hotspots: [{ name: 'Dueling grounds', levels: 'any', note: 'Consensual PvP arena' }],
     notes: 'Neutral dueling grounds carved into the mountains by Lake Rathetear.',
-    mapX: 36, mapY: 52
+    mapX: 32, mapY: 65
   },
   // ── Ocean ─────────────────────────────────────────────────
   {
@@ -692,6 +692,6 @@ export const ANTONICA_ZONES: Zone[] = [
     ],
     dangers: ['Falling off the boat mid-ocean', 'Cyclops isle borders the boat route'],
     notes: 'Island-dotted sea crossed by the Freeport–Butcherblock ferry.',
-    mapX: 84, mapY: 50
+    mapX: 74, mapY: 55
   }
 ];
