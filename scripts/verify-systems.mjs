@@ -155,6 +155,31 @@ try {
   check('your-place section present', loreText.includes('Your place in the world'));
   await page.screenshot({ path: join(SHOTS, 's17-lore.png') });
 
+  // My Character: Ding! + AA advisor
+  await page.goto(`${BASE}/#/character`, { waitUntil: 'networkidle0' });
+  await page.evaluate(() => {
+    localStorage.setItem('eql-companion.characters', JSON.stringify([
+      { id: 'v1', name: 'Vex', raceId: 'troll', classIds: ['shadow-knight', 'shaman', 'warrior'], level: 20, aaPoints: 4 }
+    ]));
+    localStorage.setItem('eql-companion.activeCharacter', 'v1');
+  });
+  await page.reload({ waitUntil: 'networkidle0' });
+  await new Promise((r) => setTimeout(r, 600));
+  const charText = await page.evaluate(() => document.body.innerText);
+  check('AA banked badge shows', charText.includes('4 AA banked'));
+  check('AA advisor section renders', Boolean(await page.$('[data-aa-advisor]')));
+  const aaAdvisorText = await page.evaluate(
+    () => document.querySelector('[data-aa-advisor]')?.textContent ?? ''
+  );
+  check('AA advisor suggests buy-now picks', aaAdvisorText.includes('buy now'));
+  await page.evaluate(() => {
+    [...document.querySelectorAll('button')].find((b) => b.textContent.includes('Ding!')).click();
+  });
+  await new Promise((r) => setTimeout(r, 250));
+  const dinged = await page.evaluate(() => document.body.innerText);
+  check('Ding! levels the character to 21', dinged.includes('level 21'));
+  await page.screenshot({ path: join(SHOTS, 's23-character-aa.png') });
+
   // Nav wiring: grouped dropdowns
   await page.goto(`${BASE}/#/`, { waitUntil: 'networkidle0' });
   const navText = await page.evaluate(() =>

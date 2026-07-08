@@ -227,4 +227,6 @@ export interface CharacterProfile {
   /** 1-3 class ids; first entry is the primary class */
   classIds: string[];
   level: number;
+  /** banked (unspent) AA points; optional for profiles saved before this existed */
+  aaPoints?: number;
 }

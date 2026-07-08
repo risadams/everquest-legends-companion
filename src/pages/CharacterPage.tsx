@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RACES, RACE_BY_ID } from '../data/races';
 import { CLASSES, CLASS_BY_ID } from '../data/classes';
@@ -14,6 +14,8 @@ import {
 import { ZONE_BY_ID } from '../data/zones';
 import { bandForLevel } from '../data/progression';
 import { FitBadge } from '../components/ZoneCard';
+import { loadClassData, loadSharedAa, type AaRow, type SharedAa } from '../lib/classdata';
+import { suggestAAs } from '../lib/aa';
 import type { CharacterProfile } from '../data/types';
 
 function CharacterForm({
@@ -29,6 +31,7 @@ function CharacterForm({
   const [raceId, setRaceId] = useState(initial?.raceId ?? 'human');
   const [classIds, setClassIds] = useState<string[]>(initial?.classIds ?? []);
   const [level, setLevel] = useState(initial?.level ?? 1);
+  const [aaPoints, setAaPoints] = useState(initial?.aaPoints ?? 0);
 
   const race = RACE_BY_ID[raceId];
   const primary = classIds[0];
@@ -76,6 +79,17 @@ function CharacterForm({
             max={50}
             value={level}
             onChange={(e) => setLevel(Math.max(1, Math.min(50, Number(e.target.value) || 1)))}
+            style={{ width: '4.5rem' }}
+          />
+        </label>
+        <label className="small muted">
+          Unspent AA{' '}
+          <input
+            type="number"
+            min={0}
+            max={999}
+            value={aaPoints}
+            onChange={(e) => setAaPoints(Math.max(0, Math.min(999, Number(e.target.value) || 0)))}
             style={{ width: '4.5rem' }}
           />
         </label>
@@ -127,7 +141,8 @@ function CharacterForm({
               name: name.trim(),
               raceId,
               classIds,
-              level
+              level,
+              aaPoints
             })
           }
         >
@@ -136,6 +151,85 @@ function CharacterForm({
         {onCancel && <button onClick={onCancel}>Cancel</button>}
       </div>
     </div>
+  );
+}
+
+function AaAdvisor({ character }: { character: CharacterProfile }) {
+  const [classAas, setClassAas] = useState<Array<{ className: string; aas: AaRow[] }> | null>(null);
+  const [shared, setShared] = useState<SharedAa | null>(null);
+
+  useEffect(() => {
+    let live = true;
+    Promise.all(
+      character.classIds.map(async (id) => {
+        const data = await loadClassData(id);
+        return { className: CLASS_BY_ID[id]?.name ?? id, aas: data?.aas ?? [] };
+      })
+    ).then((rows) => {
+      if (live) setClassAas(rows);
+    });
+    loadSharedAa().then((s) => {
+      if (live) setShared(s);
+    });
+    return () => {
+      live = false;
+    };
+  }, [character.classIds]);
+
+  const suggestions = useMemo(() => {
+    if (!classAas || !shared) return null;
+    return suggestAAs(character, classAas, shared, 9);
+  }, [character, classAas, shared]);
+
+  const points = character.aaPoints ?? 0;
+
+  return (
+    <section data-aa-advisor>
+      <h3>Spend your AA points</h3>
+      <p className="small muted" style={{ margin: '0.2rem 0 0.5rem' }}>
+        {points > 0 ? (
+          <>
+            <span className="badge gold">{points} unspent</span> — the advisor ranks your combo’s
+            signature class lines and the shared picks that fit your roles.
+          </>
+        ) : (
+          'No points banked right now — here’s what to save for. AA XP accrues from level 1 in EQL.'
+        )}
+      </p>
+      {!suggestions && <p className="muted small">Weighing the AA lines…</p>}
+      {suggestions && (
+        <ul className="tight small">
+          {suggestions.map(({ aa, source, firstCost, minLevel, eligible, affordable, why }) => (
+            <li key={aa.name}>
+              <strong style={{ color: 'var(--gold)' }}>{aa.name}</strong>{' '}
+              <span className="badge">{source}</span>{' '}
+              {affordable ? (
+                <span className="badge good">
+                  {firstCost === 0 ? 'free — grab it' : `buy now (${firstCost} pt${firstCost === 1 ? '' : 's'})`}
+                </span>
+              ) : eligible ? (
+                <span className="badge warn">
+                  {firstCost === null ? 'cost unknown' : `save ${firstCost} pts`}
+                </span>
+              ) : (
+                <span className="badge">at level {minLevel}</span>
+              )}{' '}
+              — {why}
+              {aa.ranks !== '1' && <span className="muted"> · {aa.ranks} ranks ({aa.cost})</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="small">
+        Full tables on your class pages:{' '}
+        {character.classIds.map((id, i) => (
+          <span key={id}>
+            {i > 0 && ' · '}
+            <Link to={`/classes/${id}`}>{CLASS_BY_ID[id]?.name ?? id} AAs</Link>
+          </span>
+        ))}
+      </p>
+    </section>
   );
 }
 
@@ -226,6 +320,8 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
             ))}
           </ul>
 
+          <AaAdvisor character={character} />
+
           {quests.length > 0 && (
             <>
               <h3>Quests worth doing</h3>
@@ -313,6 +409,31 @@ export default function CharacterPage() {
         </button>
         {active && (
           <>
+            <button
+              className="primary"
+              disabled={active.level >= 50}
+              title={active.level >= 50 ? 'Level cap!' : `Level up to ${active.level + 1}`}
+              onClick={() => upsert({ ...active, level: Math.min(50, active.level + 1) })}
+            >
+              🔔 Ding! {active.level < 50 ? `→ L${active.level + 1}` : 'L50'}
+            </button>
+            <button
+              title="Bank an earned AA point"
+              onClick={() => upsert({ ...active, aaPoints: (active.aaPoints ?? 0) + 1 })}
+            >
+              ✦ +1 AA
+            </button>
+            {(active.aaPoints ?? 0) > 0 && (
+              <button
+                title="Spend an AA point"
+                onClick={() =>
+                  upsert({ ...active, aaPoints: Math.max(0, (active.aaPoints ?? 0) - 1) })
+                }
+              >
+                − spend
+              </button>
+            )}
+            <span className="badge gold">{active.aaPoints ?? 0} AA banked</span>
             <button onClick={() => { setEditing(active); setCreating(false); }}>
               Edit {active.name}
             </button>
