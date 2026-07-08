@@ -29,10 +29,17 @@ function FactionCard({
 
   return (
     <div className="card" data-faction={faction.id}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: '0.5rem'
+        }}
+      >
         <strong style={{ color: 'var(--gold)' }}>{faction.name}</strong>
-        {isHome && <span className="badge good">Your home turf</span>}
-        {kosRisk && <span className="badge danger">KOS risk for your race</span>}
+        {isHome && <span className="badge good" style={{ flexShrink: 0 }}>Your home turf</span>}
+        {kosRisk && <span className="badge danger" style={{ flexShrink: 0 }}>KOS risk</span>}
       </div>
       <div className="chip-row" style={{ margin: '0.3rem 0' }}>
         {faction.homeZoneIds.map(

@@ -175,6 +175,22 @@ button.active {
   border: 1px solid var(--border);
   color: var(--text-dim);
   white-space: nowrap;
+  /* as a flex child (card headers), keep pill-sized instead of stretching */
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+.card button.small {
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+/* badges that are links (e.g. faction home zones) keep the pill look */
+a.badge {
+  color: var(--text-dim);
+}
+a.badge:hover {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  text-decoration: none;
 }
 .badge.gold { color: var(--gold); border-color: var(--gold-dim); }
 .badge.good { color: var(--good); border-color: var(--good); }

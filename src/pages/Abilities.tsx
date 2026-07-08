@@ -12,10 +12,17 @@ function AbilityCard({ ability, combo }: { ability: CombatAbility; combo: string
 
   return (
     <div className="card" data-ability={ability.id} style={unlocked ? undefined : { opacity: 0.45 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: '0.5rem'
+        }}
+      >
         <strong style={{ color: 'var(--gold)' }}>{ability.name}</strong>
         {combo.length > 0 && (
-          <span className={`badge ${unlocked ? 'good' : ''}`}>
+          <span className={`badge ${unlocked ? 'good' : ''}`} style={{ flexShrink: 0 }}>
             {unlocked ? 'In your combo' : 'Not in combo'}
           </span>
         )}

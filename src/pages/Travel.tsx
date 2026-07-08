@@ -137,11 +137,20 @@ export default function Travel() {
         <div className="card-grid">
           {destinations.map(({ zone, spells }) => (
             <div className="card" key={zone.id} data-travel-dest={zone.id}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  gap: '0.5rem'
+                }}
+              >
                 <strong>
                   <Link to={`/atlas/${zone.id}`}>{zone.name}</Link>
                 </strong>
-                <span className="badge">{CONTINENT_LABELS[zone.continent]}</span>
+                <span className="badge" style={{ flexShrink: 0 }}>
+                  {CONTINENT_LABELS[zone.continent]}
+                </span>
               </div>
               <div className="chip-row" style={{ margin: '0.4rem 0 0' }}>
                 {spells.map((s) => (
