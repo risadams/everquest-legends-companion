@@ -43,3 +43,12 @@ function unlockLevelAny(spell: TravelSpell): number {
 
 /** spells without a destination (gate, bind, utility) */
 export const UTILITY_SPELLS = TRAVEL_SPELLS.filter((s) => !s.destZoneId);
+
+/**
+ * Names (lowercased) of the portal-type spells that become castable Rituals in EQL —
+ * once any class scribes one, it is usable from the Actions window even off-loadout.
+ * Used to badge these spells on the class spell tables.
+ */
+export const RITUAL_SPELL_NAMES = new Set(
+  TRAVEL_SPELLS.filter((s) => s.kind === 'port' || s.kind === 'gate').map((s) => s.name.toLowerCase())
+);

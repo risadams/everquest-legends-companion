@@ -234,3 +234,9 @@ export const GEAR: GearItem[] = [
     farm: 'Teleport in with a full raid and grind Maestro’s minions toward Innoruuk. Like Fear, it’s a set assembled over multiple raids — split loot by class from the start.'
   }
 ];
+
+/** notable gear grouped by the zone it drops in (for the zone page) */
+export const GEAR_BY_ZONE: Record<string, GearItem[]> = GEAR.reduce((acc, g) => {
+  (acc[g.zoneId] ??= []).push(g);
+  return acc;
+}, {} as Record<string, GearItem[]>);

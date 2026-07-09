@@ -10,6 +10,7 @@ import { useCharacters } from '../context/CharacterContext';
 import { levelFit, roleCoverage, monsterFit } from '../lib/advisor';
 import { MONSTERS_BY_ZONE, KIND_LABELS } from '../data/monsters';
 import { QUESTS_BY_ZONE } from '../data/quests';
+import { GEAR_BY_ZONE, SLOT_LABELS, TIER_LABELS } from '../data/gear';
 
 export default function ZoneDetail() {
   const { zoneId } = useParams();
@@ -177,6 +178,30 @@ export default function ZoneDetail() {
               </table>
               <p className="small">
                 <Link to="/bestiary">Full bestiary →</Link>
+              </p>
+            </>
+          )}
+
+          {(GEAR_BY_ZONE[zone.id] ?? []).length > 0 && (
+            <>
+              <h3>Notable gear that drops here</h3>
+              <ul className="tight small">
+                {GEAR_BY_ZONE[zone.id].map((g) => (
+                  <li key={g.id}>
+                    <strong style={{ color: 'var(--gold)' }}>{g.name}</strong>{' '}
+                    <span className="badge">{SLOT_LABELS[g.slot]}</span>{' '}
+                    <span className={`badge ${g.tier === 'raid' ? 'danger' : g.tier === 'endgame' ? 'gold' : ''}`}>
+                      {TIER_LABELS[g.tier]}
+                    </span>{' '}
+                    — {g.notable}
+                    <div className="muted">
+                      <span className="muted">How to farm:</span> {g.farm}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <p className="small">
+                <Link to="/gear">Full notable-gear guide →</Link>
               </p>
             </>
           )}

@@ -18,6 +18,7 @@ import {
 } from '../lib/classdata';
 import { useCharacters } from '../context/CharacterContext';
 import { SpellIcon } from '../components/SpellIcon';
+import { RITUAL_SPELL_NAMES } from '../lib/travel';
 
 type Tab = 'spells' | 'skills' | 'aas';
 
@@ -217,7 +218,10 @@ export default function ClassDetail() {
             <span className="badge gold">Auto-granted</span> spells scribe themselves as you
             level; <span className="badge">Vendor</span> scrolls are bought at guild spell
             vendors; <span className="badge warn">Drop</span> and{' '}
-            <span className="badge blue">Quest/Research</span> scrolls you hunt down.
+            <span className="badge blue">Quest/Research</span> scrolls you hunt down.{' '}
+            A <span className="badge blue">Ritual</span> tag marks portal-type spells that become
+            castable from the Actions window even when this class is off your loadout (see the{' '}
+            <Link to="/travel">Travel Guide</Link>).
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table className="data">
@@ -258,6 +262,15 @@ export default function ClassDetail() {
                     <td>{s.level}</td>
                     <td style={{ color: 'var(--gold)' }} title={s.school}>
                       {s.name}
+                      {RITUAL_SPELL_NAMES.has(s.name.toLowerCase()) && (
+                        <span
+                          className="badge blue"
+                          style={{ marginLeft: '0.4rem' }}
+                          title="Portal-type spell — becomes a castable Ritual (Actions window) even when this class is not in your active loadout"
+                        >
+                          Ritual
+                        </span>
+                      )}
                     </td>
                     <td>
                       {s.kind}
