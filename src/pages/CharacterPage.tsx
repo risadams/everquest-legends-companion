@@ -14,9 +14,120 @@ import {
 import { ZONE_BY_ID } from '../data/zones';
 import { bandForLevel } from '../data/progression';
 import { FitBadge } from '../components/ZoneCard';
-import { loadClassData, loadSharedAa, type AaRow, type SharedAa } from '../lib/classdata';
+import {
+  loadClassData,
+  loadSharedAa,
+  spellSource,
+  SPELL_SOURCE_LABELS,
+  type AaRow,
+  type SharedAa,
+  type SpellRow
+} from '../lib/classdata';
 import { suggestAAs } from '../lib/aa';
+import { SpellIcon } from '../components/SpellIcon';
 import type { CharacterProfile } from '../data/types';
+
+function sourceBadge(s: SpellRow): string {
+  const kind = spellSource(s);
+  return kind === 'auto' ? 'gold' : kind === 'vendor' ? '' : kind === 'drop' ? 'warn' : 'blue';
+}
+
+function SpellsComingUp({ character }: { character: CharacterProfile }) {
+  const [byClass, setByClass] = useState<
+    Array<{ classId: string; className: string; spells: SpellRow[] }> | null
+  >(null);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    let live = true;
+    Promise.all(
+      character.classIds.map(async (id) => {
+        const data = await loadClassData(id);
+        return { classId: id, className: CLASS_BY_ID[id]?.name ?? id, spells: data?.spells ?? [] };
+      })
+    ).then((rows) => {
+      if (live) setByClass(rows);
+    });
+    return () => {
+      live = false;
+    };
+  }, [character.classIds]);
+
+  const hi = showAll ? 50 : Math.min(50, character.level + 4);
+  const upcoming = useMemo(() => {
+    if (!byClass) return null;
+    const items: Array<{ className: string; spell: SpellRow }> = [];
+    for (const c of byClass) {
+      for (const s of c.spells) {
+        if (s.level > character.level && s.level <= hi) items.push({ className: c.className, spell: s });
+      }
+    }
+    items.sort(
+      (a, b) => a.spell.level - b.spell.level || a.spell.name.localeCompare(b.spell.name)
+    );
+    return items;
+  }, [byClass, character.level, hi]);
+
+  const multi = character.classIds.length > 1;
+
+  return (
+    <section>
+      <h3>
+        Spells coming up{' '}
+        <span className="small muted">
+          {character.level >= 50 ? '(at level cap)' : `(levels ${character.level + 1}–${hi})`}
+        </span>
+      </h3>
+      {!upcoming && <p className="muted small">Loading your spell lines…</p>}
+      {upcoming && upcoming.length === 0 && (
+        <p className="small muted">
+          {character.level >= 50
+            ? 'You’re at the cap — every spell in your combo is already available.'
+            : 'Nothing new in the next few levels — keep hunting, then check back.'}
+        </p>
+      )}
+      {upcoming && upcoming.length > 0 && (
+        <div style={{ overflowX: 'auto' }}>
+          <table className="data">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Lv</th>
+                <th>Spell</th>
+                {multi && <th>Class</th>}
+                <th>Effect</th>
+                <th>How you get it</th>
+              </tr>
+            </thead>
+            <tbody>
+              {upcoming.map(({ className, spell }, i) => (
+                <tr key={`${spell.name}-${className}-${i}`}>
+                  <td><SpellIcon index={spell.icon} title={spell.name} size={26} /></td>
+                  <td>{spell.level}</td>
+                  <td style={{ color: 'var(--gold)' }} title={spell.school}>{spell.name}</td>
+                  {multi && <td className="small">{className}</td>}
+                  <td className="small" title={spell.maxEffect}>{spell.description || spell.maxEffect}</td>
+                  <td>
+                    <span className={`badge ${sourceBadge(spell)}`} title={spell.source}>
+                      {SPELL_SOURCE_LABELS[spellSource(spell)]}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {character.level < 50 && (
+        <p className="small">
+          <button onClick={() => setShowAll((v) => !v)}>
+            {showAll ? 'Show just the next few levels' : `Show everything to level 50`}
+          </button>
+        </p>
+      )}
+    </section>
+  );
+}
 
 function CharacterForm({
   initial,
@@ -254,6 +365,8 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
       <div className="advice-callout">
         <strong>Right now ({band.title.toLowerCase()}):</strong> {band.focus}
       </div>
+
+      <SpellsComingUp character={character} />
 
       <div className="two-col">
         <div>

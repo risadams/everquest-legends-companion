@@ -14,6 +14,8 @@ export interface SpellRow {
   /** where it comes from: "Autogranted; Vendor", "Vendor", "NPC Drop.", a city list, … */
   source: string;
   era: string;
+  /** client spellbook icon index (spells_us.txt field 75); see scripts/import-spell-icons.mjs */
+  icon?: number;
 }
 
 export interface SkillRow {

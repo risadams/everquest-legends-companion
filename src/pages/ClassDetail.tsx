@@ -12,6 +12,7 @@ import {
   type AaRow
 } from '../lib/classdata';
 import { useCharacters } from '../context/CharacterContext';
+import { SpellIcon } from '../components/SpellIcon';
 
 type Tab = 'spells' | 'skills' | 'aas';
 
@@ -178,6 +179,7 @@ export default function ClassDetail() {
             <table className="data">
               <thead>
                 <tr>
+                  <th></th>
                   <th>Lv</th>
                   <th>Name</th>
                   <th>Type</th>
@@ -190,6 +192,7 @@ export default function ClassDetail() {
               <tbody>
                 {spells.map((s, i) => (
                   <tr key={`${s.name}-${i}`}>
+                    <td><SpellIcon index={s.icon} title={s.name} size={28} /></td>
                     <td>{s.level}</td>
                     <td style={{ color: 'var(--gold)' }} title={s.school}>
                       {s.name}
