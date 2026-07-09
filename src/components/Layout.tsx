@@ -20,6 +20,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { to: '/travel', label: 'Travel Guide' },
       { to: '/bestiary', label: 'Bestiary' },
+      { to: '/gear', label: 'Notable Gear' },
       { to: '/quests', label: 'Quest Guide' },
       { to: '/factions', label: 'Factions' }
     ]

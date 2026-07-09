@@ -90,6 +90,47 @@ export interface Monster {
   notes?: string;
 }
 
+export type GearSlot =
+  | 'weapon'
+  | 'shield'
+  | 'head'
+  | 'chest'
+  | 'arms'
+  | 'hands'
+  | 'wrist'
+  | 'legs'
+  | 'feet'
+  | 'neck'
+  | 'back'
+  | 'waist'
+  | 'face'
+  | 'ears'
+  | 'fingers';
+
+export type GearTier = 'starter' | 'mid' | 'endgame' | 'raid';
+
+export interface GearItem {
+  id: string;
+  name: string;
+  slot: GearSlot;
+  /** why it's worth chasing — the stat or effect that makes it notable */
+  notable: string;
+  /** rough level at which it becomes relevant/worth farming */
+  levelMin: number;
+  levelMax?: number;
+  tier: GearTier;
+  /** class ids it especially suits; omit/empty = broadly useful */
+  classes?: string[];
+  /** zone to farm it in (links the Atlas) */
+  zoneId: string;
+  /** dropping/related monster id (links the Bestiary) when one is modeled */
+  monsterId?: string;
+  /** short human source line: what drops it or how it's obtained */
+  source: string;
+  /** how to farm it — camp strategy, spawn notes, tips */
+  farm: string;
+}
+
 export type QuestType = 'turn-in' | 'item' | 'class';
 
 export interface Quest {
@@ -229,4 +270,8 @@ export interface CharacterProfile {
   level: number;
   /** banked (unspent) AA points; optional for profiles saved before this existed */
   aaPoints?: number;
+  /** lowercased names of spells the player has acquired (checklist) */
+  ownedSpells?: string[];
+  /** names of AAs the player has purchased (checklist) */
+  ownedAas?: string[];
 }

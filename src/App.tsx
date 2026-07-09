@@ -8,6 +8,7 @@ import RacesClasses from './pages/RacesClasses';
 import Progression from './pages/Progression';
 import CharacterPage from './pages/CharacterPage';
 import Bestiary from './pages/Bestiary';
+import Gear from './pages/Gear';
 import Quests from './pages/Quests';
 import Macros from './pages/Macros';
 import Abilities from './pages/Abilities';
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/classes/:classId" element={<ClassDetail />} />
             <Route path="/spells" element={<ClassIndex />} />
             <Route path="/bestiary" element={<Bestiary />} />
+            <Route path="/gear" element={<Gear />} />
             <Route path="/quests" element={<Quests />} />
             <Route path="/factions" element={<Factions />} />
             <Route path="/macros" element={<Macros />} />

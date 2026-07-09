@@ -109,3 +109,20 @@ export const SPELL_SOURCE_LABELS: Record<SpellSource, string> = {
   research: 'Research',
   other: 'Special'
 };
+
+/** ownership-checklist key for a spell or AA (shared across pages) */
+export const ownKey = (name: string) => name.toLowerCase();
+
+/** auto-granted spells scribe themselves on reaching their level */
+export function isAutoGranted(s: SpellRow): boolean {
+  return spellSource(s) === 'auto';
+}
+
+/**
+ * Effective ownership: a spell is owned if it was explicitly checked, or if it is
+ * auto-granted and the character has reached its level. `owned` is the set of the
+ * character's explicitly-checked spell keys.
+ */
+export function spellOwned(s: SpellRow, level: number, owned: Set<string>): boolean {
+  return owned.has(ownKey(s.name)) || (isAutoGranted(s) && level >= s.level);
+}

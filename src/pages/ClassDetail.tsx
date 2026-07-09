@@ -8,6 +8,9 @@ import {
   SPELL_SOURCE_LABELS,
   RESIST_LABELS,
   castLabel,
+  ownKey,
+  isAutoGranted,
+  spellOwned,
   type ClassData,
   type SharedAa,
   type SpellRow,
@@ -23,13 +26,23 @@ function sourceBadgeClass(s: SpellRow): string {
   return kind === 'auto' ? 'gold' : kind === 'vendor' ? '' : kind === 'drop' ? 'warn' : 'blue';
 }
 
-function AaTable({ rows }: { rows: AaRow[] }) {
+function AaTable({
+  rows,
+  owned,
+  onToggle
+}: {
+  rows: AaRow[];
+  owned?: Set<string>;
+  onToggle?: (key: string) => void;
+}) {
   if (rows.length === 0) return <p className="small muted">Nothing documented on the wiki yet.</p>;
+  const track = !!onToggle;
   return (
     <div style={{ overflowX: 'auto' }}>
       <table className="data">
         <thead>
           <tr>
+            {track && <th title="Purchased">✓</th>}
             <th>Name</th>
             <th>Ranks</th>
             <th>Cost</th>
@@ -37,14 +50,28 @@ function AaTable({ rows }: { rows: AaRow[] }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((a) => (
-            <tr key={a.name}>
-              <td style={{ color: 'var(--gold)', whiteSpace: 'nowrap' }}>{a.name}</td>
-              <td>{a.ranks}</td>
-              <td style={{ whiteSpace: 'nowrap' }}>{a.cost}</td>
-              <td className="small">{a.description}</td>
-            </tr>
-          ))}
+          {rows.map((a) => {
+            const key = ownKey(a.name);
+            const have = owned?.has(key) ?? false;
+            return (
+              <tr key={a.name} style={have ? { opacity: 0.5 } : undefined}>
+                {track && (
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={have}
+                      onChange={() => onToggle!(key)}
+                      aria-label={`Owned: ${a.name}`}
+                    />
+                  </td>
+                )}
+                <td style={{ color: 'var(--gold)', whiteSpace: 'nowrap' }}>{a.name}</td>
+                <td>{a.ranks}</td>
+                <td style={{ whiteSpace: 'nowrap' }}>{a.cost}</td>
+                <td className="small">{a.description}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -54,7 +81,7 @@ function AaTable({ rows }: { rows: AaRow[] }) {
 export default function ClassDetail() {
   const { classId } = useParams<{ classId: string }>();
   const cls = classId ? CLASS_BY_ID[classId] : undefined;
-  const { active } = useCharacters();
+  const { active, toggleOwned } = useCharacters();
   const [data, setData] = useState<ClassData | 'missing' | null>(null);
   const [shared, setShared] = useState<SharedAa | null>(null);
   const [tab, setTab] = useState<Tab>('spells');
@@ -62,6 +89,12 @@ export default function ClassDetail() {
   const [maxLevel, setMaxLevel] = useState<number>(50);
 
   const mine = active?.classIds.includes(classId ?? '') ?? false;
+  const charLevel = active?.level ?? 0;
+  const ownedSpells = useMemo(() => new Set(active?.ownedSpells ?? []), [active]);
+  const ownedAas = useMemo(() => new Set(active?.ownedAas ?? []), [active]);
+  const aaTrack = mine
+    ? { owned: ownedAas, onToggle: (k: string) => toggleOwned('aa', k) }
+    : undefined;
 
   useEffect(() => {
     if (!classId) return;
@@ -170,6 +203,15 @@ export default function ClassDetail() {
               />
             </label>
             <span className="small muted">{spells.length} shown</span>
+            {mine && (
+              <span className="small muted">
+                ·{' '}
+                <strong style={{ color: 'var(--gold)' }}>
+                  {data.spells.filter((s) => spellOwned(s, charLevel, ownedSpells)).length}
+                </strong>{' '}
+                / {data.spells.length} owned
+              </span>
+            )}
           </div>
           <p className="small muted">
             <span className="badge gold">Auto-granted</span> spells scribe themselves as you
@@ -181,6 +223,7 @@ export default function ClassDetail() {
             <table className="data">
               <thead>
                 <tr>
+                  {mine && <th title="Owned">✓</th>}
                   <th></th>
                   <th>Lv</th>
                   <th>Name</th>
@@ -193,8 +236,24 @@ export default function ClassDetail() {
                 </tr>
               </thead>
               <tbody>
-                {spells.map((s, i) => (
-                  <tr key={`${s.name}-${i}`}>
+                {spells.map((s, i) => {
+                  const key = ownKey(s.name);
+                  const auto = isAutoGranted(s);
+                  const have = spellOwned(s, charLevel, ownedSpells);
+                  return (
+                  <tr key={`${s.name}-${i}`} style={have ? { opacity: 0.5 } : undefined}>
+                    {mine && (
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={have}
+                          disabled={auto}
+                          onChange={() => !auto && toggleOwned('spell', key)}
+                          title={auto ? `Auto-granted at level ${s.level}` : undefined}
+                          aria-label={`Owned: ${s.name}`}
+                        />
+                      </td>
+                    )}
                     <td><SpellIcon index={s.icon} title={s.name} size={28} /></td>
                     <td>{s.level}</td>
                     <td style={{ color: 'var(--gold)' }} title={s.school}>
@@ -222,7 +281,8 @@ export default function ClassDetail() {
                       </span>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -276,7 +336,7 @@ export default function ClassDetail() {
       {data && data !== 'missing' && tab === 'aas' && (
         <section>
           <h3 style={{ color: 'var(--gold-dim)' }}>{cls.name} class AAs</h3>
-          <AaTable rows={data.aas} />
+          <AaTable rows={data.aas} {...aaTrack} />
           {shared ? (
             <>
               <h3 style={{ color: 'var(--gold-dim)' }}>Archetype AAs</h3>
@@ -284,11 +344,11 @@ export default function ClassDetail() {
                 Shared across related classes — the in-game Archetype tab shows the subset your
                 combo qualifies for.
               </p>
-              <AaTable rows={shared.archetype} />
+              <AaTable rows={shared.archetype} {...aaTrack} />
               <h3 style={{ color: 'var(--gold-dim)' }}>General AAs (all classes)</h3>
-              <AaTable rows={shared.general} />
+              <AaTable rows={shared.general} {...aaTrack} />
               <h3 style={{ color: 'var(--gold-dim)' }}>Special AAs</h3>
-              <AaTable rows={shared.special} />
+              <AaTable rows={shared.special} {...aaTrack} />
             </>
           ) : (
             <p className="muted small">Loading shared AAs…</p>

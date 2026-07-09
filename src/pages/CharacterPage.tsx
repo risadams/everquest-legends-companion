@@ -20,6 +20,9 @@ import {
   spellSource,
   SPELL_SOURCE_LABELS,
   castLabel,
+  ownKey,
+  isAutoGranted,
+  spellOwned,
   type AaRow,
   type SharedAa,
   type SpellRow
@@ -34,6 +37,7 @@ function sourceBadge(s: SpellRow): string {
 }
 
 function SpellsComingUp({ character }: { character: CharacterProfile }) {
+  const { toggleOwned } = useCharacters();
   const [byClass, setByClass] = useState<
     Array<{ classId: string; className: string; spells: SpellRow[] }> | null
   >(null);
@@ -55,19 +59,22 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
   }, [character.classIds]);
 
   const hi = showAll ? 50 : Math.min(50, character.level + 4);
+  const owned = useMemo(() => new Set(character.ownedSpells ?? []), [character.ownedSpells]);
   const upcoming = useMemo(() => {
     if (!byClass) return null;
     const items: Array<{ className: string; spell: SpellRow }> = [];
     for (const c of byClass) {
       for (const s of c.spells) {
-        if (s.level > character.level && s.level <= hi) items.push({ className: c.className, spell: s });
+        if (s.level > character.level && s.level <= hi && !spellOwned(s, character.level, owned)) {
+          items.push({ className: c.className, spell: s });
+        }
       }
     }
     items.sort(
       (a, b) => a.spell.level - b.spell.level || a.spell.name.localeCompare(b.spell.name)
     );
     return items;
-  }, [byClass, character.level, hi]);
+  }, [byClass, character.level, hi, owned]);
 
   const multi = character.classIds.length > 1;
 
@@ -84,7 +91,9 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
         <p className="small muted">
           {character.level >= 50
             ? 'You’re at the cap — every spell in your combo is already available.'
-            : 'Nothing new in the next few levels — keep hunting, then check back.'}
+            : owned.size > 0
+              ? 'Nothing new to pick up in the next few levels — you’re caught up. Check off more on your class pages.'
+              : 'Nothing new in the next few levels — keep hunting, then check back.'}
         </p>
       )}
       {upcoming && upcoming.length > 0 && (
@@ -92,6 +101,7 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
           <table className="data">
             <thead>
               <tr>
+                <th title="Owned">✓</th>
                 <th></th>
                 <th>Lv</th>
                 <th>Spell</th>
@@ -101,8 +111,20 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
               </tr>
             </thead>
             <tbody>
-              {upcoming.map(({ className, spell }, i) => (
+              {upcoming.map(({ className, spell }, i) => {
+                const auto = isAutoGranted(spell);
+                return (
                 <tr key={`${spell.name}-${className}-${i}`}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={false}
+                      disabled={auto}
+                      onChange={() => toggleOwned('spell', ownKey(spell.name))}
+                      title={auto ? `Auto-granted at level ${spell.level}` : 'Mark owned'}
+                      aria-label={`Owned: ${spell.name}`}
+                    />
+                  </td>
                   <td><SpellIcon index={spell.icon} title={spell.name} size={26} /></td>
                   <td>{spell.level}</td>
                   <td
@@ -119,7 +141,8 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
                     </span>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -21,6 +21,8 @@ interface CharacterContextValue {
   setActiveId: (id: string | null) => void;
   upsert: (c: CharacterProfile) => void;
   remove: (id: string) => void;
+  /** toggle whether the active character owns a spell/AA (checklist) */
+  toggleOwned: (kind: 'spell' | 'aa', key: string) => void;
 }
 
 const CharacterContext = createContext<CharacterContextValue | null>(null);
@@ -50,14 +52,30 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     setActiveIdState((cur) => (cur === id ? null : cur));
   }, []);
 
+  const toggleOwned = useCallback(
+    (kind: 'spell' | 'aa', key: string) => {
+      setCharacters((prev) => {
+        const i = prev.findIndex((p) => p.id === activeId);
+        if (i === -1) return prev;
+        const field = kind === 'spell' ? 'ownedSpells' : 'ownedAas';
+        const cur = prev[i][field] ?? [];
+        const has = cur.includes(key);
+        const next = [...prev];
+        next[i] = { ...prev[i], [field]: has ? cur.filter((k) => k !== key) : [...cur, key] };
+        return next;
+      });
+    },
+    [activeId]
+  );
+
   const active = useMemo(
     () => characters.find((c) => c.id === activeId) ?? null,
     [characters, activeId]
   );
 
   const value = useMemo(
-    () => ({ characters, active, setActiveId, upsert, remove }),
-    [characters, active, setActiveId, upsert, remove]
+    () => ({ characters, active, setActiveId, upsert, remove, toggleOwned }),
+    [characters, active, setActiveId, upsert, remove, toggleOwned]
   );
 
   return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;
