@@ -19,6 +19,7 @@ import {
   loadSharedAa,
   spellSource,
   SPELL_SOURCE_LABELS,
+  castLabel,
   type AaRow,
   type SharedAa,
   type SpellRow
@@ -95,8 +96,8 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
                 <th>Lv</th>
                 <th>Spell</th>
                 {multi && <th>Class</th>}
-                <th>Effect</th>
-                <th>How you get it</th>
+                <th>Cast</th>
+                <th>Source</th>
               </tr>
             </thead>
             <tbody>
@@ -104,9 +105,14 @@ function SpellsComingUp({ character }: { character: CharacterProfile }) {
                 <tr key={`${spell.name}-${className}-${i}`}>
                   <td><SpellIcon index={spell.icon} title={spell.name} size={26} /></td>
                   <td>{spell.level}</td>
-                  <td style={{ color: 'var(--gold)' }} title={spell.school}>{spell.name}</td>
+                  <td
+                    style={{ color: 'var(--gold)', cursor: 'help' }}
+                    title={`${spell.description || spell.maxEffect}${spell.school ? ` — ${spell.school}` : ''}`}
+                  >
+                    {spell.name}
+                  </td>
                   {multi && <td className="small">{className}</td>}
-                  <td className="small" title={spell.maxEffect}>{spell.description || spell.maxEffect}</td>
+                  <td className="small">{castLabel(spell.castMs)}</td>
                   <td>
                     <span className={`badge ${sourceBadge(spell)}`} title={spell.source}>
                       {SPELL_SOURCE_LABELS[spellSource(spell)]}
@@ -366,8 +372,6 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
         <strong>Right now ({band.title.toLowerCase()}):</strong> {band.focus}
       </div>
 
-      <SpellsComingUp character={character} />
-
       <div className="two-col">
         <div>
           <h3>Where to hunt</h3>
@@ -405,6 +409,8 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
               ))}
             </tbody>
           </table>
+
+          <SpellsComingUp character={character} />
         </div>
         <div>
           <h3>Your build</h3>

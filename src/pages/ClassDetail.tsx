@@ -6,6 +6,8 @@ import {
   loadSharedAa,
   spellSource,
   SPELL_SOURCE_LABELS,
+  RESIST_LABELS,
+  castLabel,
   type ClassData,
   type SharedAa,
   type SpellRow,
@@ -184,6 +186,7 @@ export default function ClassDetail() {
                   <th>Name</th>
                   <th>Type</th>
                   <th>Mana</th>
+                  <th>Cast</th>
                   <th>Effect</th>
                   <th>Duration</th>
                   <th>Source</th>
@@ -197,8 +200,18 @@ export default function ClassDetail() {
                     <td style={{ color: 'var(--gold)' }} title={s.school}>
                       {s.name}
                     </td>
-                    <td>{s.kind}</td>
+                    <td>
+                      {s.kind}
+                      {s.resist ? <span className="muted"> · {RESIST_LABELS[s.resist]}</span> : ''}
+                    </td>
                     <td>{s.mana}</td>
+                    <td
+                      className="small"
+                      title={s.recastMs ? `Recast ${castLabel(s.recastMs)}` : undefined}
+                    >
+                      {castLabel(s.castMs)}
+                      {s.recastMs ? <span className="muted"> ⟳</span> : ''}
+                    </td>
                     <td className="small" title={s.maxEffect}>
                       {s.description || s.maxEffect}
                     </td>

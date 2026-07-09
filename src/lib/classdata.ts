@@ -16,6 +16,34 @@ export interface SpellRow {
   era: string;
   /** client spellbook icon index (spells_us.txt field 75); see scripts/import-spell-icons.mjs */
   icon?: number;
+  /** cast time in ms (0 = instant), from the client */
+  castMs?: number;
+  /** recast/reuse timer in ms, from the client (omitted when 0) */
+  recastMs?: number;
+  /** cast range in the client's units (omitted when 0/self) */
+  range?: number;
+  /** resist type id: 1 Magic, 2 Fire, 3 Cold, 4 Poison, 5 Disease, 6 Chromatic, 7 Prismatic, 8 Physical, 9 Corruption (omitted when 0/unresistable) */
+  resist?: number;
+}
+
+export const RESIST_LABELS: Record<number, string> = {
+  1: 'Magic',
+  2: 'Fire',
+  3: 'Cold',
+  4: 'Poison',
+  5: 'Disease',
+  6: 'Chromatic',
+  7: 'Prismatic',
+  8: 'Physical',
+  9: 'Corruption'
+};
+
+/** format a client cast time (ms) for display */
+export function castLabel(ms?: number): string {
+  if (ms == null) return '';
+  if (ms === 0) return 'Instant';
+  const s = ms / 1000;
+  return `${s % 1 === 0 ? s : s.toFixed(1)}s`;
 }
 
 export interface SkillRow {

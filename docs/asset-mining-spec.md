@@ -8,7 +8,12 @@ was already 100% accurate — so the client's contribution was **spell icons** (
 verified: Blast of Cold=56=blue snowflake; 144 unique icons packed into a 67 KB
 `public/icons/spells.webp`, 1493/1494 spells covered). The 488 "missing" client rows are
 confirmed Live-superset noise (post-classic illusions, modern focus/research spells) — NOT
-added. Phases 3–8 (maps, factions, AA, achievements, lore, zone renders) still open.
+added. **Also enriched every spell with client combat fields** — cast time (idx 8),
+recast/reuse timer (idx 10, recorded only when ≥6s and > cast), range (idx 4), resist type
+(idx 29: 1 Magic 2 Fire 3 Cold …) — surfaced as a Cast column + resist label + ⟳ cooldown
+marker in the ClassDetail table and the "Spells coming up" panel. **Phase 3 (Atlas): DONE
+for current content — classic only, see below.** Phases 4–8 (factions, AA, achievements,
+lore, zone renders) still open.
 Rewritten earlier 2026-07-09 after a design grill plus an empirical check that settled the
 central question: **the install at
 `D:\EverQuest Legends` is the actual EQ Legends client, and its data files are an
@@ -199,9 +204,23 @@ client doesn't ship a usable map for, and match its layout to the client's. The 
 `MAPPING` already resolved this per-zone by hand (e.g. `freportw/n/e`, `qeynos2/qeynos`,
 `neriaka/b/c`) — **preserve that per-zone discipline; never bulk-glob the folder.**
 
-**Work:** extend `MAPPING` with the zones the Legends server has unlocked (check
-`src/data/zones/` for which zone groups the site models; add `src/data/zones/*.ts`
-following `antonica.ts`). Add only zones Legends actually has.
+**CURRENT STATUS (2026-07-09): nothing to do — classic only.** The Atlas already covers
+all 67 classic zones (67 modeled = 67 maps, 1:1). Confirmed with the user: **only classic
+is live right now; Kunark, Velious, and later expansions are NOT yet available and will be
+added later.** The EQL Wiki *Category:Zones* lists Kunark+Velious zones (Chardok, Cabilis,
+Dreadlands, Firiona Vie, Kael Drakkel, Thurgadin, Western Wastes, Temple of Veeshan, …)
+because they are planned/documented, not because they are playable. Their brewall maps
+DO exist (`maps/brewall/`: burningwood, cabeast/west, chardok, dreadlands, firiona,
+karnor, sebilis, veeshan, kael, eastwastes, westwastes, thurgadina/b, skyshrine,
+templeveeshan, velketor, sleeper, … all present) so extraction is trivial *when* an
+expansion launches. **Do NOT add expansion zones until they are live** — it would show
+players zones they cannot visit. Re-open this phase per expansion release.
+
+**Work (when an expansion goes live):** extend `MAPPING` with that expansion's zones,
+add a continent (`kunark`/`velious`) to the `Continent` type + `CONTINENT_LABELS` +
+`CONTINENTS`, add curated `src/data/zones/*.ts` entries (levels/connections/lore from the
+EQL Wiki — do not fabricate), and optionally a `COASTLINES` entry in
+`src/components/ContinentMap.tsx` (a new continent auto-fits without one, like the Planes).
 
 **Acceptance:** `node scripts/verify-maps.mjs` passes; per-zone JSON sizes comparable to
 existing; Atlas renders new zones; each added zone's layout matches what the Legends

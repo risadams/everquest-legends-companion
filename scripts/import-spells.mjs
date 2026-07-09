@@ -43,8 +43,12 @@ if (!existsSync(SPELLS_FILE)) {
 
 // ── field layout ─────────────────────────────────────────────
 const IDX_NAME = 1;
+const IDX_RANGE = 4;   // cast range
+const IDX_CAST = 8;    // cast time (ms)
+const IDX_RECAST = 10; // recast/reuse timer (ms)
 const IDX_MANA = 14;
-const IDX_ICON = 75; // detailed spellbook icon (verified: Blast of Cold=56 = blue snowflake)
+const IDX_RESIST = 29; // resist type (1 Magic 2 Fire 3 Cold 4 Poison 5 Disease …); verified: Fire Bolt=2, Blast of Cold=3
+const IDX_ICON = 75;   // detailed spellbook icon (verified: Blast of Cold=56 = blue snowflake)
 const RUN_START = 36;
 // per-class level run order (16 classes)
 const CLASS_ORDER = [
@@ -70,8 +74,9 @@ const byName = new Map();
     if (f.length < RUN_START + 16) continue;
     const name = f[IDX_NAME];
     if (!name) continue;
-    const mana = parseInt(f[IDX_MANA], 10);
-    const icon = parseInt(f[IDX_ICON], 10);
+    const num = (i) => { const v = parseInt(f[i], 10); return Number.isFinite(v) ? v : null; };
+    const mana = num(IDX_MANA);
+    const icon = num(IDX_ICON);
     const levels = {};
     for (const c of CLASS_ORDER) {
       const v = parseInt(f[classLevelIdx(c)], 10);
@@ -81,8 +86,12 @@ const byName = new Map();
     if (!byName.has(key)) byName.set(key, []);
     byName.get(key).push({
       name,
-      mana: Number.isFinite(mana) ? mana : null,
-      icon: Number.isFinite(icon) && icon > 0 ? icon : null,
+      mana,
+      icon: icon != null && icon > 0 ? icon : null,
+      castMs: num(IDX_CAST),
+      recastMs: num(IDX_RECAST),
+      range: num(IDX_RANGE),
+      resist: num(IDX_RESIST),
       levels
     });
   }
@@ -121,6 +130,10 @@ function matchForClass(spellName, classId) {
     level: pick.levels[classId],
     mana: pick.mana,
     icon,
+    castMs: pick.castMs,
+    recastMs: pick.recastMs,
+    range: pick.range,
+    resist: pick.resist,
     collision: levels.length > 1 ? levels.sort((a, b) => a - b) : null
   };
 }
@@ -169,6 +182,17 @@ for (const classId of CLASS_FILES) {
     }
     if (m.icon != null) { iconSet++; if (WRITE) s.icon = m.icon; }
     else iconMissing++;
+    if (WRITE) {
+      // new client-sourced combat fields; omit zero/self defaults to keep JSON lean.
+      // clear-then-set so re-runs stay idempotent (fields may drop below threshold).
+      delete s.recastMs; delete s.range; delete s.resist;
+      if (m.castMs != null) s.castMs = m.castMs;
+      // recast only when it's a genuine long reuse timer (>=6s and longer than the
+      // cast) — sub-6s "recasts" are effectively the global cooldown and just noise
+      if (m.recastMs && m.recastMs >= 6000 && m.recastMs > (m.castMs ?? 0)) s.recastMs = m.recastMs;
+      if (m.range) s.range = m.range;
+      if (m.resist) s.resist = m.resist;
+    }
   }
 
   // client spells castable by this class at <=50, missing from curated
