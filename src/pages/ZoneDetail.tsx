@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ZONE_BY_ID, CONTINENT_LABELS } from '../data/zones';
 import ZoneMap from '../components/ZoneMap';
+import ZoneMap3D from '../components/ZoneMap3D';
+import ZoneMesh3D from '../components/ZoneMesh3D';
 import { FitBadge } from '../components/ZoneCard';
 import { TYPE_LABELS } from '../components/mapUtils';
 import { useCharacters } from '../context/CharacterContext';
@@ -12,6 +15,7 @@ export default function ZoneDetail() {
   const { zoneId } = useParams();
   const zone = zoneId ? ZONE_BY_ID[zoneId] : undefined;
   const { active } = useCharacters();
+  const [view, setView] = useState<'2d' | '3d' | 'render'>('2d');
 
   if (!zone) {
     return (
@@ -46,7 +50,20 @@ export default function ZoneDetail() {
         {fit && <FitBadge fit={fit} />}
       </div>
 
-      <ZoneMap zone={zone} />
+      <div className="filter-bar" style={{ margin: '0.6rem 0 0.4rem' }}>
+        <button className={view === '2d' ? 'active' : ''} onClick={() => setView('2d')}>
+          2D map
+        </button>
+        <button className={view === '3d' ? 'active' : ''} onClick={() => setView('3d')}>
+          3D map
+        </button>
+        <button className={view === 'render' ? 'active' : ''} onClick={() => setView('render')}>
+          3D render
+        </button>
+      </div>
+      {view === '2d' && <ZoneMap zone={zone} />}
+      {view === '3d' && <ZoneMap3D zone={zone} />}
+      {view === 'render' && <ZoneMesh3D zone={zone} />}
 
       <div className="two-col" style={{ marginTop: '1rem' }}>
         <div>
