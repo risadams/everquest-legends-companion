@@ -1,0 +1,415 @@
+{
+  "screaming-mace": {
+    "id": "screaming-mace",
+    "name": "Screaming Mace",
+    "wikiTitle": "Screaming Mace",
+    "lucyId": 578,
+    "flags": [
+      "MAGIC ITEM"
+    ],
+    "slot": "PRIMARY SECONDARY",
+    "skill": "1H Blunt",
+    "atkDelay": 35,
+    "dmg": 8,
+    "effect": {
+      "name": "Screaming Mace",
+      "type": "Combat",
+      "level": 10
+    },
+    "wt": 8,
+    "size": "MEDIUM",
+    "classesRaw": "ALL except NEC WIZ MAG ENC",
+    "racesRaw": "ALL",
+    "quests": [
+      "Screaming Mace Quest"
+    ],
+    "farmableNow": true
+  },
+  "guise-deceiver": {
+    "id": "guise-deceiver",
+    "name": "Guise of the Deceiver",
+    "wikiTitle": "Guise of the Deceiver",
+    "era": [
+      "Classic"
+    ],
+    "lucyId": 771,
+    "flags": [
+      "MAGIC ITEM",
+      "NO DROP"
+    ],
+    "stats": {
+      "CHA": 13
+    },
+    "resists": {
+      "MAGIC": 7
+    },
+    "slot": "FACE",
+    "ac": 4,
+    "effect": {
+      "name": "Illusion: Dark Elf",
+      "type": "Any Slot"
+    },
+    "wt": 0.4,
+    "size": "SMALL",
+    "classesRaw": "BRD ROG",
+    "racesRaw": "ALL"
+  },
+  "granite-tomahawk": {
+    "id": "granite-tomahawk",
+    "name": "Polished Granite Tomahawk",
+    "wikiTitle": "Polished Granite Tomahawk",
+    "lucyId": 902,
+    "flags": [
+      "MAGIC ITEM",
+      "LORE ITEM"
+    ],
+    "slot": "PRIMARY SECONDARY",
+    "skill": "1H Slashing",
+    "atkDelay": 26,
+    "dmg": 6,
+    "effect": {
+      "name": "Berserker Strength",
+      "type": "Combat",
+      "level": 10
+    },
+    "wt": 6.5,
+    "size": "MEDIUM",
+    "classesRaw": "WAR PAL RNG SHD BRD ROG",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Highpass Hold"
+      ],
+      "mobs": [
+        "Grenix Mucktail"
+      ],
+      "noLonger": false,
+      "raw": "Highpass Hold * Grenix Mucktail"
+    },
+    "farmableNow": true
+  },
+  "flowing-black-silk-sash": {
+    "id": "flowing-black-silk-sash",
+    "name": "Flowing Black Silk Sash",
+    "wikiTitle": "Flowing Black Silk Sash",
+    "era": [
+      "Classic"
+    ],
+    "lucyId": 938,
+    "flags": [
+      "MAGIC ITEM",
+      "LORE ITEM"
+    ],
+    "slot": "WAIST",
+    "haste": 21,
+    "wt": 0.1,
+    "size": "SMALL",
+    "classesRaw": "ALL",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Lower Guk"
+      ],
+      "mobs": [
+        "a frenzied ghoul"
+      ],
+      "noLonger": false,
+      "raw": "Lower Guk * a frenzied ghoul"
+    },
+    "farmableNow": true
+  },
+  "ssoy": {
+    "id": "ssoy",
+    "name": "Short Sword of the Ykesha",
+    "wikiTitle": "Short Sword of the Ykesha",
+    "era": [
+      "Classic"
+    ],
+    "lucyId": 1170,
+    "merchantValue": "235p",
+    "flags": [
+      "MAGIC ITEM"
+    ],
+    "slot": "PRIMARY SECONDARY",
+    "skill": "1H Slashing",
+    "atkDelay": 24,
+    "dmg": 9,
+    "effect": {
+      "name": "Ykesha",
+      "type": "Combat",
+      "level": 37
+    },
+    "wt": 4.5,
+    "size": "MEDIUM",
+    "classesRaw": "WAR PAL RNG SHD BRD ROG",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Lower Guk"
+      ],
+      "mobs": [
+        "the ghoul lord"
+      ],
+      "noLonger": false,
+      "raw": "Lower Guk * the ghoul lord"
+    },
+    "farmableNow": true
+  },
+  "fungus-great-staff": {
+    "id": "fungus-great-staff",
+    "name": "Fungus Covered Great Staff",
+    "wikiTitle": "Fungus Covered Great Staff",
+    "era": [
+      "Kunark"
+    ],
+    "lucyId": 601,
+    "flags": [
+      "MAGIC ITEM",
+      "LORE ITEM"
+    ],
+    "stats": {
+      "WIS": 8,
+      "INT": 8,
+      "CHA": -10
+    },
+    "resists": {
+      "FIRE": 5,
+      "DISEASE": 5
+    },
+    "slot": "PRIMARY",
+    "skill": "2H Blunt",
+    "atkDelay": 35,
+    "dmg": 18,
+    "effect": {
+      "name": "Fungal Regrowth",
+      "type": "Any Slot"
+    },
+    "wt": 1.1,
+    "size": "MEDIUM",
+    "classesRaw": "ALL",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Used to drop in Old Sebilis off myconid spore king."
+      ],
+      "mobs": [],
+      "noLonger": true,
+      "raw": "No Longer Drops Used to drop in Old Sebilis off myconid spore king."
+    },
+    "farmableNow": false
+  },
+  "deepwater-helm": {
+    "id": "deepwater-helm",
+    "name": "Deepwater Helm",
+    "wikiTitle": "Deepwater Helm",
+    "era": [
+      "Kunark"
+    ],
+    "lucyId": 746,
+    "flags": [
+      "MAGIC ITEM",
+      "LORE ITEM"
+    ],
+    "slot": "HEAD",
+    "ac": 21,
+    "effect": {
+      "name": "Daring",
+      "type": "Must Equip",
+      "level": 45
+    },
+    "wt": 6,
+    "size": "SMALL",
+    "classesRaw": "PAL",
+    "racesRaw": "ALL except IKS",
+    "drops": {
+      "zones": [
+        "Old Sebilis"
+      ],
+      "mobs": [
+        "crypt caretaker"
+      ],
+      "noLonger": false,
+      "raw": "Old Sebilis * crypt caretaker"
+    },
+    "farmableNow": false
+  },
+  "lamentation": {
+    "id": "lamentation",
+    "name": "Lamentation",
+    "wikiTitle": "Lamentation",
+    "era": [
+      "Kunark"
+    ],
+    "lucyId": 1165,
+    "flags": [
+      "MAGIC ITEM"
+    ],
+    "stats": {
+      "STR": 6,
+      "STA": 6,
+      "HP": 20
+    },
+    "slot": "PRIMARY SECONDARY",
+    "skill": "1H Slashing",
+    "atkDelay": 19,
+    "dmg": 9,
+    "wt": 0.6,
+    "size": "MEDIUM",
+    "classesRaw": "WAR RNG SHD",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Old Sebilis"
+      ],
+      "mobs": [
+        "sebilite guardian"
+      ],
+      "noLonger": false,
+      "raw": "Old Sebilis * sebilite guardian"
+    },
+    "farmableNow": false
+  },
+  "fungi-tunic": {
+    "id": "fungi-tunic",
+    "name": "Fungus Covered Scale Tunic",
+    "wikiTitle": "Fungus Covered Scale Tunic",
+    "era": [
+      "Kunark"
+    ],
+    "lucyId": 678,
+    "flags": [
+      "LORE ITEM"
+    ],
+    "stats": {
+      "STR": 2,
+      "AGI": -10,
+      "DEX": -10,
+      "INT": 2
+    },
+    "slot": "CHEST",
+    "ac": 21,
+    "effect": {
+      "name": "Fungal Regrowth",
+      "type": "Worn"
+    },
+    "wt": 2,
+    "size": "SMALL",
+    "classesRaw": "WAR CLR PAL RNG SHD DRU MNK BRD ROG SHM",
+    "racesRaw": "HUM BAR ERU ELF HIE DEF HEF DWF TRL OGR HFL GNM IKS",
+    "drops": {
+      "zones": [
+        "Old Sebilis"
+      ],
+      "mobs": [
+        "Myconid Spore King"
+      ],
+      "noLonger": false,
+      "raw": "Old Sebilis * Myconid Spore King"
+    },
+    "farmableNow": false
+  },
+  "cloak-of-flames": {
+    "id": "cloak-of-flames",
+    "name": "Cloak of Flames",
+    "wikiTitle": "Cloak of Flames",
+    "era": [
+      "Classic"
+    ],
+    "lucyId": 658,
+    "flags": [
+      "MAGIC ITEM"
+    ],
+    "stats": {
+      "AGI": 9,
+      "DEX": 9,
+      "HP": 50
+    },
+    "resists": {
+      "FIRE": 15
+    },
+    "slot": "BACK",
+    "ac": 10,
+    "haste": 36,
+    "wt": 0.1,
+    "size": "MEDIUM",
+    "classesRaw": "ALL",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Nagafen's Lair"
+      ],
+      "mobs": [
+        "Lord Nagafen"
+      ],
+      "noLonger": false,
+      "raw": "Nagafen's Lair * Lord Nagafen"
+    },
+    "farmableNow": true
+  },
+  "golden-efreeti-boots": {
+    "id": "golden-efreeti-boots",
+    "name": "Golden Efreeti Boots",
+    "wikiTitle": "Golden Efreeti Boots",
+    "era": [
+      "Classic"
+    ],
+    "lucyId": 764,
+    "flags": [
+      "MAGIC ITEM"
+    ],
+    "stats": {
+      "WIS": 9,
+      "INT": 9
+    },
+    "resists": {
+      "POISON": 1
+    },
+    "slot": "FEET",
+    "ac": 5,
+    "wt": 2.5,
+    "size": "MEDIUM",
+    "classesRaw": "ALL",
+    "racesRaw": "ALL",
+    "drops": {
+      "zones": [
+        "Nagafen's Lair"
+      ],
+      "mobs": [
+        "Efreeti Lord Djarn"
+      ],
+      "noLonger": false,
+      "raw": "Nagafen's Lair * Efreeti Lord Djarn"
+    },
+    "farmableNow": true
+  },
+  "rubicite-breastplate": {
+    "id": "rubicite-breastplate",
+    "name": "Rubicite Breastplate",
+    "wikiTitle": "Rubicite Breastplate",
+    "era": [
+      "Classic"
+    ],
+    "lucyId": 624,
+    "flags": [
+      "MAGIC ITEM",
+      "LORE ITEM"
+    ],
+    "slot": "CHEST",
+    "ac": 19,
+    "wt": 6,
+    "size": "LARGE",
+    "classesRaw": "WAR CLR PAL RNG SHD BRD ROG SHM",
+    "racesRaw": "HUM BAR ERU ELF HIE DEF HEF DWF TRL OGR",
+    "drops": {
+      "zones": [
+        "Cazic Thule"
+      ],
+      "mobs": [
+        "Avatar of Fear Classic Phase 1"
+      ],
+      "noLonger": false,
+      "raw": "Cazic Thule * Avatar of Fear Classic Phase 1"
+    },
+    "farmableNow": true
+  }
+}

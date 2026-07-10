@@ -1,0 +1,1927 @@
+{
+  "fippy-darkpaw": {
+    "id": "fippy-darkpaw",
+    "name": "Fippy Darkpaw",
+    "era": [
+      "Classic"
+    ],
+    "race": "Gnoll",
+    "class": "Monster",
+    "level": 4,
+    "ac": 38,
+    "hp": 39,
+    "aggroRadius": 55,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "special": [],
+    "zones": [
+      "North Qeynos"
+    ],
+    "spawns": [
+      "100% @ (1210, 480)"
+    ],
+    "loot": [
+      {
+        "name": "Rusty Weapons",
+        "rarity": "Rare",
+        "rate": "34%"
+      },
+      {
+        "name": "Patch of Gnoll Fur",
+        "rarity": "Always",
+        "rate": "100%"
+      },
+      {
+        "name": "Gnoll Fang",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "High Quality Gnoll Fur",
+        "rarity": "Rare",
+        "rate": "20%"
+      }
+    ]
+  },
+  "holly-windstalker": {
+    "id": "holly-windstalker",
+    "name": "Holly Windstalker[https://web.archive.org/web/20020319195253/http://eqbeastiary.allakhazam.com:80/search.shtml?id=2985]",
+    "race": "Human",
+    "class": "NPC",
+    "level": 27,
+    "ac": 194,
+    "hp": 999,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "100%",
+    "special": [],
+    "zones": [
+      "Qeynos Hills"
+    ],
+    "spawns": [
+      "100% @ (2726, -16)"
+    ],
+    "loot": [
+      {
+        "name": "Bronze Short Sword",
+        "rarity": "Uncommon",
+        "rate": "100%"
+      }
+    ]
+  },
+  "lord-elgnub": {
+    "id": "lord-elgnub",
+    "name": "Lord Elgnub",
+    "era": [
+      "Classic"
+    ],
+    "race": "Gnoll",
+    "class": "Shadow Knight",
+    "level": 22,
+    "hp": 850,
+    "aggroRadius": 30,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "special": [
+      "Harm Touch"
+    ],
+    "zones": [
+      "Blackburrow"
+    ],
+    "spawns": [
+      "@ (160, -385)"
+    ],
+    "loot": [
+      {
+        "name": "Baby Joseph Sayer",
+        "rarity": "Always"
+      },
+      {
+        "name": "Dark Runed Leggings",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Wicked Sallet",
+        "rarity": "Ultra Rare"
+      }
+    ]
+  },
+  "dark-assassin": {
+    "id": "dark-assassin",
+    "name": "Dark Assassin",
+    "era": [
+      "Paineel"
+    ],
+    "race": "Human",
+    "class": "Rogue",
+    "level": 50,
+    "ac": 344,
+    "hp": 14500,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "85%",
+    "special": [
+      "See Hide (does not see invis)"
+    ],
+    "zones": [
+      "Everfrost Peaks, The Feerrott"
+    ],
+    "spawns": [
+      "Various"
+    ],
+    "loot": [
+      {
+        "name": "Bloody Mantle",
+        "rarity": "Common"
+      },
+      {
+        "name": "Bloody Dirk",
+        "rarity": "Common"
+      },
+      {
+        "name": "Fading Shadow Dagger",
+        "rarity": "Rare"
+      }
+    ]
+  },
+  "lich-of-miragul": {
+    "id": "lich-of-miragul",
+    "name": "Lich of Miragul",
+    "era": [
+      "Paineel"
+    ],
+    "race": "Skeleton",
+    "class": "Necromancer",
+    "level": 45,
+    "ac": 311,
+    "hp": 10,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "90%",
+    "respawn": "1 week?",
+    "special": [
+      "Immune to Flee",
+      "Sees Invis",
+      "Sees Invis vs Undead",
+      "does not see Rogue Hide/Sneak (Work @ Level 3+)"
+    ],
+    "zones": [
+      "Everfrost Peaks"
+    ],
+    "spawns": [
+      "30% @ (4929, -4772), (4503, -4558)"
+    ],
+    "loot": []
+  },
+  "lady-vox": {
+    "id": "lady-vox",
+    "name": "Lady Vox",
+    "era": [
+      "Classic"
+    ],
+    "race": "Lava Dragon",
+    "class": "Cleric",
+    "level": 55,
+    "ac": 470,
+    "hp": 32000,
+    "aggroRadius": 55,
+    "attacksPerRound": "4 (?)",
+    "attackSpeed": "83%",
+    "respawn": "7 Days (+/- 8 Hours Variance)",
+    "special": [
+      "Banish",
+      "Dragon Roar",
+      "Frost Breath",
+      "Complete Heal",
+      "Enrage",
+      "Summon",
+      "Uncharmable",
+      "Unfearable",
+      "Unmezzable",
+      "Unstunnable",
+      "See Invis",
+      "See-hide",
+      "Belly Caster MR 340 CR 1000 DR 340 FR 70 PR 340"
+    ],
+    "zones": [
+      "Permafrost"
+    ],
+    "spawns": [
+      "(857, -262)"
+    ],
+    "loot": [
+      {
+        "name": "Block of Permafrost"
+      },
+      {
+        "name": "Crystalline Spear"
+      },
+      {
+        "name": "Dragon Bone Bracelet"
+      },
+      {
+        "name": "Kavruul`s Mystic Pouch"
+      },
+      {
+        "name": "McVaxius` Horn of War"
+      },
+      {
+        "name": "Runed Bolster Belt"
+      },
+      {
+        "name": "Scimitar of the Mistwalker"
+      },
+      {
+        "name": "Staff of Forbidden Rites"
+      },
+      {
+        "name": "Tobrin's Mystical Eyepatch"
+      },
+      {
+        "name": "Torn, Frost covered book"
+      },
+      {
+        "name": "Warhammer of Divine Grace"
+      },
+      {
+        "name": "White Dragon Hide"
+      },
+      {
+        "name": "White Dragon Scales"
+      },
+      {
+        "name": "White Dragon Tooth"
+      },
+      {
+        "name": "White Wolf-hide Girdle"
+      }
+    ]
+  },
+  "quillmane": {
+    "id": "quillmane",
+    "name": "Quillmane",
+    "era": [
+      "Classic"
+    ],
+    "race": "Pegasus",
+    "class": "Warrior",
+    "level": 30,
+    "ac": 235,
+    "hp": 1200,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "93%",
+    "special": [],
+    "zones": [
+      "Southern Karana"
+    ],
+    "spawns": [
+      "Wanders"
+    ],
+    "loot": [
+      {
+        "name": "Feathered Leggings",
+        "rarity": "Very Likely; about 88%"
+      },
+      {
+        "name": "Pegasus Feather Cloak",
+        "rarity": "Good luck! about 12%"
+      }
+    ]
+  },
+  "grimfeather": {
+    "id": "grimfeather",
+    "name": "GrimFeather",
+    "race": "Griffin",
+    "class": "Warrior",
+    "level": 37,
+    "ac": 259,
+    "hp": 2.2,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "92%",
+    "special": [
+      "See Invis",
+      "See Hide"
+    ],
+    "zones": [
+      "Northern Karana"
+    ],
+    "spawns": [
+      "50% @ (500, -1996)"
+    ],
+    "loot": [
+      {
+        "name": "Jade Ring",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Griffon Eye",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Salil's Writ Pg. 60 (Left)",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Salil's Writ Pg. 90 (Left)",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Golden Pendant",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Griffon Feathers",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Lambent Stone",
+        "rarity": "Rare",
+        "rate": "50%"
+      },
+      {
+        "name": "Rune of Ivy",
+        "rarity": "Rare",
+        "rate": "50%"
+      }
+    ]
+  },
+  "renux-herkanor": {
+    "id": "renux-herkanor",
+    "name": "Renux Herkanor",
+    "era": [
+      "Epic Quests"
+    ],
+    "race": "Human",
+    "class": "Rogue Guildmaster",
+    "level": 43,
+    "ac": 415,
+    "hp": 20000,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "81%",
+    "special": [],
+    "zones": [
+      "North Qeynos, Steamfont Mountains"
+    ],
+    "spawns": [
+      "{{Loc|Steamfont Mountains|(18, 152)}}"
+    ],
+    "loot": [
+      {
+        "name": "Jagged Diamond Dagger"
+      },
+      {
+        "name": "Trochilic's Skean"
+      },
+      {
+        "name": "Ravenscale Belt"
+      },
+      {
+        "name": "Ravenscale Cloak"
+      },
+      {
+        "name": "Ravenscale Mask"
+      },
+      {
+        "name": "Ravenscale Neckguard"
+      },
+      {
+        "name": "Ravenscale Shoulderpads"
+      },
+      {
+        "name": "Translated Parchment"
+      }
+    ]
+  },
+  "runnyeye-headmaster": {
+    "id": "runnyeye-headmaster",
+    "name": "a goblin headmaster",
+    "era": [
+      "Classic"
+    ],
+    "race": "Goblin",
+    "class": "Warrior",
+    "level": 24,
+    "ac": 181,
+    "hp": 875,
+    "aggroRadius": 70,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "respawn": "6 mins",
+    "special": [],
+    "zones": [
+      "Ocean of Tears"
+    ],
+    "spawns": [
+      "(-1200, -8594) - Common Spawn"
+    ],
+    "loot": [
+      {
+        "name": "Bonechipped Mask"
+      },
+      {
+        "name": "Shadowed Knife"
+      },
+      {
+        "name": "Rune of Clay"
+      }
+    ]
+  },
+  "baron-telyx": {
+    "id": "baron-telyx",
+    "name": "Baron Telyx V`Zher",
+    "era": [
+      "Classic"
+    ],
+    "race": "Dark Elf",
+    "class": "Paladin",
+    "level": 28,
+    "hp": 2234,
+    "respawn": "4:27",
+    "zones": [
+      "Befallen"
+    ],
+    "spawns": [
+      "-1002, -70, -66"
+    ],
+    "loot": [
+      {
+        "name": "Pristine Studded Leather Tunic"
+      },
+      {
+        "name": "The Baron's Blade"
+      }
+    ]
+  },
+  "drelzna": {
+    "id": "drelzna",
+    "name": "Drelzna",
+    "era": [
+      "Classic"
+    ],
+    "race": "Dark Elf",
+    "class": "Shadow Knight",
+    "level": 25,
+    "ac": 226,
+    "hp": 875,
+    "aggroRadius": 55,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "special": [
+      "Harmtouch(251) Respawn: 18.5 minutes"
+    ],
+    "zones": [
+      "Najena"
+    ],
+    "spawns": [
+      "20% @ (-35, -222)"
+    ],
+    "loot": [
+      {
+        "name": "Journeyman's Boots",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Tentacle Whip",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Ashenwood Short Spear",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Stiletto of the Bloodclaw",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Earring of Disease Reflection",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Bloodstained Key",
+        "rarity": "Uncommon",
+        "rate": "25%"
+      },
+      {
+        "name": "Golden Crescent Key",
+        "rarity": "Common",
+        "rate": "75%"
+      }
+    ]
+  },
+  "lord-nagafen": {
+    "id": "lord-nagafen",
+    "name": "Lord Nagafen",
+    "era": [
+      "Classic"
+    ],
+    "race": "Lava Dragon",
+    "class": "Warrior",
+    "level": 55,
+    "ac": 470,
+    "hp": 32000,
+    "aggroRadius": 55,
+    "attacksPerRound": "4 (?)",
+    "attackSpeed": "83%",
+    "special": [
+      "Enrage",
+      "Summon",
+      "Uncharmable",
+      "Unfearable",
+      "Unmezzable",
+      "Unstunnable",
+      "See Invis",
+      "Belly Caster Casts: Dragon Roar (Fear) Lava Breath (PB AoE 500 Fire Damage + Cancel Magic)"
+    ],
+    "zones": [
+      "Nagafen's Lair"
+    ],
+    "spawns": [
+      "(-1395, -871)"
+    ],
+    "loot": [
+      {
+        "name": "Bladestopper"
+      },
+      {
+        "name": "Blight, Hammer of the Scourge"
+      },
+      {
+        "name": "Cloak of Flames"
+      },
+      {
+        "name": "Gauntlets of Fiery Might"
+      },
+      {
+        "name": "Gold Plated Koshigatana"
+      },
+      {
+        "name": "Hierophant`s Crook"
+      },
+      {
+        "name": "Orb of Tishan"
+      },
+      {
+        "name": "Prayers of Life"
+      },
+      {
+        "name": "Red Dragon Scales"
+      },
+      {
+        "name": "Red Dragon Tooth"
+      },
+      {
+        "name": "Selo`s Drums of the March"
+      },
+      {
+        "name": "Torn, burnt book"
+      },
+      {
+        "name": "Treasure Hunter`s Satchel"
+      }
+    ]
+  },
+  "king-tranix": {
+    "id": "king-tranix",
+    "name": "King Tranix",
+    "era": [
+      "Classic"
+    ],
+    "race": "Giant",
+    "class": "Shadow Knight",
+    "level": 52,
+    "ac": 446,
+    "hp": 15550,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "84%",
+    "respawn": "8 Hours",
+    "special": [
+      "Unstunnable",
+      "See Invis",
+      "See Hide"
+    ],
+    "zones": [
+      "Nagafen's Lair"
+    ],
+    "spawns": [
+      "100% @ (-1552, -385)"
+    ],
+    "loot": [
+      {
+        "name": "Polished Mithril Torque",
+        "rarity": "Common"
+      },
+      {
+        "name": "Crown of King Tranix",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Throwing Boulder",
+        "rarity": "Uncommon"
+      },
+      {
+        "name": "Fire Giant Toes",
+        "rarity": "Uncommon"
+      }
+    ]
+  },
+  "efreeti-djarn": {
+    "id": "efreeti-djarn",
+    "name": "Efreeti Lord Djarn",
+    "era": [
+      "Classic"
+    ],
+    "race": "Efreeti",
+    "class": "Wizard",
+    "level": 50,
+    "ac": 429,
+    "hp": 9550,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "85%",
+    "respawn": "22 min",
+    "special": [
+      "High MR",
+      "Ice Comet",
+      "flees"
+    ],
+    "zones": [
+      "Nagafen's Lair"
+    ],
+    "spawns": [
+      "10% @ (-482, 321)"
+    ],
+    "loot": [
+      {
+        "name": "Djarn's Amethyst Ring",
+        "rarity": "Uncommon",
+        "rate": "25%"
+      },
+      {
+        "name": "Golden Efreeti Boots",
+        "rarity": "Common",
+        "rate": "75%"
+      }
+    ]
+  },
+  "dorn": {
+    "id": "dorn",
+    "name": "Dorn B`Dynn",
+    "race": "Dark Elf",
+    "class": "Warrior",
+    "level": 14,
+    "ac": 110,
+    "hp": 336,
+    "aggroRadius": 70,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "respawn": "6:40",
+    "special": [],
+    "zones": [
+      "Northern Desert of Ro"
+    ],
+    "spawns": [
+      "100% @ (1311, -391)"
+    ],
+    "loot": [
+      {
+        "name": "Dragoon Dirk",
+        "rarity": "Ultra Rare"
+      }
+    ]
+  },
+  "lockjaw": {
+    "id": "lockjaw",
+    "name": "Lockjaw",
+    "era": [
+      "Classic"
+    ],
+    "race": "Alligator",
+    "class": "Warrior",
+    "level": 25,
+    "ac": 181,
+    "hp": 875,
+    "aggroRadius": 60,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "special": [],
+    "zones": [
+      "Oasis of Marr"
+    ],
+    "spawns": [
+      "50% @ (943, -746), (-1301, -867)"
+    ],
+    "loot": [
+      {
+        "name": "Lockjaw Hide Vest",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Glowing Wooden Crook",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Gator Meat",
+        "rarity": "Uncommon",
+        "rate": "12%"
+      },
+      {
+        "name": "Dark Elf Parts"
+      },
+      {
+        "name": "High Elf Parts"
+      },
+      {
+        "name": "Halfling Parts"
+      },
+      {
+        "name": "Wood Elf Parts"
+      },
+      {
+        "name": "Gnome Meat"
+      }
+    ]
+  },
+  "cazel": {
+    "id": "cazel",
+    "name": "Cazel",
+    "race": "Giant",
+    "class": "Warrior",
+    "level": 51,
+    "ac": 350,
+    "hp": 9750,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "84%",
+    "special": [
+      "Summon",
+      "Unstunable",
+      "Unmezzable",
+      "High HP Regen 350+",
+      "flees at low HP"
+    ],
+    "zones": [
+      "Oasis of Marr"
+    ],
+    "spawns": [
+      "50% @ (1553, 782), 50% @ (-236, -667)"
+    ],
+    "loot": [
+      {
+        "name": "Fine Steel Long Sword",
+        "rarity": "Rare",
+        "rate": "50%"
+      },
+      {
+        "name": "Golden Earring",
+        "rarity": "Rare",
+        "rate": "50%"
+      },
+      {
+        "name": "Words of Duress",
+        "rarity": "Rare",
+        "rate": "33%"
+      },
+      {
+        "name": "Sand of Ro",
+        "rarity": "Rare",
+        "rate": "33%"
+      },
+      {
+        "name": "Fine Steel Two Handed Sword",
+        "rarity": "Rare",
+        "rate": "50%"
+      },
+      {
+        "name": "Essence of Sunlight",
+        "rarity": "Rare",
+        "rate": "34%"
+      },
+      {
+        "name": "Lambent Stone",
+        "rarity": "Always",
+        "rate": "100%"
+      },
+      {
+        "name": "Spoon",
+        "rarity": "Common",
+        "rate": "100%"
+      }
+    ]
+  },
+  "froglok-shin-lord": {
+    "id": "froglok-shin-lord",
+    "name": "the froglok shin lord",
+    "era": [
+      "Classic"
+    ],
+    "race": "Old Froglok",
+    "class": "Paladin",
+    "level": 30,
+    "ac": 267,
+    "hp": 1200,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "93%",
+    "special": [],
+    "zones": [
+      "Upper Guk"
+    ],
+    "spawns": [
+      "33% @ (-5, 288)"
+    ],
+    "loot": [
+      {
+        "name": "Silver-Plated Bracer",
+        "rarity": "Common"
+      },
+      {
+        "name": "Ghoulbane",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Mesh Armor",
+        "rarity": "Uncommon"
+      },
+      {
+        "name": "Rusty Short Sword"
+      },
+      {
+        "name": "Froglok Meat",
+        "rarity": "Common"
+      },
+      {
+        "name": "Froglok Blood",
+        "rarity": "Common"
+      }
+    ]
+  },
+  "frenzied-ghoul": {
+    "id": "frenzied-ghoul",
+    "name": "a frenzied ghoul",
+    "era": [
+      "Classic"
+    ],
+    "race": "Froglok Ghoul",
+    "class": "Warrior",
+    "level": 42,
+    "ac": 364,
+    "hp": 6261,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "91%",
+    "respawn": "28 min",
+    "special": [
+      "Immune to Flee",
+      "See Invis",
+      "Sees through IVU"
+    ],
+    "zones": [
+      "Lower Guk"
+    ],
+    "spawns": [
+      "8% @ Various"
+    ],
+    "loot": [
+      {
+        "name": "Flowing Black Silk Sash",
+        "rarity": "Rare",
+        "rate": "10%"
+      },
+      {
+        "name": "Moonstone Ring",
+        "rarity": "Common",
+        "rate": "90%"
+      }
+    ]
+  },
+  "ghoul-lord": {
+    "id": "ghoul-lord",
+    "name": "the ghoul lord",
+    "era": [
+      "Classic"
+    ],
+    "race": "Old Froglok Ghoul",
+    "class": "Shadowknight",
+    "level": 47,
+    "ac": 405,
+    "hp": 10863,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "90%",
+    "respawn": "9 min",
+    "special": [
+      "Immune to Flee",
+      "See Invis"
+    ],
+    "zones": [
+      "Lower Guk"
+    ],
+    "spawns": [
+      "25% @ (1558, -749)"
+    ],
+    "loot": [
+      {
+        "name": "Scalp of the Ghoul Lord",
+        "rarity": "Unknown"
+      },
+      {
+        "name": "Skull-shaped Barbute",
+        "rarity": "Common",
+        "rate": "75%"
+      },
+      {
+        "name": "Short Sword of the Ykesha",
+        "rarity": "Rare",
+        "rate": "25%"
+      }
+    ]
+  },
+  "ghoul-assassin": {
+    "id": "ghoul-assassin",
+    "name": "a ghoul assassin",
+    "era": [
+      "Classic"
+    ],
+    "race": "Old Froglok Ghoul",
+    "class": "Rogue",
+    "level": 35,
+    "ac": 308,
+    "hp": 1656,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "92%",
+    "special": [
+      "Immune to Flee",
+      "See Invis",
+      "See Hide",
+      "See IVU"
+    ],
+    "zones": [
+      "Lower Guk"
+    ],
+    "spawns": [
+      "20% @ (620, -754)"
+    ],
+    "loot": [
+      {
+        "name": "Mask of Deception",
+        "rarity": "Common",
+        "rate": "80%"
+      },
+      {
+        "name": "Serrated Bone Dirk",
+        "rarity": "Common",
+        "rate": "20%"
+      }
+    ]
+  },
+  "oot-oracle": {
+    "id": "oot-oracle",
+    "name": "Oracle of K`Arnon",
+    "era": [
+      "Classic"
+    ],
+    "race": "High Elf",
+    "class": "Wizard",
+    "level": 36,
+    "ac": 253,
+    "hp": 1656,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "92%",
+    "respawn": "~6 hours",
+    "special": [
+      "See Invis"
+    ],
+    "zones": [
+      "Ocean of Tears"
+    ],
+    "spawns": [
+      "100% @ (-529, -8843)"
+    ],
+    "loot": [
+      {
+        "name": "Robe of the Oracle",
+        "rarity": "Always",
+        "rate": "100%"
+      }
+    ]
+  },
+  "oot-allizewsaur": {
+    "id": "oot-allizewsaur",
+    "name": "Allizewsaur",
+    "era": [
+      "Classic"
+    ],
+    "race": "Lizard Man",
+    "class": "Warrior",
+    "level": 50,
+    "ac": 344,
+    "hp": 15000,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "85%",
+    "respawn": "6.0 min",
+    "special": [],
+    "zones": [
+      "Ocean of Tears"
+    ],
+    "spawns": [
+      "75% @ (-3007, -698)"
+    ],
+    "loot": [
+      {
+        "name": "Emerald Ring",
+        "rarity": "Ultra Rare",
+        "rate": "25%"
+      },
+      {
+        "name": "Fire Emerald Ring",
+        "rarity": "Ultra Rare",
+        "rate": "25%"
+      },
+      {
+        "name": "Sapphire Necklace",
+        "rarity": "Ultra Rare",
+        "rate": "25%"
+      },
+      {
+        "name": "Star Ruby Earring",
+        "rarity": "Ultra Rare",
+        "rate": "25%"
+      },
+      {
+        "name": "Ruby",
+        "rarity": "Ultra Rare",
+        "rate": "25%"
+      },
+      {
+        "name": "Ruby Crown",
+        "rarity": "Ultra Rare",
+        "rate": "25%"
+      },
+      {
+        "name": "Black Sapphire",
+        "rarity": "Ultra Rare",
+        "rate": "12%"
+      },
+      {
+        "name": "Diamond",
+        "rarity": "Ultra Rare",
+        "rate": "12%"
+      },
+      {
+        "name": "Jacinth",
+        "rarity": "Ultra Rare",
+        "rate": "12%"
+      },
+      {
+        "name": "Blue Diamond",
+        "rarity": "Ultra Rare",
+        "rate": "13%"
+      },
+      {
+        "name": "Crystallized Sulfur",
+        "rarity": "Uncommon"
+      },
+      {
+        "name": "Snake Scales"
+      }
+    ]
+  },
+  "emperor-crush": {
+    "id": "emperor-crush",
+    "name": "Emperor Crush",
+    "era": [
+      "Classic"
+    ],
+    "race": "Orc",
+    "class": "Warrior",
+    "level": 18,
+    "ac": 136,
+    "hp": 504,
+    "aggroRadius": 40,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "respawn": "9 minutes",
+    "special": [
+      "See Invisible"
+    ],
+    "zones": [
+      "Crushbone"
+    ],
+    "spawns": [
+      "50% @ (86, -74)"
+    ],
+    "loot": [
+      {
+        "name": "Dwarven Ringmail Tunic",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Raw Hide Armor",
+        "rarity": "Common"
+      },
+      {
+        "name": "Rusty Weapons",
+        "rarity": "Common"
+      },
+      {
+        "name": "Bronze Weapons",
+        "rarity": "Common"
+      }
+    ]
+  },
+  "ambassador-dvinn": {
+    "id": "ambassador-dvinn",
+    "name": "Ambassador Dvinn",
+    "era": [
+      "Classic"
+    ],
+    "race": "Dark Elf",
+    "class": "Warrior",
+    "level": 20,
+    "ac": 150,
+    "hp": 600,
+    "aggroRadius": 40,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "respawn": "9 mins; orc pawn as PH.",
+    "special": [],
+    "zones": [
+      "Crushbone"
+    ],
+    "spawns": [
+      "80% @ (76, -72)"
+    ],
+    "loot": [
+      {
+        "name": "Dragoon Dirk",
+        "rarity": "Uncommon"
+      },
+      {
+        "name": "Black Heart",
+        "rarity": "Common"
+      },
+      {
+        "name": "Dark Elf Parts",
+        "rarity": "Uncommon"
+      },
+      {
+        "name": "Elven Blood",
+        "rarity": "Uncommon"
+      }
+    ]
+  },
+  "lord-darish": {
+    "id": "lord-darish",
+    "name": "Lord Darish",
+    "era": [
+      "Classic"
+    ],
+    "race": "Orc",
+    "class": "Warrior",
+    "level": 14,
+    "ac": 110,
+    "hp": 336,
+    "aggroRadius": 40,
+    "attacksPerRound": "1",
+    "attackSpeed": "100%",
+    "special": [
+      "See Invisible"
+    ],
+    "zones": [
+      "Crushbone"
+    ],
+    "spawns": [
+      "(250, 90)"
+    ],
+    "loot": [
+      {
+        "name": "Dwarven Axe",
+        "rarity": "Rare",
+        "rate": "50%"
+      },
+      {
+        "name": "Dwarven Two-Handed Axe",
+        "rarity": "Rarity?"
+      }
+    ]
+  },
+  "equestrielle": {
+    "id": "equestrielle",
+    "name": "Equestrielle",
+    "era": [
+      "Classic"
+    ],
+    "race": "Unicorn",
+    "class": "Warrior",
+    "level": 40,
+    "ac": 279,
+    "hp": 3250,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "91%",
+    "special": [
+      "None."
+    ],
+    "zones": [
+      "Lesser Faydark"
+    ],
+    "spawns": [
+      "(1585, 505), (866, 9)?"
+    ],
+    "loot": [
+      {
+        "name": "Unicorn Horn",
+        "rarity": "Always"
+      },
+      {
+        "name": "Equestrielle's Eye",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Unicorn Horn Fragments",
+        "rarity": "Rare"
+      }
+    ]
+  },
+  "garanel-rucksif": {
+    "id": "garanel-rucksif",
+    "name": "Garanel Rucksif",
+    "era": [
+      "Classic"
+    ],
+    "race": "Ghost Dwarf",
+    "class": "Warrior",
+    "level": 35,
+    "ac": 246,
+    "hp": 1675,
+    "aggroRadius": 45,
+    "attacksPerRound": "2",
+    "attackSpeed": "92%",
+    "respawn": "22 minutes (or A Festering Hag)",
+    "special": [
+      "Immune to Flee",
+      "See Invis"
+    ],
+    "zones": [
+      "The Estate of Unrest"
+    ],
+    "spawns": [
+      "13% @ (485, 147, basement)"
+    ],
+    "loot": [
+      {
+        "name": "Dwarven Work Boots",
+        "rarity": "Uncommon",
+        "rate": "13%"
+      },
+      {
+        "name": "Jagged Band",
+        "rarity": "Uncommon",
+        "rate": "13%"
+      },
+      {
+        "name": "Sphere of Unrest",
+        "rarity": "Rare",
+        "rate": "12%"
+      }
+    ]
+  },
+  "phinigel": {
+    "id": "phinigel",
+    "name": "Phinigel Autropos",
+    "era": [
+      "Classic"
+    ],
+    "race": "Kedge",
+    "class": "Wizard",
+    "level": 53,
+    "ac": 454,
+    "hp": 18,
+    "aggroRadius": 200,
+    "attacksPerRound": "3",
+    "attackSpeed": "84%",
+    "respawn": "12 hours",
+    "special": [
+      "Summon",
+      "Uncharmable",
+      "Unfearable",
+      "Unmezzable",
+      "See Invisible",
+      "Belly Caster",
+      "Immune to Run Speed Changes"
+    ],
+    "zones": [
+      "Kedge Keep"
+    ],
+    "spawns": [
+      "100% @ (37, 111)"
+    ],
+    "loot": [
+      {
+        "name": "Blue Crystal Staff",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Kedge Backbone",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Robe of the Kedge",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Rod of Malisement",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Staff of Elemental Mastery: Water",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Trident of the Seven Seas",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Wand of Mana Tapping",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Fusible Coral Ore",
+        "rarity": "Always"
+      }
+    ]
+  },
+  "estrella": {
+    "id": "estrella",
+    "name": "Estrella of Gloomwater",
+    "race": "Mermaid",
+    "class": "Druid",
+    "level": 51,
+    "ac": 438,
+    "hp": 9750,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "84%",
+    "respawn": "3 Days (2.5-3?)",
+    "special": [
+      "See Invis",
+      "Summons",
+      "Gates."
+    ],
+    "zones": [
+      "Kedge Keep"
+    ],
+    "spawns": [
+      "20% @ (5, -308)"
+    ],
+    "loot": [
+      {
+        "name": "Prayer Shawl",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Lamentation Blade",
+        "rarity": "Rare",
+        "rate": "20%"
+      },
+      {
+        "name": "Rod of Drones",
+        "rarity": "Rare",
+        "rate": "20%"
+      }
+    ]
+  },
+  "mayong": {
+    "id": "mayong",
+    "name": "Mayong Mistmoore",
+    "era": [
+      "Classic"
+    ],
+    "race": "?",
+    "class": "?",
+    "level": 53,
+    "attacksPerRound": "?",
+    "attackSpeed": "?",
+    "special": [
+      "?"
+    ],
+    "zones": [
+      "Mistmoore Castle"
+    ],
+    "spawns": [
+      "?"
+    ],
+    "loot": [
+      {
+        "name": "Fanged Skull Stiletto"
+      }
+    ]
+  },
+  "master-yael": {
+    "id": "master-yael",
+    "name": "Master Yael",
+    "era": [
+      "Classic"
+    ],
+    "race": "Elemental",
+    "class": "Wizard",
+    "level": 56,
+    "ac": 478,
+    "hp": 32000,
+    "aggroRadius": 55,
+    "attacksPerRound": "2",
+    "attackSpeed": "83%",
+    "respawn": "3 Days -/+8",
+    "special": [
+      "Unmezzable",
+      "Summon",
+      "See Invis",
+      "Cazic Touch",
+      "Slowable"
+    ],
+    "zones": [
+      "The Hole"
+    ],
+    "spawns": [
+      "(800, 200)"
+    ],
+    "loot": [
+      {
+        "name": "Earthshaker",
+        "rarity": "Uncommon",
+        "rate": "33%"
+      },
+      {
+        "name": "Serpent's Tooth",
+        "rarity": "Uncommon",
+        "rate": "33%"
+      },
+      {
+        "name": "Loam Encrusted Robe",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Brell's Girdle",
+        "rarity": "Common",
+        "rate": "50%"
+      },
+      {
+        "name": "Fusible Earthen Ore"
+      }
+    ]
+  },
+  "dracoliche": {
+    "id": "dracoliche",
+    "name": "a dracoliche",
+    "era": [
+      "Fear"
+    ],
+    "race": "Dragon Skeleton",
+    "class": "Shadow Knight",
+    "level": 58,
+    "ac": 600,
+    "hp": 175000,
+    "aggroRadius": 115,
+    "attacksPerRound": "1-2",
+    "attackSpeed": "-",
+    "respawn": "7 Days (+/- 8 Hours)",
+    "special": [
+      "Summon",
+      "Uncharmable",
+      "Unfearable",
+      "Unmezzable",
+      "Unstunnable",
+      "See Invis",
+      "Belly Caster",
+      "Deadly Lifetap",
+      "Rotting Flesh"
+    ],
+    "zones": [
+      "Plane of Fear"
+    ],
+    "spawns": [
+      "Wanders"
+    ],
+    "loot": [
+      {
+        "name": "Berserkers Ring"
+      },
+      {
+        "name": "Crimson Robe of Alendine"
+      },
+      {
+        "name": "Fearsome Shield"
+      },
+      {
+        "name": "Grotesque Girdle"
+      },
+      {
+        "name": "Shawl of Protection"
+      },
+      {
+        "name": "Zombie Flesh Bracer"
+      },
+      {
+        "name": "Bone-Clasped Girdle"
+      },
+      {
+        "name": "Bone Razor"
+      },
+      {
+        "name": "Spined Dragon Claws"
+      },
+      {
+        "name": "Staff of Undead Legions"
+      },
+      {
+        "name": "Withered Totem of Widdershins"
+      },
+      {
+        "name": "Monsoon, Sword of the Swiftwind"
+      }
+    ]
+  },
+  "maestro": {
+    "id": "maestro",
+    "name": "Maestro of Rancor",
+    "era": [
+      "Hate"
+    ],
+    "race": "Vampire",
+    "class": "Bard",
+    "level": 52,
+    "ac": 363,
+    "hp": 16,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "84%",
+    "respawn": "3 Days (+/- 8 Hours)",
+    "special": [
+      "Immune to Flee",
+      "Immune or Hard to Slow",
+      "See Invis",
+      "See Hide (confirmed)",
+      "Maestro Lifetap"
+    ],
+    "zones": [
+      "Plane of Hate"
+    ],
+    "spawns": [
+      "100% @ (-82, 295)"
+    ],
+    "loot": [
+      {
+        "name": "Basoon Haste Gauntlets",
+        "rarity": "Ultra Rare"
+      },
+      {
+        "name": "Evensong",
+        "rarity": "Rarity?"
+      },
+      {
+        "name": "Hand of the Maestro",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Kelin`s Seven Stringed Lute",
+        "rarity": "Rarity?"
+      },
+      {
+        "name": "Mempo of Likato",
+        "rarity": "Rarity?"
+      },
+      {
+        "name": "Shield of the Stalwart Seas",
+        "rarity": "Rarity?"
+      },
+      {
+        "name": "Six Note Blade",
+        "rarity": "Rarity?"
+      }
+    ]
+  },
+  "noble-dojorn": {
+    "id": "noble-dojorn",
+    "name": "Noble Dojorn",
+    "era": [
+      "Sky"
+    ],
+    "race": "Efreeti",
+    "class": "Paladin",
+    "level": 63,
+    "ac": 409,
+    "hp": 32,
+    "aggroRadius": 70,
+    "attacksPerRound": "2-4",
+    "attackSpeed": "81%",
+    "respawn": "7 Days / 3 Days (No Variance)",
+    "special": [
+      "Summon Efreeti Fire Soul Devour Belly Caster"
+    ],
+    "zones": [
+      "Plane of Sky"
+    ],
+    "spawns": [
+      "Island 1.5"
+    ],
+    "loot": [
+      {
+        "name": "Golden Efreeti Turban",
+        "rarity": "Ultra Rare"
+      },
+      {
+        "name": "Golden Efreeti Chestplate",
+        "rarity": "Ultra Rare"
+      },
+      {
+        "name": "Golden Efreeti Vambraces",
+        "rarity": "Ultra Rare"
+      },
+      {
+        "name": "Golden Efreeti Bracers",
+        "rarity": "Ultra Rare"
+      },
+      {
+        "name": "Golden Efreeti Gauntlets",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Golden Efreeti Greaves",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Shield",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Axe",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Scimitar",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Wind Staff",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Great Staff",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Mace",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Dirk",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Standard",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Horn",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Maul",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Spear",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Staff",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Club",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Long Sword",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti War Bow",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Magi Staff",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Belt",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Battle Axe",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Efreeti Zweihander",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Wind Etched Bracers of Ro",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Wind Etched Gauntlets of Ro",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Wind Etched Boots of Ro",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Wind Etched Helm of Ro",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Brass_Knuckles",
+        "rarity": "Rare"
+      },
+      {
+        "name": "Large Sky Pearl",
+        "rarity": "Uncommon"
+      }
+    ]
+  },
+  "spiroc-lord": {
+    "id": "spiroc-lord",
+    "name": "The Spiroc Lord",
+    "era": [
+      "Sky"
+    ],
+    "race": "Aviak",
+    "class": "Ranger",
+    "level": 63,
+    "ac": 428,
+    "hp": 33261,
+    "aggroRadius": 70,
+    "attacksPerRound": "3",
+    "attackSpeed": "80%",
+    "special": [
+      "Difficult to slow Enrage Summon Belly Caster Death Touch (45-second cooldown) Procs Stone Spider Stun (long duration stun) Greater Spiroc Thunder (unresistable targeted AoE)"
+    ],
+    "zones": [
+      "Plane of Sky"
+    ],
+    "spawns": [
+      "5th Island"
+    ],
+    "loot": [
+      {
+        "name": "Ceremonial Belt"
+      },
+      {
+        "name": "Crude Wooden Flute"
+      },
+      {
+        "name": "Dove Slippers"
+      },
+      {
+        "name": "Fine Cloth Raiment"
+      },
+      {
+        "name": "Finely Woven Cloth Belt"
+      },
+      {
+        "name": "Golden Coffer"
+      },
+      {
+        "name": "High Quality Raiment"
+      },
+      {
+        "name": "Ivory Sky Diamond"
+      },
+      {
+        "name": "Light Damask Mantle"
+      },
+      {
+        "name": "Shiny Pauldrons"
+      },
+      {
+        "name": "Silken Mask"
+      },
+      {
+        "name": "Spiroc Air Totem"
+      },
+      {
+        "name": "Spiroc Battle Staff"
+      },
+      {
+        "name": "Spiroc Earth totem"
+      },
+      {
+        "name": "Spiroc Elder's Totem"
+      },
+      {
+        "name": "Spiroc Sky Totem"
+      },
+      {
+        "name": "Spiroc Wingblade"
+      }
+    ]
+  },
+  "eye-of-veeshan": {
+    "id": "eye-of-veeshan",
+    "name": "Eye of Veeshan",
+    "era": [
+      "Classic"
+    ],
+    "race": "Fay Drake",
+    "class": "Warrior",
+    "level": 70,
+    "ac": 474,
+    "hp": 32000,
+    "aggroRadius": 70,
+    "attacksPerRound": "2",
+    "attackSpeed": "75%",
+    "special": [
+      "Summon",
+      "Cazic Touch",
+      "Enrage"
+    ],
+    "zones": [
+      "Plane of Sky"
+    ],
+    "spawns": [
+      "(-267, -1370, 1250)"
+    ],
+    "loot": [
+      {
+        "name": "Blood Sky Ruby"
+      },
+      {
+        "name": "Bloodsky Sapphire"
+      },
+      {
+        "name": "Efreeti Great Staff"
+      },
+      {
+        "name": "Ethereal Emerald"
+      },
+      {
+        "name": "Fae Pauldrons"
+      },
+      {
+        "name": "Hazy Opal"
+      },
+      {
+        "name": "Large Opal"
+      },
+      {
+        "name": "Large Sky Diamond"
+      },
+      {
+        "name": "Large Sky Sapphire"
+      },
+      {
+        "name": "Large Sky Sapphire (Enchanter)"
+      },
+      {
+        "name": "Mithril Bands"
+      },
+      {
+        "name": "Nebulous Diamond"
+      },
+      {
+        "name": "Shimmering Pearl"
+      },
+      {
+        "name": "Storm Sky Opal"
+      },
+      {
+        "name": "Symbol of Veeshan"
+      },
+      {
+        "name": "Tear of Quellious"
+      }
+    ]
+  }
+}

@@ -1,8 +1,11 @@
 import type { GearItem, GearSlot, GearTier } from './types';
 
-// Curated notable equipment for the classic era, following classic EverQuest
-// itemization that EQL recreates. Drop locations and camps are canonical-classic —
-// verify exact stats and spawns in-game while the beta shakes out. Each item links
+// Curated notable equipment. Stats, slots, class restrictions and drop sources are
+// cross-checked against the EQL Wiki's {{Itempage}} data (scripts/import-items.mjs,
+// docs/reports/item-import.md) — Legends re-cut several items and re-homed their drops
+// vs. classic EQ, so these follow Legends, not classic memory. Items whose Legends source
+// is a not-yet-live zone (e.g. Kunark's Old Sebilis) carry `available: false` and are
+// flagged in the UI rather than shown with a fabricated classic location. Each item links
 // to the zone it farms in (Atlas) and, where modeled, the mob that drops it (Bestiary).
 
 export const SLOT_LABELS: Record<GearSlot, string> = {
@@ -30,47 +33,41 @@ export const TIER_LABELS: Record<GearTier, string> = {
   raid: 'Raid'
 };
 
-const PLATE = ['warrior', 'paladin', 'shadow-knight'];
-const CASTERS = ['wizard', 'magician', 'necromancer', 'enchanter'];
-const PRIESTS = ['cleric', 'druid', 'shaman'];
-
 export const GEAR: GearItem[] = [
   // ── Starter (rough level 10-20) ────────────────────────────
   {
     id: 'screaming-mace',
     name: 'Screaming Mace',
     slot: 'weapon',
-    notable: 'A glowing one-hand blunt that lands a life-tapping proc — an outstanding early caster/hybrid weapon and undead deterrent.',
+    notable: 'A 1H Blunt (8 dmg / 35 delay) whose proc is a short STR + AC buff, much like a self-cast Yaulp — a strong early hybrid/melee reward. Usable by all but the pure INT casters.',
     levelMin: 12,
     tier: 'starter',
-    zoneId: 'befallen',
-    monsterId: 'befallen-keepers',
-    source: 'Drops off the undead knights and keepers deep in Befallen',
-    farm: 'Fight down through the ramps to the lower undead floors and camp the knight spawns. Bring a group in the mid-teens; the crypt trains hard if you over-pull.'
+    zoneId: 'crushbone',
+    source: 'Final reward of the Screaming Mace Quest, given by the dwarven smith in Crushbone.',
+    farm: 'Not a drop — run the Screaming Mace Quest in Crushbone: recover the smith’s stolen goods (Brass Earring, Shiny Brass Shield), prove the deaths of Emperor Crush and the orc warlord, then have the elven priest enchant a Dwarven Mace into the Screaming Mace. A low-teens group clearing Crushbone can finish it over a few sessions.'
   },
   {
     id: 'guise-deceiver',
     name: 'Guise of the Deceiver',
     slot: 'face',
-    notable: 'Clicks a permanent Dark Elf illusion — one of the most coveted vanity/utility drops in the game, and a fortune on the bazaar.',
+    notable: 'Clicks a permanent Dark Elf illusion (AC 4, CHA +13, MR +7) — one of the most coveted vanity/utility items in the game. NO DROP and only equippable by bards and rogues, but clickable from inventory by any class.',
     levelMin: 18,
     tier: 'starter',
-    zoneId: 'runnyeye',
-    monsterId: 'runnyeye-eye',
-    source: 'Rare drop from the Evil Eye in the deep vaults of Runnyeye',
-    farm: 'Clear to the bottom vault and camp the Evil Eye’s long placeholder cycle. A patient duo/group in the low 20s can hold the camp; expect many kills before it drops.'
+    zoneId: 'lower-guk',
+    source: 'Rare NO DROP off a ghoul assassin in Lower Guk (restored to the Legends beta May 2026; when it stops dropping, the assassin drops Mask of Deception instead).',
+    farm: 'Camp the ghoul-assassin spawns on the live side of Lower Guk and rotate placeholders. A patient group in the 20s–30s can hold it; expect a long grind for the rare.'
   },
   {
     id: 'granite-tomahawk',
     name: 'Polished Granite Tomahawk',
     slot: 'weapon',
-    notable: 'A hard-hitting two-hand slasher that carries melee damage well into the 30s — the classic Splitpaw prize.',
+    notable: 'A fast 1H Slashing weapon (6 dmg / 26 delay) whose Berserker Strength proc adds STR and a small damage shield — a great early melee one-hander for warriors, knights, rangers, bards and rogues.',
     levelMin: 20,
     tier: 'starter',
-    zoneId: 'splitpaw',
-    monsterId: 'splitpaw-tomahawk',
-    source: 'Drops from the Splitpaw elite guards in the inner tunnels',
-    farm: 'Pull the elite guards from the inner tunnels back to the entrance ramp one at a time. Steady camp for a group in the mid-20s.'
+    classes: ['warrior', 'paladin', 'ranger', 'shadow-knight', 'bard', 'rogue'],
+    zoneId: 'highpass',
+    source: 'Drops from Grenix Mucktail in Highpass Hold.',
+    farm: 'Camp Grenix Mucktail and his gnoll cohort in Highpass Hold; a small group or a strong duo in the low 20s can hold the spawn and rotate placeholders.'
   },
 
   // ── Mid-game (rough level 20-40) ───────────────────────────
@@ -78,61 +75,63 @@ export const GEAR: GearItem[] = [
     id: 'flowing-black-silk-sash',
     name: 'Flowing Black Silk Sash',
     slot: 'waist',
-    notable: 'The famous “FBSS” — a haste belt that every melee wants for years. A permanent DPS upgrade with no level requirement to speak of.',
+    notable: 'The famous “FBSS” — +21% haste on the waist with no level requirement, usable by every class. A permanent DPS upgrade the whole server chases.',
     levelMin: 25,
     tier: 'mid',
     zoneId: 'lower-guk',
     monsterId: 'frenzied-ghoul',
-    source: 'Classic drop from the Frenzied Ghoul (and other froglok ghouls) in Lower Guk',
+    source: 'Drops from a frenzied ghoul (and other froglok ghouls) in Lower Guk.',
     farm: 'Camp the Frenzied Ghoul spawn on the live side; hold the room and rotate placeholders. A strong group in the 30s farms it for cash even when it’s not for you.'
   },
   {
     id: 'ssoy',
     name: 'Short Sword of the Ykesha',
     slot: 'weapon',
-    notable: 'The “SSoY” — a fast one-hander with a lifetap proc, prized by rogues and hybrids for its damage and sustain.',
+    notable: 'The “SSoY” — a fast 1H Slashing weapon (9 dmg / 24 delay) with the Ykesha aggro proc; an excellent ratio prized by warriors for threat and by rogues/hybrids for DPS.',
     levelMin: 20,
     tier: 'mid',
-    zoneId: 'upper-guk',
-    source: 'Drops off Ykesha in Upper Guk',
-    farm: 'Work the froglok camps toward Ykesha’s spawn. Manageable for a mid-20s group; watch for froglok adds and shaman heals.'
+    classes: ['warrior', 'paladin', 'ranger', 'shadow-knight', 'bard', 'rogue'],
+    zoneId: 'lower-guk',
+    source: 'Drops off the ghoul lord in Lower Guk.',
+    farm: 'Work the froglok ghoul camps toward the ghoul lord’s spawn. Manageable for a mid-20s group; watch for froglok adds and shaman heals.'
   },
   {
     id: 'fungus-great-staff',
     name: 'Fungus Covered Great Staff',
     slot: 'weapon',
-    notable: 'A two-hand staff with a clicky heal — turns a caster or priest into a self-sufficient soloer and a group’s emergency medic.',
+    notable: 'A 2H Blunt (18/35) with WIS/INT and an instant clicky heal (Fungal Regrowth), usable by every class — the all-class “pre-nerf” version. Note: this version no longer drops; the current Fungi Covered Great Staff is Druid/Shaman only.',
     levelMin: 25,
     tier: 'mid',
-    classes: [...CASTERS, ...PRIESTS],
-    zoneId: 'oasis',
-    monsterId: 'oasis-giants',
-    source: 'Drops from the Ancient Cyclops that roams the Oasis of Marr',
-    farm: 'Track the Ancient Cyclops as it wanders the shoreline and islands; it hits hard, so pull to a safe spot with a group in the upper 20s–30s. Rare spawn — expect to track it repeatedly.'
+    available: false,
+    zoneId: 'old-sebilis',
+    source: 'No longer obtainable in Legends. The all-class version formerly dropped off the myconid spore king in Old Sebilis (Kunark).',
+    farm: 'Not currently farmable — retired content. If chasing a clicky-heal staff, look to the current Druid/Shaman Fungi Covered Great Staff once Kunark is live.'
   },
   {
     id: 'deepwater-helm',
     name: 'Deepwater Helm',
     slot: 'head',
-    notable: 'A top-tier classic helm with strong AC and stats — the headline drop of Kedge Keep.',
-    levelMin: 35,
-    tier: 'mid',
-    zoneId: 'kedge-keep',
-    monsterId: 'phinigel',
-    source: 'Drops from Phinigel Autropos, the seahorse lord of Kedge Keep',
-    farm: 'Bring enchanted/underwater-breathing gear and a full group in the 35–45 range. Clear to Phinigel’s chamber and burn him fast — his adds and the drowning risk make this a coordinated fight.'
+    notable: 'A strong Paladin helm (AC 21) with a clicky Daring aggro effect at level 45 — part of the Deepwater armor set. Paladin-only.',
+    levelMin: 45,
+    tier: 'endgame',
+    classes: ['paladin'],
+    available: false,
+    zoneId: 'old-sebilis',
+    source: 'Drops off the crypt caretaker in Old Sebilis (Kunark) — not obtainable until Kunark is live.',
+    farm: 'Kunark content: camp the crypt caretaker in Old Sebilis with a group once the expansion opens. (It also vendors around 337p, so watch merchants.)'
   },
   {
     id: 'lamentation',
     name: 'Lamentation',
     slot: 'weapon',
-    notable: 'A very fast one-hand slasher — a benchmark proc/haste weapon for melee before raid gear.',
+    notable: 'A very fast 1H Slashing weapon (9 dmg / 19 delay) with STR +6, STA +6 and HP +20 — a benchmark ratio one-hander for warriors, rangers and shadow knights.',
     levelMin: 35,
-    tier: 'mid',
-    zoneId: 'cazic-thule',
-    monsterId: 'ct-avatars',
-    source: 'Drops among the lizardman temple guardians and avatars of Cazic-Thule',
-    farm: 'Hold a camp in the temple’s outer maze and pull singles; CT’s tight corridors punish loose pulls. A group in the high 30s–40s can farm the guardian spawns.'
+    tier: 'endgame',
+    classes: ['warrior', 'ranger', 'shadow-knight'],
+    available: false,
+    zoneId: 'old-sebilis',
+    source: 'Drops off the sebilite guardian in Old Sebilis (Kunark) — not obtainable until Kunark is live.',
+    farm: 'Kunark content: camp the sebilite guardians in Old Sebilis with a group once the expansion opens.'
   },
 
   // ── Endgame (rough level 40-50) ────────────────────────────
@@ -140,50 +139,49 @@ export const GEAR: GearItem[] = [
     id: 'fungi-tunic',
     name: 'Fungus Covered Scale Tunic',
     slot: 'chest',
-    notable: 'The legendary “Fungi Tunic” — passive hit-point regeneration that never stops. The single most sought-after non-raid chest piece in classic.',
+    notable: 'The legendary “Fungi Tunic” — AC 21 and +15 HP/tick worn regen that stacks with spell and racial regen (it alone hits the worn-regen cap). The single most sought-after non-raid chest piece.',
     levelMin: 40,
     tier: 'endgame',
-    zoneId: 'lower-guk',
-    monsterId: 'ghoul-assassin',
-    source: 'Drops from the froglok ghoul nobles (Ghoul Assassin line) on the dead side of Lower Guk',
-    farm: 'A dead-side Lower Guk raid/strong group holds the royal camps and rotates placeholders for hours. Contested and slow — bring track, a puller, and patience.'
+    available: false,
+    zoneId: 'old-sebilis',
+    source: 'Drops off the Myconid Spore King in Old Sebilis (Kunark) — not obtainable until Kunark is live (it is not a Lower Guk drop in Legends).',
+    farm: 'Kunark content: hold the Myconid Spore King camp in Old Sebilis with a strong group once the expansion opens. Expect it to be heavily contested.'
   },
   {
     id: 'cloak-of-flames',
     name: 'Cloak of Flames',
     slot: 'back',
-    notable: 'Haste plus a fire damage-add on a cloak — a best-in-slot melee back piece for the whole era.',
-    levelMin: 40,
-    tier: 'endgame',
+    notable: '+36% haste on a cloak, plus AC 10 and AGI/DEX +9 and HP +50 — a best-in-slot melee back piece, usable by any class. In Legends it drops from the red dragon himself rather than a named efreeti.',
+    levelMin: 50,
+    tier: 'raid',
     zoneId: 'nagafens-lair',
-    monsterId: 'efreeti-djarn',
-    source: 'Drops from Efreeti Lord Djarn in Nagafen’s Lair (Sol B)',
-    farm: 'Fight to Djarn’s spawn with a group in the mid-40s+ and fire resist ready. He’s a rare spawn on a placeholder cycle — settle in for repeat kills.'
+    monsterId: 'lord-nagafen',
+    source: 'Drops from Lord Nagafen in Nagafen’s Lair (Sol B).',
+    farm: 'A raid drop: bring an 8-player raid with fire resist to Lord Nagafen’s lair, clear the giant halls, and beat his enrage. Pair the kill with the Djarn camp to clear Sol B’s best prizes in one trip.'
   },
   {
     id: 'golden-efreeti-boots',
     name: 'Golden Efreeti Boots',
     slot: 'feet',
-    notable: 'Permanent run-speed on your feet slot — “GEBs” free up a buff slot and let any class outrun trouble.',
+    notable: 'Permanent run-speed on your feet slot, plus AC 5 and WIS/INT +9 — “GEBs” free up a buff slot and let any class outrun trouble.',
     levelMin: 40,
     tier: 'endgame',
     zoneId: 'nagafens-lair',
     monsterId: 'efreeti-djarn',
-    source: 'Drops from Efreeti Lord Djarn in Nagafen’s Lair (Sol B)',
+    source: 'Drops from Efreeti Lord Djarn in Nagafen’s Lair (Sol B).',
     farm: 'Same camp as the Cloak of Flames — hold Djarn’s spawn and clear his placeholders. Two of the era’s best drops share one rare mob, so the camp is worth defending.'
   },
   {
     id: 'rubicite-breastplate',
     name: 'Rubicite Breastplate',
     slot: 'chest',
-    notable: 'The iconic blood-red plate — top-tier classic AC for a knight or warrior, and a striking look.',
-    levelMin: 40,
+    notable: 'The iconic blood-red breastplate (AC 19) with a striking look — usable by a wide melee/priest spread (warrior, cleric, paladin, ranger, shadow knight, bard, rogue, shaman), not just plate tanks.',
+    levelMin: 45,
     tier: 'endgame',
-    classes: PLATE,
-    zoneId: 'nagafens-lair',
-    monsterId: 'king-tranix',
-    source: 'Rare drops among the named and deep spawns of Nagafen’s Lair',
-    farm: 'Work the deeper Sol B camps (King Tranix and the goblin nobles) with a fire-resist group in the 40s. The full Rubicite set is a long-term chase — pieces are scattered and rare.'
+    classes: ['warrior', 'cleric', 'paladin', 'ranger', 'shadow-knight', 'bard', 'rogue', 'shaman'],
+    zoneId: 'cazic-thule',
+    source: 'Drops from the Avatar of Fear in Cazic-Thule.',
+    farm: 'Assemble a strong group/mini-raid in the mid-40s+ and fight to the Avatar of Fear’s spawn in the temple. The full Rubicite set is a long-term chase — pieces are rare.'
   },
 
   // ── Raid (level 46-50) ─────────────────────────────────────

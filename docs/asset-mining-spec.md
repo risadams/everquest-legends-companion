@@ -278,6 +278,86 @@ top-down ortho render per zone would give the Atlas real terrain underlays. Sepa
 pipeline (external tool + headless render). Watch the same classic-vs-revamp trap. Don't
 start here.
 
+## Phase 9 — Items & Bestiary from the EQL Wiki (accuracy + new features)
+
+**Status:** In progress 2026-07-10. `scripts/import-items.mjs` (items diff, era-aware) and
+`scripts/import-bestiary.mjs` (mob stats + loot/drop-rates diff) both implemented, each
+writing a `*-harvested.json` + a `docs/reports/*-import.md` review diff. The item diff proved
+the curated notable-gear **substantially inaccurate for Legends**, and its confirmed
+corrections have been **folded into `gear.ts`** (with a new `available?: boolean` flag +
+"Kunark — not yet live" UI badge for items whose Legends source is a not-yet-live zone). The
+Bestiary harvest independently confirmed those fixes (e.g. Lord Nagafen's loot table lists the
+Cloak of Flames). **Still open:** fold the Bestiary numbers into `monsters.ts`; extend both
+importers past the curated set to the full `Classic Era` catalog + a browsable item/mob DB UI.
+
+**Why this phase exists.** `src/data/gear.ts` is 16 hand-written items whose own header says
+"verify exact stats and spawns in-game." The first diff pass (`docs/reports/item-import.md`)
+found real errors, not nitpicks: Polished Granite Tomahawk is **1H Slashing from Grenix
+Mucktail in Highpass Hold** (curated: a "two-hand slasher" in Splitpaw); Deepwater Helm is
+**PAL-only, Old Sebilis / crypt caretaker** (curated: Kedge Keep / Phinigel); Lamentation and
+the Fungi Tunic both drop in **Old Sebilis** (curated: Cazic-Thule / Lower Guk); Rubicite is
+**Cazic Thule / Avatar of Fear** (curated: Nagafen's Lair / King Tranix); Screaming Mace is
+**quest-obtained**, not a Befallen drop; Guise of the Deceiver is **NO DROP, BRD/ROG only**.
+Legends re-homed drops and re-cut item stats — reasoning from classic memory is exactly the
+mistake the Governing Principle warns against. The wiki is the fix.
+
+**Source & platform.** `eqlwiki.com` is **MediaWiki 1.45.3 with a live `api.php`** (~40k
+pages) — the same source `scripts/import-classdata.mjs` already harvests. No Semantic
+MediaWiki/Cargo, but every content type is filled by a consistent template you parse like a
+spell row:
+- **`{{Itempage}}`** (10,688 items) — params: `itemname`, `statsblock` (raw EQ display text:
+  flags, `Slot:`, `Skill:`/`Atk Delay:`, `DMG:`, `AC:`, attribute & `SV <resist>:` lines,
+  `Haste:`, `Effect: [[…]] (Combat/Worn/Any Slot/Must Equip, …) at Level N`, `WT:`/`Size:`,
+  `Class:`, `Race:`), `dropsfrom` (wiki-linked zone + bulleted mobs), `relatedquests`,
+  `merchant_value`, `lucy_img_ID` (→ item icon), `notes` (prose).
+- **`{{Namedmobpage}}`** (6,498 named / 8,145 NPC) — race, class, **level, AC, HP**,
+  attacks/round, attack speed, **zone, spawn %, respawn timer, aggro radius**, special
+  abilities (see-invis, flurry), a **loot table with drop rates**, and **faction hits**.
+- Also category-queryable: **Merchants** (1,641), **Armor Sets** (277), quests by class/zone,
+  tradeskill recipes, and the **era tags** (`Classic Era`, `Kunark Era`, …).
+
+**Era gating is mandatory** (same rule as Phase 3): harvest only `Category:Classic Era`
+∩ `Category:Items` (etc.) so no Kunark/Velious item or mob shows before that expansion is
+live. Note the first diff already sees Legends placing several "classic" items in **Old
+Sebilis** (a Kunark zone) — treat those as *not yet live* until the era gate says otherwise;
+the diff is the place that decision gets made, not the importer silently.
+
+**9a — Items (diff first, then fold in).** `scripts/import-items.mjs` (done) reads curated
+`gear.ts`, fetches each item's wikitext, parses the statsblock + dropsfrom, writes structured
+stats to `src/data/items-harvested.json` and a review diff to `docs/reports/item-import.md`.
+It **never rewrites `gear.ts`** — curated `notable`/`farm` prose and editorial tier choices
+stay authoritative; a human folds the harvested numbers (haste %, AC, dmg/delay, effect,
+class mask, corrected drop) into `gear.ts` after reading the diff. Four "class armor set"
+entries (Vox/Nagafen dragonscale, Fear/Hate armor) have no single item page — they are
+`Armor Sets`/per-class-piece pages; harvest those separately, don't force a single `Itempage`.
+**Next:** extend the same importer to harvest the full `Classic Era` item catalog into a
+browsable DB (not just the curated 16), keyed for a slot/class/level filter UI (mirrors the
+wiki's own `ClassSlotEquip` + `ItemLevelSlider` extensions). Add item icons via `lucy_img_ID`
+reusing the `SpellIcon` sprite pipeline.
+
+**9b — Bestiary (new feature).** `scripts/import-bestiary.mjs` → parse `{{Namedmobpage}}` for
+`Category:Named Mobs` ∩ `Classic Era` into `src/data/bestiary.json` (extend the `Monster`
+type: level, AC, HP, spawn %, respawn, aggro radius, abilities, loot with drop rates, faction
+hits). This turns the thin Bestiary into the relational backbone — loot tables reverse-link to
+9a's items, and mob `zone` links to the Atlas. Same discipline: **emit a diff**, never wipe
+curated prose, gate by era.
+
+**Cross-check against the client where it encodes items.** Per the Governing Principle the
+`D:\EverQuest Legends` client is authoritative for what it encodes; item stat files likely
+exist there too. The wiki's unique value is the **relational + community layer** the client
+display files don't give cleanly: drop rates, spawn %, respawn timers, faction hits, era tags,
+quest links, Lucy icon IDs, and prose. Ideally item *stats* get a client cross-check while the
+wiki supplies loot/spawn/era/notes — but the wiki alone already beats hand-typed classic
+memory, which is demonstrably wrong.
+
+**Conventions & acceptance.** Plain Node ESM, no new deps (global `fetch`), API base
+overridable via `argv[2]`, `{{...}}`/`[[...]]`-aware top-level pipe splitter (shared with
+`import-classdata.mjs`), cache raw pages and throttle politely (`maxlag`, low concurrency) for
+the full-catalog run. Attribute this data to the EQL Wiki in the UI, as the Brewall maps are.
+Add `scripts/verify-items.mjs` (every harvested item has a slot, a parseable statsblock, and
+either a drop or a quest source; icon indices in range; JSON parses). `npm test` and
+`npm run build` stay green.
+
 ---
 
 ## Execution order & effort (revised)
@@ -292,6 +372,8 @@ start here.
 | 6 Achievements | M | Med | Filter to Legends' scope; new UI |
 | 7 Lore text | S (curation) | Low | Prefer `eqls*` Legends-specific files |
 | 8 Zone renders | XL | High | Separate spec |
+| 9a Items (diff + fold-in) | S | High | Curated gear proven wrong; `import-items.mjs` done, diff-first |
+| 9b Items DB + Bestiary | M | High | Full `Classic Era` catalog + `Namedmobpage` loot/spawn; new UI |
 
 Each phase is an independent PR: importer/generator + generated asset + verify script +
 UI wiring. The client is authoritative for the data it encodes, so importers **generate**

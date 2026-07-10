@@ -81,11 +81,32 @@ export default function Lore() {
         <p className="small muted">
           Sixteen powers shaped Norrath and still take sides in it. Your deity choice at creation
           colors factions, usable relics, and a few quest lines — the truly stubborn stay
-          agnostic. See the <Link to="/handbook">Handbook</Link> for the mechanical side.
+          agnostic. See the <Link to="/handbook">Handbook</Link> for the mechanical side; artwork
+          from the{' '}
+          <a href="https://wiki.project1999.com/Deity" target="_blank" rel="noreferrer">Project 1999 wiki</a>.
         </p>
         <div className="card-grid">
           {LORE_DEITIES.map((d) => (
             <div className="card" key={d.id} data-deity={d.id}>
+              {d.image && (
+                <div
+                  style={{
+                    marginBottom: '0.5rem',
+                    borderRadius: '6px',
+                    overflow: 'hidden',
+                    background: 'rgba(0,0,0,0.28)',
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <img
+                    src={d.image}
+                    alt={`${d.name} — ${d.epithet}`}
+                    loading="lazy"
+                    style={{ maxHeight: '240px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+                  />
+                </div>
+              )}
               <div
                 style={{
                   display: 'flex',
@@ -101,6 +122,7 @@ export default function Lore() {
                 {d.epithet} · {d.domain}
               </p>
               <p className="small" style={{ margin: '0.2rem 0' }}>{d.blurb}</p>
+              {d.lore && <p className="small muted" style={{ margin: '0.3rem 0' }}>{d.lore}</p>}
               <p className="small muted" style={{ margin: '0.3rem 0 0' }}>
                 <strong>Followers:</strong> {d.followers}
               </p>
@@ -117,12 +139,33 @@ export default function Lore() {
       <section>
         <h2>Figures of note</h2>
         <p className="small muted">
-          The names behind the zones — kings, tyrants, dragons, and one very determined gnoll.
-          Several are hunt targets in the <Link to="/bestiary">Bestiary</Link>.
+          The names behind the zones — kings, tyrants, dragons, vampires, and one very determined
+          gnoll. Several are hunt targets in the <Link to="/bestiary">Bestiary</Link>; portraits are
+          in-game renders from the <a href="https://eqlwiki.com" target="_blank" rel="noreferrer">EQL Wiki</a>{' '}
+          and <a href="https://everquest.allakhazam.com" target="_blank" rel="noreferrer">Allakhazam</a>.
         </p>
         <div className="card-grid">
           {LORE_FIGURES.map((f) => (
             <div className="card" key={f.id} data-figure={f.id}>
+              {f.image && (
+                <div
+                  style={{
+                    marginBottom: '0.5rem',
+                    borderRadius: '6px',
+                    overflow: 'hidden',
+                    background: 'rgba(0,0,0,0.28)',
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <img
+                    src={f.image}
+                    alt={`${f.name} — in-game portrait`}
+                    loading="lazy"
+                    style={{ maxHeight: '190px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+                  />
+                </div>
+              )}
               <div
                 style={{
                   display: 'flex',
@@ -142,6 +185,9 @@ export default function Lore() {
                 {f.title}
               </p>
               <p className="small" style={{ margin: 0 }}>{f.blurb}</p>
+              {f.lore && (
+                <p className="small muted" style={{ margin: '0.4rem 0 0' }}>{f.lore}</p>
+              )}
             </div>
           ))}
         </div>

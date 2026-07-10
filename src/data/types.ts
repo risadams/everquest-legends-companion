@@ -129,6 +129,9 @@ export interface GearItem {
   source: string;
   /** how to farm it — camp strategy, spawn notes, tips */
   farm: string;
+  /** false when the item's Legends source is in a not-yet-live expansion (e.g. Kunark);
+   *  omit for currently-obtainable classic items. Kept listed but flagged in the UI. */
+  available?: boolean;
 }
 
 export type QuestType = 'turn-in' | 'item' | 'class';
@@ -218,9 +221,14 @@ export interface Deity {
   epithet: string;
   alignment: Alignment;
   domain: string;
+  /** the one-line hook shown first */
   blurb: string;
+  /** deeper doctrine — what the faithful believe and how they act (grounded in EQ canon) */
+  lore?: string;
   /** who typically kneels at this altar */
   followers: string;
+  /** local artwork path under public/, e.g. '/deities/tunare.webp' (P99 deity art) */
+  image?: string;
   /** the deity's plane, when it's a visitable zone */
   planeZoneId?: string;
 }
@@ -230,7 +238,12 @@ export interface LoreFigure {
   name: string;
   title: string;
   zoneId?: string;
+  /** the one-line hook shown first */
   blurb: string;
+  /** deeper lore — history, motive, place in the world (grounded in the EQL Wiki) */
+  lore?: string;
+  /** local portrait path under public/, e.g. '/npcs/lord-nagafen.webp' (mined from the wiki) */
+  image?: string;
 }
 
 export interface Faction {
