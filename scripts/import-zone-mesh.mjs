@@ -101,7 +101,10 @@ function materialTexture(wld, T, matIdx) {
   const r03 = findRef(T[r04], 0x03); if (!r03) return null;
   return name03(wld, T[r03]);
 }
-/** resolve the ordered material palette (index → texture filename) from a 0x31 list */
+/** resolve the ordered material palette from a 0x31 list: { tex, rm } per material index.
+ *  rm is the 0x30 render method — its high bit (0x80000000) is set for normal textured
+ *  surfaces and CLEAR for the client's special shader surfaces (water, sky, boundaries),
+ *  which render as opaque occluding slabs here and are culled. */
 function materialPalette(wld, T, listIdx) {
   const ml = T[listIdx];
   if (!ml || ml.type !== 0x31) return [];
@@ -110,7 +113,9 @@ function materialPalette(wld, T, listIdx) {
   const pal = [];
   for (let i = 0; i < count; i++) {
     const ref = wld.readInt32LE(o); o += 4;
-    pal.push(materialTexture(wld, T, ref));
+    const m = T[ref];
+    const rm = m && m.type === 0x30 ? wld.readUInt32LE(m.body + 8) : 0;
+    pal.push({ tex: materialTexture(wld, T, ref), rm });
   }
   return pal;
 }
@@ -246,17 +251,19 @@ function buildVariant(files, wldName) {
   // resolve every mesh's material palette up front, then note whether this zone resolves
   // any real textures at all (guards against culling a zone whose materials failed to parse)
   for (const m of meshes) if (!palCache.has(m.matListRef)) palCache.set(m.matListRef, materialPalette(wld, T, m.matListRef));
-  const anyTex = [...palCache.values()].some((p) => p.some((t) => t));
+  const anyTex = [...palCache.values()].some((p) => p.some((e) => e && e.tex));
 
   for (const m of meshes) {
     const mpal = palCache.get(m.matListRef);
     for (let p = 0; p < m.polys.length; p++) {
       const mi = m.polyMat[p];
-      const texName = mi >= 0 ? mpal[mi] : undefined;
-      // cull invisible zone-boundary geometry (a material with no texture): in-game these
-      // are the unseen walls that box the zone in; rendered solid they hide the terrain.
-      if (anyTex && mi >= 0 && texName == null) continue;
-      const rgb = texColor(files, texName, colorCache) ?? FALLBACK;
+      const mat = mi >= 0 ? mpal[mi] : undefined;
+      // cull two kinds of occluders (only when the zone resolves textures at all, so a
+      // wholesale parse failure isn't wiped): invisible boundary walls (no texture), and the
+      // client's special shader surfaces — water volumes, sky domes — whose render method has
+      // the high bit clear and which otherwise render as opaque slabs over the terrain.
+      if (anyTex && mi >= 0 && (mat == null || mat.tex == null || (mat.rm & 0x80000000) === 0)) continue;
+      const rgb = texColor(files, mat.tex, colorCache) ?? FALLBACK;
       const pIdx = palIdx(rgb);
       const poly = m.polys[p];
       const a = vid(m.verts[poly[0]], pIdx), b = vid(m.verts[poly[1]], pIdx), c = vid(m.verts[poly[2]], pIdx);
