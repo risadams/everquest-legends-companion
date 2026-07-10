@@ -10,6 +10,8 @@ interface MeshVariant {
   b: number[]; // [minx,miny,minz,maxx,maxy,maxz]
   pos: number[];
   idx: number[];
+  pal?: number[][]; // unique [r,g,b] 0-255 material colours
+  ci?: number[];    // per-vertex palette index into pal
 }
 
 // ── column-major mat4 helpers ────────────────────────────────
@@ -31,19 +33,21 @@ function mul(a: number[], b: number[]): number[] {
   return o;
 }
 
-const VERT = `attribute vec3 aPos; attribute vec3 aNormal; uniform mat4 uMVP; varying vec3 vN;
-void main(){ gl_Position = uMVP * vec4(aPos,1.0); vN = aNormal; }`;
-const FRAG = `precision mediump float; varying vec3 vN; uniform vec3 uLight;
+const VERT = `attribute vec3 aPos; attribute vec3 aNormal; attribute vec3 aColor;
+uniform mat4 uMVP; varying vec3 vN; varying vec3 vCol;
+void main(){ gl_Position = uMVP * vec4(aPos,1.0); vN = aNormal; vCol = aColor; }`;
+const FRAG = `precision mediump float; varying vec3 vN; varying vec3 vCol; uniform vec3 uLight;
 void main(){
   vec3 n = normalize(vN);
-  float up = n.y * 0.5 + 0.5;                        // hemispheric sky light
-  float d = max(dot(n, normalize(uLight)), 0.0);     // key light
-  float l = min(0.4 + 0.45 * up + 0.45 * d, 1.35);
-  gl_FragColor = vec4(vec3(0.72, 0.64, 0.5) * l, 1.0);
+  // two-sided lighting: zone meshes aren't consistently wound, so light either face
+  float up = abs(n.y) * 0.5 + 0.5;                   // hemispheric sky light
+  float d = abs(dot(n, normalize(uLight)));          // key light
+  float l = min(0.55 + 0.35 * up + 0.35 * d, 1.4);
+  gl_FragColor = vec4(vCol * l, 1.0);
 }`;
 
-interface GLState { gl: WebGLRenderingContext; prog: WebGLProgram; aPos: number; aNormal: number; uMVP: WebGLUniformLocation | null; uLight: WebGLUniformLocation | null; }
-interface Geom { posB: WebGLBuffer; normB: WebGLBuffer; idxB: WebGLBuffer; count: number; }
+interface GLState { gl: WebGLRenderingContext; prog: WebGLProgram; aPos: number; aNormal: number; aColor: number; uMVP: WebGLUniformLocation | null; uLight: WebGLUniformLocation | null; }
+interface Geom { posB: WebGLBuffer; normB: WebGLBuffer; colB: WebGLBuffer; idxB: WebGLBuffer; count: number; }
 
 /** normalize world coords to a unit cube at origin (z up), + smooth per-vertex normals */
 function buildGeom(v: MeshVariant) {
@@ -70,7 +74,17 @@ function buildGeom(v: MeshVariant) {
     const l = Math.hypot(N[i * 3], N[i * 3 + 1], N[i * 3 + 2]) || 1;
     N[i * 3] /= l; N[i * 3 + 1] /= l; N[i * 3 + 2] /= l;
   }
-  return { P, N, idx: new Uint32Array(idx) };
+  // per-vertex colour from the palette index (material average) 0-255 -> 0-1
+  const C = new Float32Array(n * 3);
+  if (v.pal && v.ci && v.ci.length === n) {
+    for (let i = 0; i < n; i++) {
+      const p = v.pal[v.ci[i]] ?? [184, 164, 128];
+      C[i * 3] = p[0] / 255; C[i * 3 + 1] = p[1] / 255; C[i * 3 + 2] = p[2] / 255;
+    }
+  } else {
+    for (let i = 0; i < n; i++) { C[i * 3] = 0.72; C[i * 3 + 1] = 0.64; C[i * 3 + 2] = 0.5; }
+  }
+  return { P, N, C, idx: new Uint32Array(idx) };
 }
 
 export default function ZoneMesh3D({ zone }: { zone: Zone }) {
@@ -110,6 +124,7 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
       gl, prog,
       aPos: gl.getAttribLocation(prog, 'aPos'),
       aNormal: gl.getAttribLocation(prog, 'aNormal'),
+      aColor: gl.getAttribLocation(prog, 'aColor'),
       uMVP: gl.getUniformLocation(prog, 'uMVP'),
       uLight: gl.getUniformLocation(prog, 'uLight')
     };
@@ -133,6 +148,8 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
       gl.enableVertexAttribArray(S.aPos); gl.vertexAttribPointer(S.aPos, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, G.normB);
       gl.enableVertexAttribArray(S.aNormal); gl.vertexAttribPointer(S.aNormal, 3, gl.FLOAT, false, 0, 0);
+      if (S.aColor >= 0) { gl.bindBuffer(gl.ARRAY_BUFFER, G.colB);
+        gl.enableVertexAttribArray(S.aColor); gl.vertexAttribPointer(S.aColor, 3, gl.FLOAT, false, 0, 0); }
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, G.idxB);
       gl.drawElements(gl.TRIANGLES, G.count, uintExtRef.current ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
     };
@@ -151,9 +168,9 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
     if (!S || !data || data === 'missing') return;
     const { gl } = S;
     const variant = data.variants[Math.min(variantIdx, data.variants.length - 1)];
-    const { P, N, idx } = buildGeom(variant);
+    const { P, N, C, idx } = buildGeom(variant);
     const old = geomRef.current;
-    if (old) { gl.deleteBuffer(old.posB); gl.deleteBuffer(old.normB); gl.deleteBuffer(old.idxB); }
+    if (old) { gl.deleteBuffer(old.posB); gl.deleteBuffer(old.normB); gl.deleteBuffer(old.colB); gl.deleteBuffer(old.idxB); }
     const arr = (target: number, src: ArrayBufferView) => {
       const b = gl.createBuffer()!; gl.bindBuffer(target, b); gl.bufferData(target, src, gl.STATIC_DRAW); return b;
     };
@@ -169,6 +186,7 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
     geomRef.current = {
       posB: arr(gl.ARRAY_BUFFER, P),
       normB: arr(gl.ARRAY_BUFFER, N),
+      colB: arr(gl.ARRAY_BUFFER, C),
       idxB: arr(gl.ELEMENT_ARRAY_BUFFER, indices),
       count
     };
@@ -209,7 +227,8 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
         />
       </div>
       <p className="small muted" style={{ marginTop: '0.3rem' }}>
-        Actual zone geometry parsed from the game’s .s3d files · drag to orbit · scroll to zoom. Untextured (flat-lit) for now.
+        Actual zone geometry parsed from the game’s .s3d files, tinted by each surface’s real
+        texture colour · drag to orbit · scroll to zoom.
       </p>
     </div>
   );
