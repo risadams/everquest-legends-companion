@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Zone } from '../data/types';
+import { createLabelLayer, mapToMeshWorld, type LabelLayer, type GlLabel } from './mapLabels';
+
+interface MapPoint { x: number; y: number; z: number; t: string }
+interface MapVariant { points: MapPoint[] }
 
 // True 3D zone render from the actual game geometry: scripts/import-zone-mesh.mjs parses
 // the zone's .s3d → WLD 0x36 meshes into public/zonemesh/<zone>.json (positions + indices),
@@ -89,21 +93,32 @@ function buildGeom(v: MeshVariant) {
 
 export default function ZoneMesh3D({ zone }: { zone: Zone }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const labelBoxRef = useRef<HTMLDivElement>(null);
+  const labelLayerRef = useRef<LabelLayer | null>(null);
+  const mapVarsRef = useRef<MapVariant[] | null>(null);
   const [data, setData] = useState<{ variants: MeshVariant[] } | null | 'missing'>(null);
   const [variantIdx, setVariantIdx] = useState(0);
+  const [showLabels, setShowLabels] = useState(true);
   const cam = useRef({ az: 0.7, el: 0.5, dist: 3.0 });
   const glRef = useRef<GLState | null>(null);
   const geomRef = useRef<Geom | null>(null);
   const uintExtRef = useRef<boolean>(false);
   const drawRef = useRef<() => void>(() => {});
+  const rebuildLabelsRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     setData(null); setVariantIdx(0);
+    mapVarsRef.current = null;
     let live = true;
     fetch(`${import.meta.env.BASE_URL}zonemesh/${zone.id}.json`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => live && setData(d))
       .catch(() => live && setData('missing'));
+    // labels come from the same map-file points the 2D atlas and wireframe use
+    fetch(`${import.meta.env.BASE_URL}maps3d/${zone.id}.json`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => { if (live) { mapVarsRef.current = d.variants; rebuildLabelsRef.current(); drawRef.current(); } })
+      .catch(() => { mapVarsRef.current = null; });
     return () => { live = false; };
   }, [zone.id]);
 
@@ -152,12 +167,16 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
         gl.enableVertexAttribArray(S.aColor); gl.vertexAttribPointer(S.aColor, 3, gl.FLOAT, false, 0, 0); }
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, G.idxB);
       gl.drawElements(gl.TRIANGLES, G.count, uintExtRef.current ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT, 0);
+      labelLayerRef.current?.update(mvp, w, h);
     };
+    if (labelBoxRef.current) labelLayerRef.current = createLabelLayer(labelBoxRef.current);
     const onResize = () => drawRef.current();
     window.addEventListener('resize', onResize);
     return () => {
       // do not loseContext() — StrictMode remounts on the same canvas and a lost
       // context can't be re-acquired (permanently blank). Freed on real unmount via GC.
+      labelLayerRef.current?.destroy();
+      labelLayerRef.current = null;
       window.removeEventListener('resize', onResize);
     };
   }, []);
@@ -190,6 +209,24 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
       idxB: arr(gl.ELEMENT_ARRAY_BUFFER, indices),
       count
     };
+
+    // Rebuild the map-file labels in THIS mesh's normalised space. Map coords are swapped
+    // and negated vs. the mesh (world = (-mapY,-mapX,mapZ)); then apply the same centre/scale
+    // buildGeom uses so labels land on the matching spot. Re-runs if the maps3d fetch lands late.
+    const [mnx, mny, mnz, mxx, mxy, mxz] = variant.b;
+    const lcx = (mnx + mxx) / 2, lcy = (mny + mxy) / 2, lcz = (mnz + mxz) / 2;
+    const ls = 2 / Math.max(mxx - mnx, mxy - mny, mxz - mnz, 1);
+    rebuildLabelsRef.current = () => {
+      const mv = mapVarsRef.current;
+      const pts = mv?.[Math.min(variantIdx, mv.length - 1)]?.points ?? [];
+      const labels: GlLabel[] = pts.filter((p) => p.t).map((p) => {
+        const [wx, wy, wz] = mapToMeshWorld(p.x, p.y, p.z);
+        return { text: p.t, x: (wx - lcx) * ls, y: (wz - lcz) * ls, z: (wy - lcy) * ls };
+      });
+      labelLayerRef.current?.setLabels(labels);
+    };
+    rebuildLabelsRef.current();
+
     cam.current = { az: 0.7, el: 0.5, dist: 3.0 };
     drawRef.current();
   }, [data, variantIdx]);
@@ -210,13 +247,12 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
   const variants = data && data !== 'missing' ? data.variants : [];
   return (
     <div>
-      {variants.length > 1 && (
-        <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-          {variants.map((v, i) => (
-            <button key={i} className={i === variantIdx ? 'active' : ''} onClick={() => setVariantIdx(i)}>{v.label}</button>
-          ))}
-        </div>
-      )}
+      <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
+        {variants.length > 1 && variants.map((v, i) => (
+          <button key={i} className={i === variantIdx ? 'active' : ''} onClick={() => setVariantIdx(i)}>{v.label}</button>
+        ))}
+        <button className={showLabels ? 'active' : ''} onClick={() => setShowLabels((s) => !s)}>Labels</button>
+      </div>
       <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', background: '#0e0b08', borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
         {data === 'missing' && <p className="muted small" style={{ padding: '1rem' }}>No parsed geometry for this zone yet.</p>}
         {data === null && <p className="muted small" style={{ padding: '1rem' }}>Loading zone geometry…</p>}
@@ -225,10 +261,11 @@ export default function ZoneMesh3D({ zone }: { zone: Zone }) {
           style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab', touchAction: 'none' }}
           onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerLeave={onPointerUp} onWheel={onWheel}
         />
+        <div ref={labelBoxRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', display: showLabels ? 'block' : 'none' }} />
       </div>
       <p className="small muted" style={{ marginTop: '0.3rem' }}>
         Actual zone geometry parsed from the game’s .s3d files, tinted by each surface’s real
-        texture colour · drag to orbit · scroll to zoom.
+        texture colour · drag to orbit · scroll to zoom · labels shared with the 2D map.
       </p>
     </div>
   );

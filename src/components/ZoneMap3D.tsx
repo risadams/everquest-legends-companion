@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Zone } from '../data/types';
+import { createLabelLayer, type LabelLayer, type GlLabel } from './mapLabels';
 
 // Orbitable 3D wireframe of a zone, rendered in raw WebGL (no 3D library) from the
 // lazy-loaded public/maps3d/<zone>.json produced by scripts/import-maps-3d.mjs. It draws
@@ -76,8 +77,11 @@ interface Geom {
 
 export default function ZoneMap3D({ zone }: { zone: Zone }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const labelBoxRef = useRef<HTMLDivElement>(null);
+  const labelLayerRef = useRef<LabelLayer | null>(null);
   const [data, setData] = useState<{ variants: V3[] } | null | 'missing'>(null);
   const [variantIdx, setVariantIdx] = useState(0);
+  const [showLabels, setShowLabels] = useState(true);
   const cam = useRef({ az: 0.6, el: 0.9, dist: 3.2 });
   const glRef = useRef<GLState | null>(null);
   const geomRef = useRef<Geom | null>(null);
@@ -153,11 +157,15 @@ export default function ZoneMap3D({ zone }: { zone: Zone }) {
         bind(G.ptPos, G.ptCol);
         gl.drawArrays(gl.POINTS, 0, G.ptCount);
       }
+      labelLayerRef.current?.update(mvp, w, h);
     };
 
+    if (labelBoxRef.current) labelLayerRef.current = createLabelLayer(labelBoxRef.current);
     const onResize = () => drawRef.current();
     window.addEventListener('resize', onResize);
     return () => {
+      labelLayerRef.current?.destroy();
+      labelLayerRef.current = null;
       // NOTE: do not loseContext() here — under React StrictMode the effect is
       // mounted→cleaned→remounted on the SAME canvas, and a lost context cannot be
       // re-acquired, leaving a permanently blank canvas. The context is released when
@@ -193,10 +201,13 @@ export default function ZoneMap3D({ zone }: { zone: Zone }) {
       }
     }
     const ppos: number[] = [], pcol: number[] = [];
+    const labels: GlLabel[] = [];
     for (const p of variant.points) {
       ppos.push(tx(p.x), ty(p.z), tz(p.y));
       pcol.push(...glColor(p.c));
+      if (p.t) labels.push({ text: p.t, x: tx(p.x), y: ty(p.z), z: tz(p.y) });
     }
+    labelLayerRef.current?.setLabels(labels);
 
     const buf = (arr: number[]) => {
       const b = gl.createBuffer()!;
@@ -249,15 +260,16 @@ export default function ZoneMap3D({ zone }: { zone: Zone }) {
 
   return (
     <div>
-      {variants.length > 1 && (
-        <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-          {variants.map((v, i) => (
-            <button key={i} className={i === variantIdx ? 'active' : ''} onClick={() => setVariantIdx(i)}>
-              {v.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
+        {variants.length > 1 && variants.map((v, i) => (
+          <button key={i} className={i === variantIdx ? 'active' : ''} onClick={() => setVariantIdx(i)}>
+            {v.label}
+          </button>
+        ))}
+        <button className={showLabels ? 'active' : ''} onClick={() => setShowLabels((s) => !s)}>
+          Labels
+        </button>
+      </div>
       <div
         style={{
           position: 'relative',
@@ -284,10 +296,14 @@ export default function ZoneMap3D({ zone }: { zone: Zone }) {
           onPointerLeave={onPointerUp}
           onWheel={onWheel}
         />
+        <div
+          ref={labelBoxRef}
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none', display: showLabels ? 'block' : 'none' }}
+        />
       </div>
       <p className="small muted" style={{ marginTop: '0.3rem' }}>
-        Drag to orbit · scroll to zoom · elevation is exaggerated so floors read clearly. Labels stay
-        on the 2D map.
+        Drag to orbit · scroll to zoom · elevation is exaggerated so floors read clearly. Labels are
+        the same points as the 2D map.
       </p>
     </div>
   );
