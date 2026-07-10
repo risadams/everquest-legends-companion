@@ -243,13 +243,22 @@ function buildVariant(files, wldName) {
     }
     return i;
   };
+  // resolve every mesh's material palette up front, then note whether this zone resolves
+  // any real textures at all (guards against culling a zone whose materials failed to parse)
+  for (const m of meshes) if (!palCache.has(m.matListRef)) palCache.set(m.matListRef, materialPalette(wld, T, m.matListRef));
+  const anyTex = [...palCache.values()].some((p) => p.some((t) => t));
+
   for (const m of meshes) {
-    let mpal = palCache.get(m.matListRef);
-    if (!mpal) { mpal = materialPalette(wld, T, m.matListRef); palCache.set(m.matListRef, mpal); }
+    const mpal = palCache.get(m.matListRef);
     for (let p = 0; p < m.polys.length; p++) {
-      const poly = m.polys[p];
-      const rgb = texColor(files, mpal[m.polyMat[p]], colorCache) ?? FALLBACK;
+      const mi = m.polyMat[p];
+      const texName = mi >= 0 ? mpal[mi] : undefined;
+      // cull invisible zone-boundary geometry (a material with no texture): in-game these
+      // are the unseen walls that box the zone in; rendered solid they hide the terrain.
+      if (anyTex && mi >= 0 && texName == null) continue;
+      const rgb = texColor(files, texName, colorCache) ?? FALLBACK;
       const pIdx = palIdx(rgb);
+      const poly = m.polys[p];
       const a = vid(m.verts[poly[0]], pIdx), b = vid(m.verts[poly[1]], pIdx), c = vid(m.verts[poly[2]], pIdx);
       if (a !== b && b !== c && a !== c) idx.push(a, b, c); // drop degenerate tris
     }
