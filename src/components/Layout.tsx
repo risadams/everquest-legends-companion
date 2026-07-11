@@ -115,6 +115,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="site-footer">
+        <BrandMark size={22} />
         <p>{DISCLAIMER}</p>
         <p>
           Data version: {DATA_VERSION} ·{' '}
