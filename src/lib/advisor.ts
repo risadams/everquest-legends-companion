@@ -5,6 +5,7 @@ import { RACE_BY_ID } from '../data/races';
 import { bandForLevel } from '../data/progression';
 import { QUESTS } from '../data/quests';
 import { MONSTERS } from '../data/monsters';
+import { DEITY_BY_ID } from '../data/lore';
 
 // ── Zone graph ──────────────────────────────────────────────
 
@@ -301,4 +302,43 @@ export function nextMilestones(character: CharacterProfile): string[] {
   const band = bandForLevel(character.level);
   out.push(...band.milestones);
   return out;
+}
+
+// ── Deity ───────────────────────────────────────────────────
+
+/** faith-flavored advice: how the character's deity plays with their race and the world */
+export function deityAdvice(character: CharacterProfile): string | null {
+  const deity = character.deityId ? DEITY_BY_ID[character.deityId] : undefined;
+  if (!deity) return null;
+  const race = RACE_BY_ID[character.raceId];
+  const parts: string[] = [];
+
+  if (race && deity.alignment === 'evil' && race.alignment !== 'evil') {
+    parts.push(
+      `You follow ${deity.name}, ${deity.epithet} — keep the faith quiet in good cities; ` +
+        `priests who spot ${deity.name}'s marks will remember it, and several "worshiper" ` +
+        `quest lines close to you while their rivals' open.`
+    );
+  } else if (race && deity.alignment === 'good' && race.alignment === 'evil') {
+    parts.push(
+      `A ${race.name} sworn to ${deity.name}, ${deity.epithet}? A hard road — your own city ` +
+        `distrusts converts, but ${deity.name}'s temples will trade with you when no other ` +
+        `good-aligned door opens.`
+    );
+  } else {
+    parts.push(
+      `As a follower of ${deity.name}, ${deity.epithet}, expect warmer welcomes from ` +
+        `${deity.followers.charAt(0).toLowerCase()}${deity.followers.slice(1)} — and colder ` +
+        `ones from that god's rivals. Deity-marked "worshiper" gear on vendors is yours to use.`
+    );
+  }
+
+  if (deity.planeZoneId) {
+    parts.push(
+      character.level >= 46
+        ? `Your god's own plane is open to you — a pilgrimage worth raiding.`
+        : `At level 46 you can walk your god's own plane (${46 - character.level} levels away).`
+    );
+  }
+  return parts.join(' ');
 }

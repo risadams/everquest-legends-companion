@@ -3,6 +3,7 @@ import { RACE_BY_ID } from '../data/races';
 import { CLASS_BY_ID } from '../data/classes';
 import { DEITY_BY_ID } from '../data/lore';
 import { TRADESKILL_BY_ID } from '../data/tradeskills';
+import { SLOT_LABELS } from '../data/gear';
 import { newCharacterId } from './storage';
 
 /** Envelope written by "Export" so imports can be recognized and versioned. */
@@ -109,6 +110,17 @@ function parseOne(raw: unknown, index: number): { ok: CharacterProfile } | { err
     typeof r.deityId === 'string' && DEITY_BY_ID[r.deityId] ? r.deityId : undefined;
   const tradeskills = asIntRecord(r.tradeskills, 300, (k) => !!TRADESKILL_BY_ID[k]);
 
+  let equipment: CharacterProfile['equipment'];
+  if (typeof r.equipment === 'object' && r.equipment !== null && !Array.isArray(r.equipment)) {
+    const worn: Record<string, string> = {};
+    for (const [slot, item] of Object.entries(r.equipment as Record<string, unknown>)) {
+      if (slot in SLOT_LABELS && typeof item === 'string' && item.trim()) {
+        worn[slot] = item.trim().slice(0, 80);
+      }
+    }
+    if (Object.keys(worn).length > 0) equipment = worn as CharacterProfile['equipment'];
+  }
+
   return {
     ok: {
       id: typeof r.id === 'string' && r.id ? r.id : newCharacterId(),
@@ -122,6 +134,7 @@ function parseOne(raw: unknown, index: number): { ok: CharacterProfile } | { err
       aaRanks,
       deityId,
       tradeskills,
+      equipment,
       backstory
     }
   };

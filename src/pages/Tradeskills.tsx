@@ -82,6 +82,20 @@ function TradeskillDetail({ t }: { t: Tradeskill }) {
             ))}
         </p>
       )}
+      {trackable && skill > 0 && currentIdx >= 0 && t.leveling[currentIdx].trivial && (
+        <div className="advice-callout small" data-ts-shopping>
+          <strong>Shopping list:</strong> ~
+          {Math.ceil((t.leveling[currentIdx].trivial! - skill) * 1.5)} combines of{' '}
+          <span style={{ color: 'var(--gold)' }}>{t.leveling[currentIdx].make}</span> to reach
+          trivial ({t.leveling[currentIdx].trivial}) — each needs:{' '}
+          {t.leveling[currentIdx].components}. {t.leveling[currentIdx].where}.
+          <span className="muted">
+            {' '}
+            (Estimate assumes ~2 of 3 combines succeed below trivial — budget components for
+            failures.)
+          </span>
+        </div>
+      )}
 
       <h3>How to level it</h3>
       <div style={{ overflowX: 'auto' }}>

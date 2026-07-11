@@ -343,6 +343,8 @@ export interface CharacterProfile {
   deityId?: string;
   /** tradeskill id → current skill level (0-300) */
   tradeskills?: Record<string, number>;
+  /** worn gear: slot → item name (free text; catalog names get linked when they match) */
+  equipment?: Partial<Record<GearSlot, string>>;
   /** free-form roleplay backstory, plain text with newlines */
   backstory?: string;
 }

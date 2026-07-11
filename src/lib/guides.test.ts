@@ -3,7 +3,7 @@ import { MONSTERS } from '../data/monsters';
 import { QUESTS } from '../data/quests';
 import { ZONE_BY_ID } from '../data/zones';
 import { CLASS_BY_ID } from '../data/classes';
-import { recommendQuests, huntTargets, monsterFit, questAvailable } from './advisor';
+import { recommendQuests, huntTargets, monsterFit, questAvailable, deityAdvice } from './advisor';
 import type { CharacterProfile } from '../data/types';
 
 describe('monster & quest data integrity', () => {
@@ -93,5 +93,32 @@ describe('hunt targets', () => {
     const vox = MONSTERS.find((m) => m.id === 'lady-vox')!;
     expect(monsterFit(vox, 20)).toBe('out-of-reach');
     expect(['target', 'stretch']).toContain(monsterFit(vox, 50));
+  });
+});
+
+describe('deity advice', () => {
+  const base: CharacterProfile = {
+    id: 'd',
+    name: 'Dee',
+    raceId: 'human',
+    classIds: ['cleric'],
+    level: 20
+  };
+
+  it('returns null for the agnostic', () => {
+    expect(deityAdvice(base)).toBeNull();
+  });
+
+  it('warns evil-god followers of non-evil races to keep the faith quiet', () => {
+    const advice = deityAdvice({ ...base, deityId: 'innoruuk' });
+    expect(advice).toMatch(/keep the faith quiet/i);
+    expect(advice).toContain('Innoruuk');
+  });
+
+  it('counts down to the god-plane pilgrimage when one exists', () => {
+    const advice = deityAdvice({ ...base, raceId: 'dark-elf', deityId: 'innoruuk', classIds: ['necromancer'] });
+    expect(advice).toMatch(/26 levels away/);
+    const atCap = deityAdvice({ ...base, raceId: 'dark-elf', deityId: 'innoruuk', classIds: ['necromancer'], level: 50 });
+    expect(atCap).toMatch(/open to you/i);
   });
 });

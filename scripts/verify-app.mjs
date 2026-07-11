@@ -275,6 +275,19 @@ try {
   await new Promise((r) => setTimeout(r, 200));
   const withDeity = await page.$eval('.char-sheet', (e) => e.innerText);
   check('sheet shows the chosen deity', /follows Karana/i.test(withDeity), '');
+  check('advisor gives deity-flavored advice', (await page.$('[data-deity-advice]')) !== null);
+  check('print sheet button present', await page.evaluate(() =>
+    [...document.querySelectorAll('button')].some((b) => b.textContent.includes('Print'))
+  ));
+
+  // ── Armory: equip an item, verify it persists ────────────
+  await clickButtonByText(page, '✎ Equip your gear');
+  await page.type('.char-armory-form input', 'Ghoulbane');
+  await clickButtonByText(page, 'Save');
+  await new Promise((r) => setTimeout(r, 150));
+  await page.reload({ waitUntil: 'networkidle0' });
+  const armory = await page.$eval('.char-armory', (e) => e.innerText);
+  check('armory saves and persists gear', armory.includes('Ghoulbane'), '');
 
   // ── Tradeskill progress tracking ─────────────────────────
   await page.goto(`${BASE}/#/tradeskills`, { waitUntil: 'networkidle0' });
@@ -285,6 +298,11 @@ try {
   check(
     'tradeskill tracker marks the current rung',
     tsText.includes('you are here') && tsText.includes('current rung: Sheet Metal'),
+    ''
+  );
+  check(
+    'tradeskill shopping list estimates combines',
+    tsText.includes('Shopping list:') && /~\d+ combines/.test(tsText),
     ''
   );
 

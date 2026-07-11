@@ -3,6 +3,7 @@ import { FACTIONS, FACTION_BY_ID } from '../data/factions';
 import { ZONE_BY_ID } from '../data/zones';
 import { RACE_BY_ID } from '../data/races';
 import { useCharacters } from '../context/CharacterContext';
+import { deityAdvice } from '../lib/advisor';
 import type { Alignment, Faction } from '../data/types';
 
 function opposed(a: Alignment, b: Alignment): boolean {
@@ -98,6 +99,7 @@ export default function Factions() {
           Personalized for <strong>{active!.name}</strong> ({race.name}, {race.alignment}) —
           home-turf factions are highlighted, and factions centered on cities hostile to{' '}
           {race.alignment} races are flagged.
+          {deityAdvice(active!) && <> ✦ {deityAdvice(active!)}</>}
         </p>
       ) : (
         <p className="small muted">

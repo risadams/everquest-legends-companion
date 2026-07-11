@@ -161,6 +161,25 @@ describe('parseCharacterImport validation and repair', () => {
     expect(parseCharacterImport(JSON.stringify(heretic)).characters[0].deityId).toBeUndefined();
   });
 
+  it('keeps equipment on real slots only, names capped at 80 chars', () => {
+    const geared = {
+      ...vex,
+      equipment: {
+        weapon: 'Ghoulbane',
+        chest: '  Fine Plate Breastplate ',
+        tail: 'Not a slot',
+        head: 'x'.repeat(200),
+        feet: ''
+      }
+    };
+    const { characters } = parseCharacterImport(JSON.stringify(geared));
+    expect(characters[0].equipment).toEqual({
+      weapon: 'Ghoulbane',
+      chest: 'Fine Plate Breastplate',
+      head: 'x'.repeat(80)
+    });
+  });
+
   it('keeps tradeskill progress for real crafts only, clamped to 300', () => {
     const crafty = { ...vex, tradeskills: { baking: 76, basketweaving: 50, tailoring: 900 } };
     const { characters } = parseCharacterImport(JSON.stringify(crafty));

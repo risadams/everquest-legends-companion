@@ -9,6 +9,8 @@ import { ABILITIES } from '../data/abilities';
 import { roleCoverage } from '../lib/advisor';
 import { bandForLevel } from '../data/progression';
 import { DEITY_BY_ID } from '../data/lore';
+import { GEAR, SLOT_LABELS } from '../data/gear';
+import type { GearSlot } from '../data/types';
 import { Markdown } from '../lib/markdown';
 import { ClassPortrait, RacePortrait } from './ClassPortrait';
 
@@ -17,6 +19,113 @@ const ALIGNMENT_LABELS: Record<string, string> = {
   neutral: 'Neutral',
   evil: 'Evil'
 };
+
+const SLOT_ORDER = Object.keys(SLOT_LABELS) as GearSlot[];
+
+/** worn gear, edited in place; catalog names get their "notable" line as a tooltip */
+function Armory({ character }: { character: CharacterProfile }) {
+  const { upsert } = useCharacters();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<Partial<Record<GearSlot, string>>>({});
+
+  const worn = character.equipment ?? {};
+  const filled = SLOT_ORDER.filter((s) => worn[s]);
+  const catalog = useMemo(() => {
+    const byName = new Map<string, string>();
+    for (const g of GEAR) byName.set(g.name.toLowerCase(), g.notable);
+    return byName;
+  }, []);
+
+  function startEditing() {
+    setDraft({ ...worn });
+    setEditing(true);
+  }
+  function save() {
+    const cleaned: Partial<Record<GearSlot, string>> = {};
+    for (const slot of SLOT_ORDER) {
+      const v = draft[slot]?.trim();
+      if (v) cleaned[slot] = v.slice(0, 80);
+    }
+    upsert({
+      ...character,
+      equipment: Object.keys(cleaned).length > 0 ? cleaned : undefined
+    });
+    setEditing(false);
+  }
+  function suggestions(slot: GearSlot) {
+    return GEAR.filter(
+      (g) =>
+        g.slot === slot &&
+        g.available !== false &&
+        (!g.classes ||
+          g.classes.length === 0 ||
+          g.classes.some((c) => character.classIds.includes(c)))
+    );
+  }
+
+  return (
+    <div className="char-armory">
+      <h4>
+        Armory
+        {!editing && (
+          <button className="sheet-btn" onClick={startEditing}>
+            ✎ {filled.length > 0 ? 'Edit' : 'Equip your gear'}
+          </button>
+        )}
+      </h4>
+      {editing ? (
+        <div>
+          <div className="char-armory-form">
+            {SLOT_ORDER.map((slot) => (
+              <label key={slot}>
+                <span>{SLOT_LABELS[slot]}</span>
+                <input
+                  value={draft[slot] ?? ''}
+                  list={`gear-${slot}`}
+                  placeholder="—"
+                  onChange={(e) => setDraft((d) => ({ ...d, [slot]: e.target.value }))}
+                />
+                <datalist id={`gear-${slot}`}>
+                  {suggestions(slot).map((g) => (
+                    <option key={g.id} value={g.name} />
+                  ))}
+                </datalist>
+              </label>
+            ))}
+          </div>
+          <div className="char-chronicle-actions">
+            <button className="sheet-btn" onClick={save}>Save</button>
+            <button className="sheet-btn" onClick={() => setEditing(false)}>Cancel</button>
+            <span className="char-chronicle-count">
+              suggestions come from the Notable Gear catalog — free text works too
+            </span>
+          </div>
+        </div>
+      ) : filled.length > 0 ? (
+        <ul className="char-armory-list">
+          {filled.map((slot) => {
+            const notable = catalog.get(worn[slot]!.toLowerCase());
+            return (
+              <li key={slot}>
+                <span className="char-armory-slot">{SLOT_LABELS[slot]}</span>{' '}
+                <span
+                  className={notable ? 'char-armory-notable' : undefined}
+                  title={notable}
+                >
+                  {worn[slot]}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="char-chronicle-empty">
+          Nothing recorded — even a rusty sword deserves a line in the ledger.
+        </p>
+      )}
+    </div>
+  );
+}
 
 /** free-form RP backstory (markdown), written and edited in place on the sheet */
 function Chronicle({ character }: { character: CharacterProfile }) {
@@ -199,6 +308,8 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
           </div>
         </div>
       </div>
+
+      <Armory character={character} />
 
       <Chronicle character={character} />
 

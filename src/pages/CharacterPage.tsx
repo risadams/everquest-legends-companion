@@ -10,7 +10,8 @@ import {
   roleCoverage,
   nextMilestones,
   recommendQuests,
-  huntTargets
+  huntTargets,
+  deityAdvice
 } from '../lib/advisor';
 import { ZONE_BY_ID } from '../data/zones';
 import { FitBadge } from '../components/ZoneCard';
@@ -503,6 +504,12 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
                     ? 'Good cities across Norrath welcome you; steer clear of Neriak, Grobb, Oggok, and Paineel.'
                     : 'Neutral factions open most cities to you — a real luxury for shopping and banking.'}
               </p>
+              {deityAdvice(character) && (
+                <p className="small" data-deity-advice>
+                  ✦ {deityAdvice(character)}{' '}
+                  <Link to="/factions">Faction guide →</Link>
+                </p>
+              )}
             </>
           )}
           <h3>Next milestones</h3>
@@ -602,6 +609,16 @@ export default function CharacterPage() {
     setSearchParams({}, { replace: true });
   }, [shareToken, upsert, setSearchParams]);
 
+  function printSheet() {
+    document.body.classList.add('print-sheet-only');
+    const done = () => {
+      document.body.classList.remove('print-sheet-only');
+      window.removeEventListener('afterprint', done);
+    };
+    window.addEventListener('afterprint', done);
+    window.print();
+  }
+
   function copyShareLink() {
     if (!active) return;
     const url = `${location.origin}${location.pathname}#/character?share=${encodeShare(active)}`;
@@ -699,6 +716,9 @@ export default function CharacterPage() {
               onClick={copyShareLink}
             >
               🔗 Share
+            </button>
+            <button title="Print the character sheet on its own page" onClick={printSheet}>
+              🖨 Print
             </button>
           </>
         )}
