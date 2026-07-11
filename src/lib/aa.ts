@@ -25,6 +25,23 @@ export function parseFirstCost(cost: string): number | null {
   return Number(first);
 }
 
+/**
+ * Points spent buying the first `ranks` ranks of a per-rank cost string like
+ * "1/2/4/6". When the string has fewer entries than ranks, the last entry
+ * repeats. Returns null when any needed rank's cost is unknown ("?").
+ */
+export function parseSpentCost(cost: string, ranks: number): number | null {
+  if (ranks <= 0) return 0;
+  const parts = cost.split('/').map((p) => p.trim());
+  let total = 0;
+  for (let i = 0; i < ranks; i++) {
+    const p = parts[Math.min(i, parts.length - 1)];
+    if (!/^\d+$/.test(p)) return null;
+    total += Number(p);
+  }
+  return total;
+}
+
 /** "… Requirements: level 25." → 25 (defaults to 1 when unstated) */
 export function parseMinLevel(description: string): number | null {
   const m = description.match(/requirements?:\s*level\s*(\d+)/i);

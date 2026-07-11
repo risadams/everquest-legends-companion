@@ -332,6 +332,17 @@ export interface CharacterProfile {
   aaPoints?: number;
   /** lowercased names of spells the player has acquired (checklist) */
   ownedSpells?: string[];
-  /** names of AAs the player has purchased (checklist) */
+  /**
+   * names of AAs with at least one rank purchased (checklist).
+   * Kept in sync with aaRanks — aaRanks is the authoritative record.
+   */
   ownedAas?: string[];
+  /** AA key (ownKey of the name) → ranks purchased; tracks where points went */
+  aaRanks?: Record<string, number>;
+  /** deity followed (LORE_DEITIES id); undefined = agnostic */
+  deityId?: string;
+  /** tradeskill id → current skill level (0-300) */
+  tradeskills?: Record<string, number>;
+  /** free-form roleplay backstory, plain text with newlines */
+  backstory?: string;
 }

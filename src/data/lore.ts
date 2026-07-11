@@ -286,6 +286,10 @@ export const LORE_DEITIES: Deity[] = [
   }
 ];
 
+export const DEITY_BY_ID: Record<string, Deity> = Object.fromEntries(
+  LORE_DEITIES.map((d) => [d.id, d])
+);
+
 export const LORE_FIGURES: LoreFigure[] = [
   {
     id: 'antonius-bayle',

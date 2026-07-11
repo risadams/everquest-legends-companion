@@ -144,6 +144,22 @@ button.linklike {
 button.linklike:hover {
   color: var(--gold);
 }
+/* compact steppers for AA rank tracking */
+button.rank-btn {
+  padding: 0 0.45rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+button.rank-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.rank-count {
+  display: inline-block;
+  min-width: 2.4em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
 
 .app-shell {
   max-width: 1180px;
@@ -503,16 +519,23 @@ table.data tbody tr:nth-child(even) td {
 }
 .char-sheet-grid {
   display: grid;
-  gap: 0.4rem 1.5rem;
-  grid-template-columns: clamp(150px, 22%, 210px) 1fr;
+  gap: 0.4rem 1.4rem;
+  /* class and race portraits bookend the stats */
+  grid-template-columns: clamp(125px, 16%, 180px) 1fr clamp(125px, 16%, 180px);
+  grid-template-rows: auto auto 1fr;
   grid-template-areas:
-    'portrait nameplate'
-    'portrait attrs'
-    'portrait features';
+    'pclass nameplate prace'
+    'pclass attrs     prace'
+    'pclass features  prace';
 }
 .char-portrait {
-  grid-area: portrait;
   align-self: start;
+}
+.char-portrait--class {
+  grid-area: pclass;
+}
+.char-portrait--race {
+  grid-area: prace;
 }
 .char-portrait-caption {
   text-align: center;
@@ -556,6 +579,7 @@ table.data tbody tr:nth-child(even) td {
 }
 .char-attrs {
   grid-area: attrs;
+  align-self: start;
   list-style: none;
   padding: 0;
   margin: 0.7rem 0 0.3rem;
@@ -645,13 +669,151 @@ table.data tbody tr:nth-child(even) td {
   font-style: italic;
   color: var(--ink-soft);
 }
+/* the RP backstory, written in ink below the stat blocks */
+.char-chronicle {
+  margin-top: 1rem;
+  padding-top: 0.2rem;
+  border-top: 1px solid var(--ink-line);
+}
+.char-chronicle h4 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0.35rem 0 0.3rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.char-chronicle p {
+  margin: 0.35rem 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.55;
+  max-width: 72ch;
+}
+.char-chronicle-empty {
+  color: var(--ink-soft);
+}
+/* long chronicles collapse to a preview with a paper fade */
+.char-chronicle-body.clamped {
+  max-height: 15em;
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, #000 72%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent);
+  margin-bottom: 0.35rem;
+}
+/* markdown elements inside the chronicle, styled as ink on paper */
+.char-chronicle .md-body h3,
+.char-chronicle .md-body h4,
+.char-chronicle .md-body h5 {
+  font-family: var(--font-body);
+  font-variant: small-caps;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin: 0.7rem 0 0.15rem;
+}
+.char-chronicle .md-body h3 { font-size: 1.05rem; border-bottom: 1px solid var(--ink-line); }
+.char-chronicle .md-body h4 { font-size: 0.95rem; }
+.char-chronicle .md-body h5 { font-size: 0.88rem; color: var(--ink-soft); }
+.char-chronicle .md-body h3::after { content: none; }
+.char-chronicle .md-body ul,
+.char-chronicle .md-body ol {
+  margin: 0.35rem 0;
+  padding-left: 1.3rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.55;
+  max-width: 72ch;
+}
+.char-chronicle .md-body li {
+  padding: 0.05rem 0;
+}
+.char-chronicle .md-body li::before {
+  content: none; /* markdown lists keep their own markers, not the feature diamonds */
+}
+.char-chronicle .md-body blockquote {
+  margin: 0.4rem 0 0.4rem 0.2rem;
+  padding: 0.1rem 0 0.1rem 0.7rem;
+  border-left: 2px solid #9a7434;
+  color: var(--ink-soft);
+}
+.char-chronicle .md-body hr {
+  border: none;
+  height: 1px;
+  margin: 0.7rem auto;
+  width: 55%;
+  background: linear-gradient(90deg, transparent, #7b5f38, transparent);
+}
+.char-chronicle .md-body code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-style: normal;
+  font-size: 0.82rem;
+  background: rgba(123, 95, 56, 0.12);
+  border-radius: 2px;
+  padding: 0 0.25rem;
+}
+.char-chronicle .md-body strong {
+  color: var(--ink);
+}
+.char-chronicle textarea {
+  width: 100%;
+  max-width: 72ch;
+  resize: vertical;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink);
+  background: rgba(255, 250, 235, 0.55);
+  border: 1px solid var(--ink-line);
+  border-radius: 3px;
+  padding: 0.5rem 0.65rem;
+}
+.char-chronicle textarea::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+.char-chronicle-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+.char-chronicle-count {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+/* small ink-styled buttons that belong on the parchment */
+.char-sheet .sheet-btn {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  background: rgba(255, 250, 235, 0.5);
+  border: 1px solid var(--ink-line);
+  border-radius: 3px;
+  padding: 0.05rem 0.55rem;
+}
+.char-sheet .sheet-btn:hover {
+  color: var(--ink);
+  border-color: #7b5f38;
+}
 @media (max-width: 700px) {
   .char-sheet-grid {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'nameplate' 'portrait' 'attrs' 'features';
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'nameplate nameplate'
+      'pclass prace'
+      'attrs attrs'
+      'features features';
   }
   .char-portrait {
-    max-width: 200px;
+    width: 100%;
+    max-width: 170px;
     margin: 0.3rem auto 0;
   }
   .char-attrs {

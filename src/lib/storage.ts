@@ -3,12 +3,20 @@ import type { CharacterProfile } from '../data/types';
 const CHARS_KEY = 'eql-companion.characters';
 const ACTIVE_KEY = 'eql-companion.activeCharacter';
 
+/** profiles saved before aaRanks existed carry only the ownedAas checklist */
+function migrate(c: CharacterProfile): CharacterProfile {
+  if (!c.aaRanks && c.ownedAas && c.ownedAas.length > 0) {
+    return { ...c, aaRanks: Object.fromEntries(c.ownedAas.map((k) => [k, 1])) };
+  }
+  return c;
+}
+
 export function loadCharacters(): CharacterProfile[] {
   try {
     const raw = localStorage.getItem(CHARS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) ? parsed.map(migrate) : [];
   } catch {
     return [];
   }

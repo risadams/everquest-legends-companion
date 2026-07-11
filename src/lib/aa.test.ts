@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseFirstCost, parseMinLevel, suggestAAs } from './aa';
+import { parseFirstCost, parseMinLevel, parseSpentCost, suggestAAs } from './aa';
 import type { AaRow, SharedAa } from './classdata';
 import type { CharacterProfile } from '../data/types';
 
@@ -50,6 +50,15 @@ describe('AA cost/level parsing', () => {
     expect(parseMinLevel('Does things. Requirements: level 25.')).toBe(25);
     expect(parseMinLevel('Requirement: level 4.')).toBe(4);
     expect(parseMinLevel('No gate mentioned here.')).toBeNull();
+  });
+
+  it('sums spent points across purchased ranks', () => {
+    expect(parseSpentCost('1/2/4/6', 3)).toBe(7); // 1+2+4
+    expect(parseSpentCost('1/2/4/6', 0)).toBe(0);
+    expect(parseSpentCost('3', 4)).toBe(12); // single cost repeats per rank
+    expect(parseSpentCost('0', 1)).toBe(0);
+    expect(parseSpentCost('1/?/4', 3)).toBeNull(); // unknown rank cost
+    expect(parseSpentCost('1/?/4', 1)).toBe(1); // unknown rank not yet bought
   });
 });
 
