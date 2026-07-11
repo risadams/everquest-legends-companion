@@ -4,6 +4,7 @@ import { ZONE_BY_ID } from '../data/zones';
 import { RACE_BY_ID } from '../data/races';
 import { useCharacters } from '../context/CharacterContext';
 import { asset } from '../lib/assets';
+import { RacePortrait } from '../components/ClassPortrait';
 import type { Alignment } from '../data/types';
 
 const ALIGN_BADGE: Record<Alignment, string> = {
@@ -29,7 +30,11 @@ export default function Lore() {
       <section>
         <h2>Your place in the world</h2>
         {race && raceLore ? (
-          <div className="advice-callout">
+          <div className="advice-callout" style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ width: 'clamp(72px, 9vw, 100px)', flex: 'none' }}>
+              <RacePortrait raceId={race.id} />
+            </div>
+            <div>
             <p style={{ margin: 0 }}>
               <strong>
                 {active!.name}, {race.name} of {race.startingCity}:
@@ -43,6 +48,7 @@ export default function Lore() {
               <Link to={`/atlas/${race.startingZoneId}`}>{race.startingCity}</Link>; where it ends
               is up to you.
             </p>
+            </div>
           </div>
         ) : (
           <div className="advice-callout small">

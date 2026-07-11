@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { RACES } from '../data/races';
 import { CLASSES, CLASS_BY_ID, ARCHETYPE_LABELS, ROLE_LABELS } from '../data/classes';
 import { roleCoverage } from '../lib/advisor';
-import { ClassPortrait } from '../components/ClassPortrait';
+import { ClassPortrait, RacePortrait } from '../components/ClassPortrait';
 import type { Role } from '../data/types';
 
 const ALIGN_BADGE: Record<string, string> = {
@@ -125,8 +125,11 @@ export default function RacesClasses() {
       <div className="card-grid">
         {RACES.map((r) => (
           <div className="card" key={r.id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <strong style={{ color: 'var(--gold)' }}>{r.name}</strong>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.7rem' }}>
+              <div style={{ width: '72px', flex: 'none' }}>
+                <RacePortrait raceId={r.id} />
+              </div>
+              <strong style={{ color: 'var(--gold)', flex: 1 }}>{r.name}</strong>
               <span className={`badge ${ALIGN_BADGE[r.alignment]}`}>{r.alignment}</span>
             </div>
             <div className="small muted" style={{ margin: '0.25rem 0' }}>

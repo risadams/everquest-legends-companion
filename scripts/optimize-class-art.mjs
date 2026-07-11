@@ -1,11 +1,11 @@
-// Optimizes raw generated class-portrait art into the app's uniform webp plates.
+// Optimizes raw generated sketch portraits into the app's uniform webp plates.
 //
-//   node scripts/optimize-class-art.mjs [raw-dir]
+//   node scripts/optimize-class-art.mjs [classes|races] [raw-dir]
 //
-// Reads art/class-raw/<class-id>.(png|jpg|jpeg|webp) (dir overridable via argv[2]),
-// normalizes each to a 480x640 (3:4) grayscale webp in public/classes/<class-id>.webp.
-// The grayscale + level pass pushes the sketch paper toward true white so the
-// CSS `mix-blend-mode: multiply` on the character sheet melts it into the parchment.
+// Reads art/<set>-raw/<id>.(png|jpg|jpeg|webp), normalizes each to a 480x640
+// (3:4) grayscale webp in public/<set>/<id>.webp. The grayscale + level pass
+// pushes the sketch paper toward true white so the CSS `mix-blend-mode:
+// multiply` on the character sheet melts it into the parchment.
 
 import { mkdirSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -13,15 +13,37 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const RAW_DIR = process.argv[2] ?? join(ROOT, 'art', 'class-raw');
-const OUT_DIR = join(ROOT, 'public', 'classes');
 
-// must match src/data/classes.ts ids
-const CLASS_IDS = [
-  'bard', 'beastlord', 'berserker', 'cleric', 'druid', 'enchanter',
-  'magician', 'monk', 'necromancer', 'paladin', 'ranger', 'rogue',
-  'shadow-knight', 'shaman', 'warrior', 'wizard'
-];
+// ids must match src/data/classes.ts and src/data/races.ts
+const SETS = {
+  classes: {
+    rawDir: join(ROOT, 'art', 'class-raw'),
+    outDir: join(ROOT, 'public', 'classes'),
+    ids: [
+      'bard', 'beastlord', 'berserker', 'cleric', 'druid', 'enchanter',
+      'magician', 'monk', 'necromancer', 'paladin', 'ranger', 'rogue',
+      'shadow-knight', 'shaman', 'warrior', 'wizard'
+    ]
+  },
+  races: {
+    rawDir: join(ROOT, 'art', 'race-raw'),
+    outDir: join(ROOT, 'public', 'races'),
+    ids: [
+      'barbarian', 'dark-elf', 'dwarf', 'erudite', 'froglok', 'gnome',
+      'half-elf', 'halfling', 'high-elf', 'human', 'iksar', 'kerran',
+      'ogre', 'troll', 'wood-elf'
+    ]
+  }
+};
+
+const setName = process.argv[2] ?? 'classes';
+const set = SETS[setName];
+if (!set) {
+  console.error(`Unknown set "${setName}" — use: classes | races`);
+  process.exit(1);
+}
+const RAW_DIR = process.argv[3] ?? set.rawDir;
+const OUT_DIR = set.outDir;
 
 function magick(args) { return execFileSync('magick', args, { stdio: ['ignore', 'pipe', 'pipe'] }); }
 try { magick(['-version']); } catch {
@@ -47,7 +69,7 @@ function findRaw(id) {
 let done = 0;
 let bytes = 0;
 const missing = [];
-for (const id of CLASS_IDS) {
+for (const id of set.ids) {
   const src = findRaw(id);
   if (!src) {
     missing.push(id);
@@ -71,7 +93,7 @@ for (const id of CLASS_IDS) {
   done++;
 }
 
-console.log(`\nWrote ${done} portraits, ${(bytes / 1024).toFixed(0)} KB total → public/classes/`);
+console.log(`\nWrote ${done} portraits, ${(bytes / 1024).toFixed(0)} KB total → public/${setName}/`);
 if (missing.length > 0) {
   console.log(`Missing raw art (${missing.length}): ${missing.join(', ')}`);
   console.log('(The app shows a monogram fallback for these until art lands.)');

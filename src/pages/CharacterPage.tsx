@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { RACES, RACE_BY_ID } from '../data/races';
 import { CLASSES, CLASS_BY_ID } from '../data/classes';
+import { LORE_DEITIES } from '../data/lore';
 import { useCharacters } from '../context/CharacterContext';
 import { newCharacterId } from '../lib/storage';
 import {
@@ -26,8 +27,13 @@ import {
   type SharedAa,
   type SpellRow
 } from '../lib/classdata';
-import { suggestAAs } from '../lib/aa';
-import { downloadCharacters, parseCharacterImport } from '../lib/characterIo';
+import { suggestAAs, parseSpentCost } from '../lib/aa';
+import {
+  downloadCharacters,
+  parseCharacterImport,
+  encodeShare,
+  decodeShare
+} from '../lib/characterIo';
 import { CharacterSheet } from '../components/CharacterSheet';
 import { SpellIcon } from '../components/SpellIcon';
 import type { CharacterProfile } from '../data/types';
@@ -173,6 +179,7 @@ function CharacterForm({
   const [classIds, setClassIds] = useState<string[]>(initial?.classIds ?? []);
   const [level, setLevel] = useState(initial?.level ?? 1);
   const [aaPoints, setAaPoints] = useState(initial?.aaPoints ?? 0);
+  const [deityId, setDeityId] = useState(initial?.deityId ?? '');
 
   const race = RACE_BY_ID[raceId];
   const primary = classIds[0];
@@ -234,6 +241,19 @@ function CharacterForm({
             style={{ width: '4.5rem' }}
           />
         </label>
+        <select
+          value={deityId}
+          onChange={(e) => setDeityId(e.target.value)}
+          aria-label="Deity"
+          title="Deity choice colors factions, worshiper gear, and a few quest lines"
+        >
+          <option value="">— agnostic —</option>
+          {LORE_DEITIES.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.name} · {d.epithet}
+            </option>
+          ))}
+        </select>
       </div>
 
       <p className="small muted" style={{ marginBottom: '0.2rem' }}>
@@ -278,12 +298,14 @@ function CharacterForm({
           disabled={!canSave}
           onClick={() =>
             onSave({
+              ...initial,
               id: initial?.id ?? newCharacterId(),
               name: name.trim(),
               raceId,
               classIds,
               level,
-              aaPoints
+              aaPoints,
+              deityId: deityId || undefined
             })
           }
         >
@@ -322,6 +344,31 @@ function AaAdvisor({ character }: { character: CharacterProfile }) {
     return suggestAAs(character, classAas, shared, 9);
   }, [character, classAas, shared]);
 
+  // where the points went: sum per-rank costs across everything purchased
+  const invested = useMemo(() => {
+    if (!classAas || !shared) return null;
+    const ranks = character.aaRanks ?? {};
+    const byKey = new Map<string, AaRow>();
+    for (const c of classAas) for (const a of c.aas) byKey.set(ownKey(a.name), a);
+    for (const a of [...shared.general, ...shared.archetype, ...shared.special]) {
+      byKey.set(ownKey(a.name), a);
+    }
+    let points = 0;
+    let totalRanks = 0;
+    let lines = 0;
+    let hasUnknown = false;
+    for (const [key, n] of Object.entries(ranks)) {
+      if (n <= 0) continue;
+      lines++;
+      totalRanks += n;
+      const row = byKey.get(key);
+      const cost = row ? parseSpentCost(row.cost, n) : null;
+      if (cost === null) hasUnknown = true;
+      else points += cost;
+    }
+    return { points, totalRanks, lines, hasUnknown };
+  }, [character.aaRanks, classAas, shared]);
+
   const points = character.aaPoints ?? 0;
 
   return (
@@ -337,6 +384,16 @@ function AaAdvisor({ character }: { character: CharacterProfile }) {
           'No points banked right now — here’s what to save for. AA XP accrues from level 1 in EQL.'
         )}
       </p>
+      {invested && invested.lines > 0 && (
+        <p className="small" data-aa-invested>
+          <span className="badge blue">
+            {invested.hasUnknown ? '≥' : ''}
+            {invested.points} pts invested
+          </span>{' '}
+          across {invested.lines} AA line{invested.lines === 1 ? '' : 's'} ({invested.totalRanks}{' '}
+          rank{invested.totalRanks === 1 ? '' : 's'}) — track ranks on your class pages’ AA tab.
+        </p>
+      )}
       {!suggestions && <p className="muted small">Weighing the AA lines…</p>}
       {suggestions && (
         <ul className="tight small">
@@ -521,6 +578,38 @@ export default function CharacterPage() {
   const [editing, setEditing] = useState<CharacterProfile | null>(null);
   const [creating, setCreating] = useState(characters.length === 0);
   const importInput = useRef<HTMLInputElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // incoming share link: ?share=<token> adds the build as a new character.
+  // The ref guards against double-processing (StrictMode re-runs effects).
+  const handledShare = useRef<string | null>(null);
+  const shareToken = searchParams.get('share');
+  useEffect(() => {
+    if (!shareToken || handledShare.current === shareToken) return;
+    handledShare.current = shareToken;
+    try {
+      const shared = decodeShare(shareToken);
+      const race = RACE_BY_ID[shared.raceId]?.name ?? shared.raceId;
+      const classes = shared.classIds.map((c) => CLASS_BY_ID[c]?.name ?? c).join(' / ');
+      if (confirm(`Add shared character "${shared.name}" (level ${shared.level} ${race}, ${classes})?`)) {
+        upsert(shared);
+        setCreating(false);
+        setEditing(null);
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'That share link could not be read.');
+    }
+    setSearchParams({}, { replace: true });
+  }, [shareToken, upsert, setSearchParams]);
+
+  function copyShareLink() {
+    if (!active) return;
+    const url = `${location.origin}${location.pathname}#/character?share=${encodeShare(active)}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => alert(`Share link for ${active.name} copied to the clipboard.`))
+      .catch(() => prompt('Copy this share link:', url));
+  }
 
   async function handleImportFile(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -604,6 +693,12 @@ export default function CharacterPage() {
               onClick={() => downloadCharacters([active])}
             >
               ⤓ Export
+            </button>
+            <button
+              title={`Copy a link that shares ${active.name}'s build (race, classes, level)`}
+              onClick={copyShareLink}
+            >
+              🔗 Share
             </button>
           </>
         )}

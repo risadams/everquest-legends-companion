@@ -79,12 +79,15 @@ try {
   check('hotspot table populated', hotspotRows >= 2, `${hotspotRows} rows`);
   await page.screenshot({ path: join(SHOTS, '3-zone-oasis.png') });
   // click the North Ro exit on the SVG map itself
+  // exits render as clickable SVG <g onClick> groups labeled "→ <Zone>" (schematic)
+  // or "to <Zone>" (Brewall map)
   const clicked = await page.evaluate(() => {
-    const link = [...document.querySelectorAll('.zone-map-wrap a')].find((a) =>
-      a.textContent.includes('North Ro')
+    const label = [...document.querySelectorAll('.zone-map-wrap svg text')].find((t) =>
+      /North\s+(Desert\s+of\s+)?Ro/i.test(t.textContent)
     );
-    if (link) {
-      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    const g = label?.closest('g');
+    if (g) {
+      g.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
       return true;
     }
     return false;
@@ -158,6 +161,14 @@ try {
     return document.querySelector('.char-portrait .art-monogram') ? 'monogram' : null;
   });
   check('class portrait or monogram fallback shown', portraitOk !== null, String(portraitOk));
+  // backstory chronicle: write, save, persists through reload
+  await clickButtonByText(page, '✎ Write');
+  await page.type('.char-chronicle textarea', 'Grukk smash first, ask questions never.');
+  await clickButtonByText(page, 'Save');
+  await new Promise((r) => setTimeout(r, 150));
+  await page.reload({ waitUntil: 'networkidle0' });
+  const chron = await page.$eval('.char-chronicle', (e) => e.innerText);
+  check('backstory saves and persists', chron.includes('Grukk smash first'), '');
   const trollZones = await page.$$eval('table.data tbody tr td:first-child', (els) =>
     els.map((e) => e.textContent.trim())
   );
@@ -236,6 +247,57 @@ try {
   check('progression marks current band', prog.includes('you are here'), '');
   check('progression injects class notes', prog.includes('Your classes this band'), '');
   await page.screenshot({ path: join(SHOTS, '6-progression.png') });
+
+  // ── AA rank tracking (Aelora active: cleric/enchanter/wizard) ──
+  await page.goto(`${BASE}/#/classes/cleric`, { waitUntil: 'networkidle0' });
+  await clickButtonByText(page, 'AAs');
+  await new Promise((r) => setTimeout(r, 500)); // shared AAs lazy-load
+  const bought = await page.evaluate(() => {
+    const plus = [...document.querySelectorAll('button.rank-btn')].filter(
+      (b) => b.textContent.trim() === '+'
+    );
+    if (plus.length === 0) return false;
+    plus[0].click();
+    return true;
+  });
+  await new Promise((r) => setTimeout(r, 150));
+  const rankShown = await page.$eval('.rank-count', (e) => e.textContent.trim());
+  check('AA rank stepper buys a rank', bought && /^1\//.test(rankShown), rankShown);
+  await page.goto(`${BASE}/#/character`, { waitUntil: 'networkidle0' });
+  await new Promise((r) => setTimeout(r, 700)); // AA advisor lazy-loads
+  const invested = await page.evaluate(() => document.body.innerText);
+  check('AA advisor shows invested points', invested.includes('pts invested'), '');
+
+  // ── Deity: edit Aelora to follow Karana ──────────────────
+  await clickButtonByText(page, 'Edit Aelora');
+  await page.select('.card select[aria-label="Deity"]', 'karana');
+  await clickButtonByText(page, 'Save character');
+  await new Promise((r) => setTimeout(r, 200));
+  const withDeity = await page.$eval('.char-sheet', (e) => e.innerText);
+  check('sheet shows the chosen deity', /follows Karana/i.test(withDeity), '');
+
+  // ── Tradeskill progress tracking ─────────────────────────
+  await page.goto(`${BASE}/#/tradeskills`, { waitUntil: 'networkidle0' });
+  await clickButtonByText(page, '⚒️ Blacksmithing');
+  await page.type('[data-ts-tracker] input', '30');
+  await new Promise((r) => setTimeout(r, 150));
+  const tsText = await page.evaluate(() => document.body.innerText);
+  check(
+    'tradeskill tracker marks the current rung',
+    tsText.includes('you are here') && tsText.includes('current rung: Sheet Metal'),
+    ''
+  );
+
+  // ── Share link imports a build ───────────────────────────
+  const token = Buffer.from(
+    JSON.stringify({ n: 'Zik', r: 'gnome', c: ['wizard', 'enchanter'], l: 20, a: 5 })
+  ).toString('base64url');
+  await page.goto(`${BASE}/#/character?share=${token}`, { waitUntil: 'networkidle0' });
+  await new Promise((r) => setTimeout(r, 500));
+  const afterShare = await page.$$eval('header select option', (els) =>
+    els.map((e) => e.textContent)
+  );
+  check('share link imports a build', afterShare.some((o) => o.includes('Zik')), afterShare.join(' | '));
 } catch (err) {
   check('script completed', false, String(err));
 } finally {

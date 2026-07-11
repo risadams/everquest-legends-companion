@@ -1,19 +1,91 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { CharacterProfile } from '../data/types';
+import { useCharacters } from '../context/CharacterContext';
 import { RACE_BY_ID } from '../data/races';
 import { CLASS_BY_ID, ROLE_LABELS } from '../data/classes';
 import { STAT_KEYS, STAT_LABELS, STAT_NAMES, CLASS_PRIME_STATS, statsFor } from '../data/stats';
 import { ABILITIES } from '../data/abilities';
 import { roleCoverage } from '../lib/advisor';
 import { bandForLevel } from '../data/progression';
-import { ClassPortrait } from './ClassPortrait';
+import { DEITY_BY_ID } from '../data/lore';
+import { Markdown } from '../lib/markdown';
+import { ClassPortrait, RacePortrait } from './ClassPortrait';
 
 const ALIGNMENT_LABELS: Record<string, string> = {
   good: 'Good',
   neutral: 'Neutral',
   evil: 'Evil'
 };
+
+/** free-form RP backstory (markdown), written and edited in place on the sheet */
+function Chronicle({ character }: { character: CharacterProfile }) {
+  const { upsert } = useCharacters();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [expanded, setExpanded] = useState(false);
+
+  const backstory = character.backstory?.trim() ?? '';
+  // long chronicles collapse to a preview so the sheet stays a sheet
+  const isLong = backstory.length > 700 || backstory.split('\n').length > 12;
+
+  function startEditing() {
+    setDraft(backstory);
+    setEditing(true);
+  }
+  function save() {
+    const text = draft.trim();
+    upsert({ ...character, backstory: text || undefined });
+    setEditing(false);
+  }
+
+  return (
+    <div className="char-chronicle">
+      <h4>
+        Chronicle
+        {!editing && (
+          <button className="sheet-btn" onClick={startEditing}>
+            ✎ {backstory ? 'Edit' : 'Write your story'}
+          </button>
+        )}
+      </h4>
+      {editing ? (
+        <div>
+          <textarea
+            value={draft}
+            rows={Math.min(28, Math.max(6, draft.split('\n').length + 2))}
+            placeholder={`Who is ${character.name}? Where do they come from, what do they want, and what are they running from?`}
+            onChange={(e) => setDraft(e.target.value)}
+            aria-label="Backstory"
+          />
+          <div className="char-chronicle-actions">
+            <button className="sheet-btn" onClick={save}>Save</button>
+            <button className="sheet-btn" onClick={() => setEditing(false)}>Cancel</button>
+            <span className="char-chronicle-count">
+              {draft.length.toLocaleString()} characters · markdown: **bold**, *italic*, # headings,
+              - lists, &gt; quotes
+            </span>
+          </div>
+        </div>
+      ) : backstory ? (
+        <>
+          <div className={`char-chronicle-body${isLong && !expanded ? ' clamped' : ''}`}>
+            <Markdown text={backstory} />
+          </div>
+          {isLong && (
+            <button className="sheet-btn" onClick={() => setExpanded((v) => !v)}>
+              {expanded ? 'Show less' : 'Read the full chronicle'}
+            </button>
+          )}
+        </>
+      ) : (
+        <p className="char-chronicle-empty">
+          No chronicle recorded yet — every adventurer has a story worth a few lines.
+        </p>
+      )}
+    </div>
+  );
+}
 
 /**
  * D&D-style character sheet: a parchment document laid on the dark page.
@@ -46,9 +118,14 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
     <section className="char-sheet" aria-label={`Character sheet: ${character.name}`}>
       <div className="map-frame" aria-hidden="true" />
       <div className="char-sheet-grid">
-        <div className="char-portrait">
+        <div className="char-portrait char-portrait--class">
           <ClassPortrait classId={character.classIds[0]} parchment />
           <div className="char-portrait-caption">{primary?.name ?? character.classIds[0]}</div>
+        </div>
+
+        <div className="char-portrait char-portrait--race">
+          <RacePortrait raceId={character.raceId} parchment />
+          <div className="char-portrait-caption">{race?.name ?? character.raceId}</div>
         </div>
 
         <header className="char-nameplate">
@@ -59,6 +136,10 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
           </p>
           <p className="char-meta">
             {race && ALIGNMENT_LABELS[race.alignment]}
+            {' '}·{' '}
+            {character.deityId && DEITY_BY_ID[character.deityId]
+              ? `follows ${DEITY_BY_ID[character.deityId].name}, ${DEITY_BY_ID[character.deityId].epithet}`
+              : 'agnostic'}
             {race && (
               <>
                 {' '}· begins in{' '}
@@ -112,12 +193,14 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
               </li>
               <li>
                 {(character.ownedSpells ?? []).length} spells ·{' '}
-                {(character.ownedAas ?? []).length} AAs owned
+                {Object.values(character.aaRanks ?? {}).reduce((a, b) => a + b, 0)} AA ranks
               </li>
             </ul>
           </div>
         </div>
       </div>
+
+      <Chronicle character={character} />
 
       <footer className="sheet-cartouche">
         {band.title}

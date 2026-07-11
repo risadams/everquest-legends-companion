@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { TRADESKILLS, TRADESKILL_BY_ID, tradeskillsFor } from '../data/tradeskills';
+import { TRADESKILLS, TRADESKILL_BY_ID, tradeskillsFor, canPractice } from '../data/tradeskills';
 import { ZONE_BY_ID } from '../data/zones';
 import { CLASS_BY_ID } from '../data/classes';
 import { RACE_BY_ID } from '../data/races';
@@ -31,6 +31,13 @@ function ZoneLinks({ zoneIds }: { zoneIds?: string[] }) {
 }
 
 function TradeskillDetail({ t }: { t: Tradeskill }) {
+  const { active, setTradeskill } = useCharacters();
+  const skill = active?.tradeskills?.[t.id] ?? 0;
+  const trackable = active !== null && canPractice(t, active);
+  // the first rung this character hasn't trivialized yet
+  const currentIdx =
+    skill > 0 ? t.leveling.findIndex((s) => s.trivial !== undefined && skill < s.trivial) : -1;
+
   return (
     <div>
       <h2>
@@ -49,6 +56,32 @@ function TradeskillDetail({ t }: { t: Tradeskill }) {
           </span>
         )}
       </p>
+      {trackable && (
+        <p className="small" data-ts-tracker>
+          <label className="muted">
+            {active.name}’s {t.name} skill:{' '}
+            <input
+              type="number"
+              min={0}
+              max={300}
+              value={skill === 0 ? '' : skill}
+              placeholder="0"
+              onChange={(e) =>
+                setTradeskill(t.id, Math.max(0, Math.min(300, Number(e.target.value) || 0)))
+              }
+              style={{ width: '5rem' }}
+            />
+          </label>{' '}
+          {skill > 0 &&
+            (currentIdx === -1 ? (
+              <span className="badge gold">past every trivial on this ladder</span>
+            ) : (
+              <span className="badge gold">
+                current rung: {t.leveling[currentIdx].make}
+              </span>
+            ))}
+        </p>
+      )}
 
       <h3>How to level it</h3>
       <div style={{ overflowX: 'auto' }}>
@@ -63,9 +96,24 @@ function TradeskillDetail({ t }: { t: Tradeskill }) {
             </tr>
           </thead>
           <tbody>
-            {t.leveling.map((s) => (
-              <tr key={s.skill + s.make}>
-                <td style={{ whiteSpace: 'nowrap' }}>{s.skill}</td>
+            {t.leveling.map((s, i) => {
+              const done = skill > 0 && s.trivial !== undefined && skill >= s.trivial;
+              const here = i === currentIdx;
+              return (
+              <tr
+                key={s.skill + s.make}
+                style={done ? { opacity: 0.45 } : undefined}
+                data-rung={here ? 'current' : done ? 'done' : undefined}
+              >
+                <td style={{ whiteSpace: 'nowrap' }}>
+                  {s.skill}
+                  {here && (
+                    <span className="badge gold" style={{ marginLeft: '0.4rem' }}>
+                      ← you are here
+                    </span>
+                  )}
+                  {done && ' ✓'}
+                </td>
                 <td style={{ color: 'var(--gold)' }}>
                   {s.make}
                   {s.note && <div className="small muted">{s.note}</div>}
@@ -77,7 +125,8 @@ function TradeskillDetail({ t }: { t: Tradeskill }) {
                   <ZoneLinks zoneIds={s.zoneIds} />
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -206,6 +255,7 @@ export default function Tradeskills() {
                   <th>Who</th>
                   <th>Station</th>
                   <th>Skill-up stat</th>
+                  {active && <th title={`${active.name}'s recorded skill`}>Yours</th>}
                 </tr>
               </thead>
               <tbody>
@@ -227,6 +277,15 @@ export default function Tradeskills() {
                     </td>
                     <td className="small">{t.container}</td>
                     <td className="small">{t.stat}</td>
+                    {active && (
+                      <td className="small">
+                        {!canPractice(t, active)
+                          ? '—'
+                          : (active.tradeskills?.[t.id] ?? 0) > 0
+                            ? active.tradeskills![t.id]
+                            : ''}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

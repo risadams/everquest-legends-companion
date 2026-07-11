@@ -28,23 +28,30 @@ function sourceBadgeClass(s: SpellRow): string {
   return kind === 'auto' ? 'gold' : kind === 'vendor' ? '' : kind === 'drop' ? 'warn' : 'blue';
 }
 
+/** max purchasable ranks from the wiki's ranks string ("4" → 4; "?" → 1) */
+function maxRanks(a: AaRow): number {
+  const n = parseInt(a.ranks, 10);
+  return Number.isFinite(n) && n > 0 ? n : 1;
+}
+
 function AaTable({
   rows,
-  owned,
-  onToggle
+  ranks,
+  onSetRank
 }: {
   rows: AaRow[];
-  owned?: Set<string>;
-  onToggle?: (key: string) => void;
+  /** AA key → ranks purchased by the active character */
+  ranks?: Record<string, number>;
+  onSetRank?: (key: string, ranks: number) => void;
 }) {
   if (rows.length === 0) return <p className="small muted">Nothing documented on the wiki yet.</p>;
-  const track = !!onToggle;
+  const track = !!onSetRank;
   return (
     <div style={{ overflowX: 'auto' }}>
       <table className="data">
         <thead>
           <tr>
-            {track && <th title="Purchased">✓</th>}
+            {track && <th title="Ranks purchased">Bought</th>}
             <th>Name</th>
             <th>Ranks</th>
             <th>Cost</th>
@@ -54,17 +61,31 @@ function AaTable({
         <tbody>
           {rows.map((a) => {
             const key = ownKey(a.name);
-            const have = owned?.has(key) ?? false;
+            const max = maxRanks(a);
+            const have = ranks?.[key] ?? 0;
             return (
-              <tr key={a.name} style={have ? { opacity: 0.5 } : undefined}>
+              <tr key={a.name} style={have >= max ? { opacity: 0.5 } : undefined}>
                 {track && (
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={have}
-                      onChange={() => onToggle!(key)}
-                      aria-label={`Owned: ${a.name}`}
-                    />
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <button
+                      className="rank-btn"
+                      disabled={have <= 0}
+                      onClick={() => onSetRank!(key, have - 1)}
+                      aria-label={`Remove a rank of ${a.name}`}
+                    >
+                      −
+                    </button>
+                    <span className="rank-count" title={`${have} of ${max} ranks purchased`}>
+                      {have}/{max}
+                    </span>
+                    <button
+                      className="rank-btn"
+                      disabled={have >= max}
+                      onClick={() => onSetRank!(key, have + 1)}
+                      aria-label={`Buy a rank of ${a.name}`}
+                    >
+                      +
+                    </button>
                   </td>
                 )}
                 <td style={{ color: 'var(--gold)', whiteSpace: 'nowrap' }}>{a.name}</td>
@@ -83,7 +104,7 @@ function AaTable({
 export default function ClassDetail() {
   const { classId } = useParams<{ classId: string }>();
   const cls = classId ? CLASS_BY_ID[classId] : undefined;
-  const { active, toggleOwned } = useCharacters();
+  const { active, toggleOwned, setAaRank } = useCharacters();
   const [data, setData] = useState<ClassData | 'missing' | null>(null);
   const [shared, setShared] = useState<SharedAa | null>(null);
   const [tab, setTab] = useState<Tab>('spells');
@@ -93,10 +114,7 @@ export default function ClassDetail() {
   const mine = active?.classIds.includes(classId ?? '') ?? false;
   const charLevel = active?.level ?? 0;
   const ownedSpells = useMemo(() => new Set(active?.ownedSpells ?? []), [active]);
-  const ownedAas = useMemo(() => new Set(active?.ownedAas ?? []), [active]);
-  const aaTrack = mine
-    ? { owned: ownedAas, onToggle: (k: string) => toggleOwned('aa', k) }
-    : undefined;
+  const aaTrack = mine ? { ranks: active?.aaRanks ?? {}, onSetRank: setAaRank } : undefined;
 
   useEffect(() => {
     if (!classId) return;
