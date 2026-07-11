@@ -18,6 +18,7 @@ import {
 } from '../lib/classdata';
 import { useCharacters } from '../context/CharacterContext';
 import { SpellIcon } from '../components/SpellIcon';
+import { ClassPortrait } from '../components/ClassPortrait';
 import { RITUAL_SPELL_NAMES } from '../lib/travel';
 
 type Tab = 'spells' | 'skills' | 'aas';
@@ -155,8 +156,15 @@ export default function ClassDetail() {
       <p className="small" style={{ marginBottom: 0 }}>
         <Link to="/classes">← Races &amp; Classes</Link>
       </p>
-      <h1 style={{ marginTop: '0.2rem' }}>{cls.name}</h1>
-      <p className="muted">{cls.blurb}</p>
+      <div style={{ display: 'flex', gap: '1.1rem', alignItems: 'flex-start' }}>
+        <div style={{ width: 'clamp(84px, 12vw, 120px)', flex: 'none' }}>
+          <ClassPortrait classId={cls.id} />
+        </div>
+        <div>
+          <h1 style={{ marginTop: '0.2rem' }}>{cls.name}</h1>
+          <p className="muted">{cls.blurb}</p>
+        </div>
+      </div>
       {mine && (
         <p className="small">
           <span className="badge gold">In {active!.name}’s combo</span> — spell list pre-filtered

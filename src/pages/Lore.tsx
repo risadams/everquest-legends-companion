@@ -3,6 +3,7 @@ import { LORE_ERAS, LORE_DEITIES, LORE_FIGURES, RACE_LORE } from '../data/lore';
 import { ZONE_BY_ID } from '../data/zones';
 import { RACE_BY_ID } from '../data/races';
 import { useCharacters } from '../context/CharacterContext';
+import { asset } from '../lib/assets';
 import type { Alignment } from '../data/types';
 
 const ALIGN_BADGE: Record<Alignment, string> = {
@@ -89,22 +90,8 @@ export default function Lore() {
           {LORE_DEITIES.map((d) => (
             <div className="card" key={d.id} data-deity={d.id}>
               {d.image && (
-                <div
-                  style={{
-                    marginBottom: '0.5rem',
-                    borderRadius: '6px',
-                    overflow: 'hidden',
-                    background: 'rgba(0,0,0,0.28)',
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <img
-                    src={d.image}
-                    alt={`${d.name} — ${d.epithet}`}
-                    loading="lazy"
-                    style={{ maxHeight: '240px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
-                  />
+                <div className="art-plate art-plate--relic">
+                  <img src={asset(d.image)} alt={`${d.name} — ${d.epithet}`} loading="lazy" />
                 </div>
               )}
               <div
@@ -148,22 +135,8 @@ export default function Lore() {
           {LORE_FIGURES.map((f) => (
             <div className="card" key={f.id} data-figure={f.id}>
               {f.image && (
-                <div
-                  style={{
-                    marginBottom: '0.5rem',
-                    borderRadius: '6px',
-                    overflow: 'hidden',
-                    background: 'rgba(0,0,0,0.28)',
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <img
-                    src={f.image}
-                    alt={`${f.name} — in-game portrait`}
-                    loading="lazy"
-                    style={{ maxHeight: '190px', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
-                  />
+                <div className="art-plate art-plate--relic">
+                  <img src={asset(f.image)} alt={`${f.name} — in-game portrait`} loading="lazy" />
                 </div>
               )}
               <div

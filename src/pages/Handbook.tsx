@@ -109,6 +109,10 @@ export default function Handbook() {
 
       <section>
         <h2>Tradeskills</h2>
+        <p className="small">
+          The short version — the <Link to="/tradeskills">full Tradeskill Guide</Link> covers
+          leveling ladders, trivials, and the recipes worth making for every craft.
+        </p>
         <table className="data">
           <thead>
             <tr>

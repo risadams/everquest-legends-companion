@@ -80,6 +80,16 @@ h1::after {
   border-radius: 2px;
   background: linear-gradient(90deg, var(--gold), var(--gold-deep) 70%, transparent);
 }
+/* quieter engraved rule under section headings (sibling of the h1 rule) */
+h2::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 2px;
+  margin-top: 0.3rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold-deep), transparent);
+}
 /* page intros read at a comfortable measure */
 h1 + p {
   max-width: 74ch;
@@ -119,6 +129,19 @@ button.primary:hover {
 }
 button.active {
   border-color: var(--gold);
+  color: var(--gold);
+}
+button.linklike {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--gold-dim);
+  text-underline-offset: 2px;
+}
+button.linklike:hover {
   color: var(--gold);
 }
 
@@ -306,6 +329,10 @@ table.data th {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
 }
+/* faint gold wash on alternating rows keeps long tables scannable */
+table.data tbody tr:nth-child(even) td {
+  background: rgba(224, 178, 94, 0.035);
+}
 
 .two-col {
   display: grid;
@@ -321,7 +348,7 @@ table.data th {
    Maps render as aged parchment sheets: warm paper gradient, a fibrous
    turbulence grain (inline SVG data URI), and a soft edge vignette.
    Ink colors for the geometry live in the map components. */
-.zone-map-wrap, .continent-map-wrap {
+.zone-map-wrap, .continent-map-wrap, .char-sheet {
   position: relative;
   border: 1px solid #7b5f38;
   border-radius: var(--radius);
@@ -374,6 +401,262 @@ table.data th {
   font-size: 0.8rem;
   color: #6a563b;
   letter-spacing: 0.02em;
+}
+
+/* ── Art plates ─────────────────────────────────────────────
+   One shared frame for every illustration in the app (deity symbols,
+   figure portraits, class art) so images read as a uniform set. */
+.art-plate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.28);
+}
+.art-plate::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(224, 178, 94, 0.16);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.art-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* landscape plate for relics: deity symbols, figure renders */
+.art-plate--relic {
+  aspect-ratio: 4 / 3;
+  margin-bottom: 0.5rem;
+}
+/* portrait plate for character/class art (generated at exactly 3:4) */
+.art-plate--portrait {
+  aspect-ratio: 3 / 4;
+}
+.art-plate--portrait img {
+  object-fit: cover;
+}
+/* parchment variant: pencil sketches blend into the paper */
+.art-plate--parchment {
+  border-color: #7b5f38;
+  background: linear-gradient(140deg, #f1e5c8, #e0cc9f);
+}
+.art-plate--parchment::after {
+  border-color: rgba(123, 95, 56, 0.35);
+}
+.art-plate--parchment img {
+  mix-blend-mode: multiply;
+}
+/* monogram fallback when class art is missing */
+.art-monogram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  width: 100%;
+  height: 100%;
+}
+.art-monogram-letter {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--gold-dim);
+  line-height: 1;
+}
+.art-plate--parchment .art-monogram-letter {
+  color: #6d5628;
+}
+.art-monogram-sub {
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.art-plate--parchment .art-monogram-sub {
+  color: #6a563b;
+}
+
+/* ── Character sheet ────────────────────────────────────────
+   A parchment document (shares the map paper stack above) laid on the
+   dark page. All ink colors are scoped here; no dark-theme components
+   (.badge, buttons) belong inside the plate. */
+.char-sheet {
+  --ink: #3a2c1c;
+  --ink-soft: #6a563b;
+  --ink-line: rgba(90, 64, 32, 0.45);
+  color: var(--ink);
+  font-family: Georgia, 'Times New Roman', serif;
+  padding: 1.5rem 1.6rem 1.2rem;
+  margin: 1rem 0;
+}
+.char-sheet a {
+  color: #4a5a7a;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.char-sheet-grid {
+  display: grid;
+  gap: 0.4rem 1.5rem;
+  grid-template-columns: clamp(150px, 22%, 210px) 1fr;
+  grid-template-areas:
+    'portrait nameplate'
+    'portrait attrs'
+    'portrait features';
+}
+.char-portrait {
+  grid-area: portrait;
+  align-self: start;
+}
+.char-portrait-caption {
+  text-align: center;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+.char-nameplate {
+  grid-area: nameplate;
+}
+.char-name {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin: 0;
+}
+.char-sheet .char-name::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 2px;
+  margin-top: 0.3rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #7b5f38, rgba(123, 95, 56, 0.12));
+}
+.char-subtitle {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  margin: 0.3rem 0 0;
+  font-size: 1.02rem;
+}
+.char-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.char-attrs {
+  grid-area: attrs;
+  list-style: none;
+  padding: 0;
+  margin: 0.7rem 0 0.3rem;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(56px, 1fr));
+  gap: 0.45rem;
+}
+.stat-block {
+  text-align: center;
+  padding: 0.35rem 0.2rem 0.45rem;
+  border: 1px solid var(--ink-line);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 2px rgba(243, 232, 205, 0.6),
+    inset 0 0 0 3px rgba(123, 95, 56, 0.25);
+}
+.stat-label {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.stat-block.prime {
+  border-color: #9a7434;
+  background: rgba(224, 178, 94, 0.18);
+}
+.stat-block.prime .stat-value {
+  color: #6d5628;
+}
+.char-features {
+  grid-area: features;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.2rem 1rem;
+  font-size: 0.85rem;
+  align-content: start;
+}
+.char-features h4 {
+  margin: 0.4rem 0 0.15rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink-line);
+}
+.char-features ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.char-features li {
+  padding: 0.08rem 0;
+}
+.char-features li::before {
+  content: '◆';
+  font-size: 0.55rem;
+  margin-right: 0.4rem;
+  color: #9a7434;
+  vertical-align: 1px;
+}
+.sheet-cartouche {
+  display: inline-block;
+  margin: 1rem 0 0;
+  padding: 0.15rem 0.75rem;
+  background: rgba(243, 232, 205, 0.92);
+  border: 1px solid #7b5f38;
+  box-shadow: 0 0 0 2px rgba(243, 232, 205, 0.92), 0 0 0 3px rgba(123, 95, 56, 0.55);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+}
+.sheet-cartouche-sub {
+  font-variant: normal;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+.char-caveat {
+  margin: 0.5rem 0 0;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+@media (max-width: 700px) {
+  .char-sheet-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'nameplate' 'portrait' 'attrs' 'features';
+  }
+  .char-portrait {
+    max-width: 200px;
+    margin: 0.3rem auto 0;
+  }
+  .char-attrs {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .map-legend {
@@ -439,6 +722,12 @@ ul.tight li {
   border-radius: var(--radius);
   padding: 0.8rem 1rem;
   margin: 0.8rem 0;
+}
+/* leading label reads as a small-caps kicker */
+.advice-callout > strong:first-child {
+  font-variant: small-caps;
+  letter-spacing: 0.09em;
+  color: var(--gold);
 }
 
 /* ── Page transitions ───────────────────────────────────────── */

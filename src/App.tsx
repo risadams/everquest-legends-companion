@@ -14,6 +14,7 @@ import Macros from './pages/Macros';
 import Abilities from './pages/Abilities';
 import Travel from './pages/Travel';
 import Handbook from './pages/Handbook';
+import Tradeskills from './pages/Tradeskills';
 import Factions from './pages/Factions';
 import ClassDetail from './pages/ClassDetail';
 import ClassIndex from './pages/ClassIndex';
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/abilities" element={<Abilities />} />
             <Route path="/travel" element={<Travel />} />
             <Route path="/handbook" element={<Handbook />} />
+            <Route path="/tradeskills" element={<Tradeskills />} />
             <Route path="/lore" element={<Lore />} />
             <Route path="/progression" element={<Progression />} />
             <Route path="/character" element={<CharacterPage />} />

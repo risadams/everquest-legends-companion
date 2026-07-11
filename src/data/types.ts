@@ -274,6 +274,53 @@ export interface TravelSpell {
   note?: string;
 }
 
+/** one rung of a tradeskill leveling ladder */
+export interface RecipeStep {
+  /** the skill range this recipe carries you through, e.g. "0–18" */
+  skill: string;
+  make: string;
+  /** skill at which the combine stops granting skill-ups; omitted when not trivial-based */
+  trivial?: number;
+  components: string;
+  /** where to buy/farm the components and do the combine */
+  where: string;
+  /** linkable zones for the components or the combine spot */
+  zoneIds?: string[];
+  note?: string;
+}
+
+/** a recipe worth making for its own sake, not just for skill-ups */
+export interface NotableRecipe {
+  name: string;
+  trivial?: number;
+  components: string;
+  why: string;
+}
+
+export interface Tradeskill {
+  id: string;
+  name: string;
+  icon: string;
+  /** one-line "what it makes" for overview tables */
+  makes: string;
+  summary: string;
+  /** the crafting station / container combines happen in */
+  container: string;
+  /** stat(s) that improve skill-up chance */
+  stat: string;
+  /** class ids — at least one must be in the loadout to practice this craft */
+  requiresClasses?: string[];
+  /** race ids — the character's race must be one of these */
+  requiresRaces?: string[];
+  /** class ids that get outsized value from this craft (not a requirement) */
+  synergyClasses?: string[];
+  synergyNote?: string;
+  /** the skill-up ladder, in ascending order */
+  leveling: RecipeStep[];
+  notable: NotableRecipe[];
+  tips: string[];
+}
+
 export interface CharacterProfile {
   id: string;
   name: string;

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { RACES, RACE_BY_ID } from '../data/races';
 import { CLASSES, CLASS_BY_ID } from '../data/classes';
@@ -12,7 +12,6 @@ import {
   huntTargets
 } from '../lib/advisor';
 import { ZONE_BY_ID } from '../data/zones';
-import { bandForLevel } from '../data/progression';
 import { FitBadge } from '../components/ZoneCard';
 import {
   loadClassData,
@@ -28,6 +27,8 @@ import {
   type SpellRow
 } from '../lib/classdata';
 import { suggestAAs } from '../lib/aa';
+import { downloadCharacters, parseCharacterImport } from '../lib/characterIo';
+import { CharacterSheet } from '../components/CharacterSheet';
 import { SpellIcon } from '../components/SpellIcon';
 import type { CharacterProfile } from '../data/types';
 
@@ -380,20 +381,12 @@ function AdvisorReport({ character }: { character: CharacterProfile }) {
   const milestones = useMemo(() => nextMilestones(character), [character]);
   const quests = useMemo(() => recommendQuests(character, 6), [character]);
   const targets = useMemo(() => huntTargets(character, 5), [character]);
-  const band = bandForLevel(character.level);
 
   return (
     <div>
-      <h2>
-        Advisor: {character.name}, level {character.level} {race?.name}{' '}
-        <span className="muted small">
-          ({character.classIds.map((c) => CLASS_BY_ID[c]?.name).join(' / ')})
-        </span>
-      </h2>
+      <CharacterSheet character={character} />
 
-      <div className="advice-callout">
-        <strong>Right now ({band.title.toLowerCase()}):</strong> {band.focus}
-      </div>
+      <h2>Advisor</h2>
 
       <div className="two-col">
         <div>
@@ -527,6 +520,26 @@ export default function CharacterPage() {
   const { characters, active, setActiveId, upsert, remove } = useCharacters();
   const [editing, setEditing] = useState<CharacterProfile | null>(null);
   const [creating, setCreating] = useState(characters.length === 0);
+  const importInput = useRef<HTMLInputElement>(null);
+
+  async function handleImportFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const { characters: imported, warnings } = parseCharacterImport(await file.text());
+      imported.forEach(upsert);
+      setCreating(false);
+      setEditing(null);
+      alert(
+        `Imported ${imported.length} character${imported.length === 1 ? '' : 's'}: ` +
+          `${imported.map((c) => c.name).join(', ')}.` +
+          (warnings.length > 0 ? `\n\nSkipped:\n${warnings.join('\n')}` : '')
+      );
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Import failed.');
+    }
+  }
 
   return (
     <div>
@@ -586,8 +599,35 @@ export default function CharacterPage() {
             >
               Delete
             </button>
+            <button
+              title={`Save ${active.name} to a JSON file`}
+              onClick={() => downloadCharacters([active])}
+            >
+              ⤓ Export
+            </button>
           </>
         )}
+        {characters.length > 1 && (
+          <button
+            title="Save all characters to a JSON file"
+            onClick={() => downloadCharacters(characters)}
+          >
+            ⤓ Export all
+          </button>
+        )}
+        <button
+          title="Load characters from an exported JSON file"
+          onClick={() => importInput.current?.click()}
+        >
+          ⤒ Import…
+        </button>
+        <input
+          ref={importInput}
+          type="file"
+          accept=".json,application/json"
+          style={{ display: 'none' }}
+          onChange={handleImportFile}
+        />
       </div>
 
       {(creating || editing) && (

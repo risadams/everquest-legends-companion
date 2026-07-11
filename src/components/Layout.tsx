@@ -38,6 +38,7 @@ const GROUPS: NavGroup[] = [
     label: 'Guides',
     items: [
       { to: '/progression', label: 'Progression' },
+      { to: '/tradeskills', label: 'Tradeskills' },
       { to: '/handbook', label: 'Systems Handbook' },
       { to: '/lore', label: 'Lore & History' }
     ]

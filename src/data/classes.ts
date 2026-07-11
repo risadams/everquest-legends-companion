@@ -1,4 +1,4 @@
-import type { ClassDef } from './types';
+import type { ClassDef, Role } from './types';
 
 export const CLASSES: ClassDef[] = [
   // ── Casters ────────────────────────────────────────────────
@@ -384,4 +384,15 @@ export const ARCHETYPE_LABELS: Record<string, string> = {
   priest: 'Priests',
   melee: 'Melee',
   hybrid: 'Hybrids'
+};
+
+export const ROLE_LABELS: Record<Role, string> = {
+  tank: 'Tank',
+  healer: 'Healer',
+  'melee-dps': 'Melee DPS',
+  'caster-dps': 'Caster DPS',
+  cc: 'Crowd Control',
+  pet: 'Pets',
+  pull: 'Pulling',
+  support: 'Support'
 };

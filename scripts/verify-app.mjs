@@ -145,7 +145,19 @@ try {
   await new Promise((r) => setTimeout(r, 200));
 
   const advisor = await page.evaluate(() => document.body.innerText);
-  check('advisor renders for Grukk', advisor.includes('Advisor: Grukk, level 12 Troll'));
+  // ── Character sheet (parchment hero) ────────────────────
+  check('character sheet renders for Grukk', (await page.$('.char-sheet')) !== null);
+  check('sheet shows the character name', advisor.includes('Grukk') && advisor.includes('Level 12 Troll'));
+  const statBlocks = await page.$$eval('.char-sheet .stat-block', (els) => els.length);
+  check('sheet shows all 7 attributes', statBlocks === 7, `${statBlocks} stat blocks`);
+  const primeBlocks = await page.$$eval('.char-sheet .stat-block.prime', (els) => els.length);
+  check('primary-class prime stats highlighted', primeBlocks >= 1, `${primeBlocks} prime`);
+  const portraitOk = await page.evaluate(() => {
+    const img = document.querySelector('.char-portrait img');
+    if (img && img.complete && img.naturalWidth > 0) return 'image';
+    return document.querySelector('.char-portrait .art-monogram') ? 'monogram' : null;
+  });
+  check('class portrait or monogram fallback shown', portraitOk !== null, String(portraitOk));
   const trollZones = await page.$$eval('table.data tbody tr td:first-child', (els) =>
     els.map((e) => e.textContent.trim())
   );
@@ -166,6 +178,17 @@ try {
     ''
   );
   await page.screenshot({ path: join(SHOTS, '5-advisor-troll.png'), fullPage: true });
+
+  // ── Lore art plates (uniform image treatment) ───────────
+  await page.goto(`${BASE}/#/lore`, { waitUntil: 'networkidle0' });
+  const plates = await page.$$eval('.art-plate--relic', (els) => els.length);
+  check('lore art uses uniform plates', plates >= 16, `${plates} plates`);
+  const brokenImgs = await page.$$eval('.art-plate img', (els) =>
+    els.filter((i) => i.complete && i.naturalWidth === 0).map((i) => i.src)
+  );
+  check('all lore images resolve', brokenImgs.length === 0, brokenImgs.join(', '));
+  // back to the character page for the sections below
+  await page.goto(`${BASE}/#/character`, { waitUntil: 'networkidle0' });
 
   // ── Second character: High Elf, different recs ──────────
   await clickButtonByText(page, '+ New character');

@@ -1,20 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RACES } from '../data/races';
-import { CLASSES, CLASS_BY_ID, ARCHETYPE_LABELS } from '../data/classes';
+import { CLASSES, CLASS_BY_ID, ARCHETYPE_LABELS, ROLE_LABELS } from '../data/classes';
 import { roleCoverage } from '../lib/advisor';
+import { ClassPortrait } from '../components/ClassPortrait';
 import type { Role } from '../data/types';
-
-const ROLE_LABELS: Record<Role, string> = {
-  tank: 'Tank',
-  healer: 'Healer',
-  'melee-dps': 'Melee DPS',
-  'caster-dps': 'Caster DPS',
-  cc: 'Crowd Control',
-  pet: 'Pets',
-  pull: 'Pulling',
-  support: 'Support'
-};
 
 const ALIGN_BADGE: Record<string, string> = {
   good: 'good',
@@ -94,8 +84,13 @@ export default function RacesClasses() {
           <div className="card-grid">
             {CLASSES.filter((c) => c.archetype === arch).map((c) => (
               <div className="card" key={c.id}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <strong style={{ color: 'var(--gold)' }}>{c.name}</strong>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.7rem' }}>
+                  <div style={{ width: '72px', flex: 'none' }}>
+                    <ClassPortrait classId={c.id} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <strong style={{ color: 'var(--gold)' }}>{c.name}</strong>
+                  </div>
                   <button className="small" onClick={() => toggleClass(c.id)}>
                     {combo.includes(c.id) ? '− combo' : '+ combo'}
                   </button>

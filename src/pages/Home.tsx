@@ -120,6 +120,13 @@ export default function Home() {
             loadouts — the systems the manual never shipped for.
           </p>
         </Link>
+        <Link to="/tradeskills" className="card" style={{ color: 'inherit' }}>
+          <h3 style={{ marginTop: 0 }}>⚒️ Tradeskill Guide</h3>
+          <p className="small muted">
+            Every craft from Alchemy to Tinkering — who can practice it, the cheapest 0-to-cap
+            leveling ladder, and the recipes people actually pay for.
+          </p>
+        </Link>
         <Link to="/lore" className="card" style={{ color: 'inherit' }}>
           <h3 style={{ marginTop: 0 }}>🕯 Lore &amp; History</h3>
           <p className="small muted">
