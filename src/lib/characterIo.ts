@@ -1,6 +1,8 @@
 import type { CharacterProfile } from '../data/types';
 import { RACE_BY_ID } from '../data/races';
 import { CLASS_BY_ID } from '../data/classes';
+import { DEITY_BY_ID } from '../data/lore';
+import { TRADESKILL_BY_ID } from '../data/tradeskills';
 import { newCharacterId } from './storage';
 
 /** Envelope written by "Export" so imports can be recognized and versioned. */
@@ -46,6 +48,21 @@ function asStringArray(v: unknown): string[] | undefined {
   return strings.length > 0 ? strings : undefined;
 }
 
+/** keep integer-valued entries within [1, max], validated by an optional key check */
+function asIntRecord(
+  v: unknown,
+  max: number,
+  keyOk: (k: string) => boolean = () => true
+): Record<string, number> | undefined {
+  if (typeof v !== 'object' || v === null || Array.isArray(v)) return undefined;
+  const out: Record<string, number> = {};
+  for (const [k, raw] of Object.entries(v as Record<string, unknown>)) {
+    const n = Math.floor(Number(raw));
+    if (keyOk(k) && Number.isFinite(n) && n >= 1 && n <= max) out[k] = n;
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
 /**
  * Validate one raw entry into a CharacterProfile, or explain why it can't be.
  * Repairs what it safely can (clamps level/AA, drops unknown extra classes);
@@ -80,6 +97,17 @@ function parseOne(raw: unknown, index: number): { ok: CharacterProfile } | { err
 
   const level = Math.max(1, Math.min(50, Math.floor(Number(r.level)) || 1));
   const aaPoints = Math.max(0, Math.min(999, Math.floor(Number(r.aaPoints)) || 0));
+  const backstory =
+    typeof r.backstory === 'string' && r.backstory.trim() ? r.backstory.trim() : undefined;
+
+  const ownedAas = asStringArray(r.ownedAas);
+  // aaRanks is authoritative; older exports carry only the ownedAas checklist
+  const aaRanks =
+    asIntRecord(r.aaRanks, 99) ??
+    (ownedAas ? Object.fromEntries(ownedAas.map((k) => [k, 1])) : undefined);
+  const deityId =
+    typeof r.deityId === 'string' && DEITY_BY_ID[r.deityId] ? r.deityId : undefined;
+  const tradeskills = asIntRecord(r.tradeskills, 300, (k) => !!TRADESKILL_BY_ID[k]);
 
   return {
     ok: {
@@ -90,7 +118,11 @@ function parseOne(raw: unknown, index: number): { ok: CharacterProfile } | { err
       level,
       aaPoints,
       ownedSpells: asStringArray(r.ownedSpells),
-      ownedAas: asStringArray(r.ownedAas)
+      ownedAas: aaRanks ? Object.keys(aaRanks) : undefined,
+      aaRanks,
+      deityId,
+      tradeskills,
+      backstory
     }
   };
 }
@@ -139,6 +171,58 @@ export function parseCharacterImport(text: string): ImportResult {
     throw new Error(`No usable characters found. ${warnings.join(' ')}`);
   }
   return { characters, warnings };
+}
+
+/**
+ * Compact URL-safe encoding of a character's BUILD (name, race, classes,
+ * level, AA bank, deity) for share links. Checklists, tradeskill progress,
+ * and backstory are deliberately excluded to keep URLs short.
+ */
+export function encodeShare(c: CharacterProfile): string {
+  const build = {
+    n: c.name,
+    r: c.raceId,
+    c: c.classIds,
+    l: c.level,
+    a: c.aaPoints ?? 0,
+    ...(c.deityId ? { d: c.deityId } : {})
+  };
+  const json = JSON.stringify(build);
+  const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(json)));
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+/**
+ * Decode a share token back into an importable character (fresh id).
+ * Throws with a user-facing message when the token is unusable.
+ */
+export function decodeShare(token: string): CharacterProfile {
+  let json: string;
+  try {
+    const b64 = token.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0));
+    json = new TextDecoder().decode(bytes);
+  } catch {
+    throw new Error('That share link is damaged or truncated.');
+  }
+  let raw: unknown;
+  try {
+    raw = JSON.parse(json);
+  } catch {
+    throw new Error('That share link is damaged or truncated.');
+  }
+  const b = raw as Record<string, unknown>;
+  const { characters } = parseCharacterImport(
+    JSON.stringify({
+      name: b.n,
+      raceId: b.r,
+      classIds: b.c,
+      level: b.l,
+      aaPoints: b.a,
+      deityId: b.d
+    })
+  );
+  return { ...characters[0], id: newCharacterId() };
 }
 
 /** Trigger a browser download of the given characters as a JSON file. */

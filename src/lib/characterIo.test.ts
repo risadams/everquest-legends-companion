@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest';
 import {
   serializeCharacters,
   parseCharacterImport,
-  exportFilename
+  exportFilename,
+  encodeShare,
+  decodeShare
 } from './characterIo';
 import type { CharacterProfile } from '../data/types';
 
@@ -112,6 +114,20 @@ describe('parseCharacterImport validation and repair', () => {
     expect(characters[0].id).toMatch(/^char-/);
   });
 
+  it('round-trips a backstory of any length', () => {
+    const storied = { ...vex, backstory: '  Born in the alleys of Neriak.\n\nSwore revenge.  ' };
+    const { characters } = parseCharacterImport(serializeCharacters([storied]));
+    expect(characters[0].backstory).toBe('Born in the alleys of Neriak.\n\nSwore revenge.');
+
+    const epic = { ...vex, backstory: 'x'.repeat(120_000) };
+    const { characters: novel } = parseCharacterImport(JSON.stringify(epic));
+    expect(novel[0].backstory).toHaveLength(120_000);
+
+    const blank = { ...vex, backstory: '   ' };
+    const { characters: none } = parseCharacterImport(JSON.stringify(blank));
+    expect(none[0].backstory).toBeUndefined();
+  });
+
   it('drops non-string entries from owned lists', () => {
     const messy = { ...vex, ownedSpells: ['lifetap', 7, null], ownedAas: 'nope' };
     const { characters } = parseCharacterImport(JSON.stringify(messy));
@@ -119,10 +135,71 @@ describe('parseCharacterImport validation and repair', () => {
     expect(characters[0].ownedAas).toBeUndefined();
   });
 
+  it('round-trips aaRanks and keeps ownedAas in sync', () => {
+    const ranked = { ...vex, aaRanks: { origin: 1, 'combat fury': 3 }, ownedAas: undefined };
+    const { characters } = parseCharacterImport(JSON.stringify(ranked));
+    expect(characters[0].aaRanks).toEqual({ origin: 1, 'combat fury': 3 });
+    expect(characters[0].ownedAas?.sort()).toEqual(['combat fury', 'origin']);
+  });
+
+  it('migrates legacy ownedAas-only exports to rank 1', () => {
+    const legacy = { ...vex, ownedAas: ['origin', 'first aid'], aaRanks: undefined };
+    const { characters } = parseCharacterImport(JSON.stringify(legacy));
+    expect(characters[0].aaRanks).toEqual({ origin: 1, 'first aid': 1 });
+  });
+
+  it('drops invalid aaRank values and clamps to sane integers', () => {
+    const messy = { ...vex, aaRanks: { a: 2.9, b: 0, c: -3, d: 'five', e: 500 } };
+    const { characters } = parseCharacterImport(JSON.stringify(messy));
+    expect(characters[0].aaRanks).toEqual({ a: 2 });
+  });
+
+  it('keeps a valid deity and drops an unknown one', () => {
+    const pious = { ...vex, deityId: 'innoruuk' };
+    expect(parseCharacterImport(JSON.stringify(pious)).characters[0].deityId).toBe('innoruuk');
+    const heretic = { ...vex, deityId: 'cthulhu' };
+    expect(parseCharacterImport(JSON.stringify(heretic)).characters[0].deityId).toBeUndefined();
+  });
+
+  it('keeps tradeskill progress for real crafts only, clamped to 300', () => {
+    const crafty = { ...vex, tradeskills: { baking: 76, basketweaving: 50, tailoring: 900 } };
+    const { characters } = parseCharacterImport(JSON.stringify(crafty));
+    expect(characters[0].tradeskills).toEqual({ baking: 76 });
+  });
+
   it('requires a name', () => {
     expect(() => parseCharacterImport(JSON.stringify({ ...vex, name: '  ' }))).toThrow(
       /character name/
     );
+  });
+});
+
+describe('share links', () => {
+  it('round-trips a build through encode/decode with a fresh id', () => {
+    const withDeity = { ...vex, deityId: 'innoruuk', backstory: 'secret diary'.repeat(100) };
+    const token = encodeShare(withDeity);
+    expect(token).not.toMatch(/[+/=]/); // URL-safe
+    const decoded = decodeShare(token);
+    expect(decoded.name).toBe('Vex');
+    expect(decoded.raceId).toBe('dark-elf');
+    expect(decoded.classIds).toEqual(['necromancer', 'rogue']);
+    expect(decoded.level).toBe(24);
+    expect(decoded.aaPoints).toBe(3);
+    expect(decoded.deityId).toBe('innoruuk');
+    expect(decoded.id).not.toBe(vex.id);
+    // private/bulky fields never travel in a link
+    expect(decoded.backstory).toBeUndefined();
+    expect(token.length).toBeLessThan(200);
+  });
+
+  it('handles unicode names', () => {
+    const decoded = decodeShare(encodeShare({ ...vex, name: 'Ægir Ödmjúk' }));
+    expect(decoded.name).toBe('Ægir Ödmjúk');
+  });
+
+  it('rejects garbage tokens with a friendly error', () => {
+    expect(() => decodeShare('not-a-real-token!!!')).toThrow(/share link/);
+    expect(() => decodeShare('')).toThrow();
   });
 });
 
