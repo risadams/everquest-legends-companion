@@ -33,9 +33,15 @@ describe('build names', () => {
   });
 
   it('is order-insensitive and ignores duplicate picks', () => {
-    expect(buildName(['warrior', 'berserker', 'shadow-knight'])).toBe('Deathknight');
-    expect(buildName(['shadow-knight', 'warrior', 'berserker'])).toBe('Deathknight');
-    expect(buildName(['cleric', 'druid', 'shaman'])).toBe('Triune Voice');
+    // Pinned to the table rather than a literal: build names are editorial and
+    // get rewritten, but every permutation must always resolve to the same one.
+    const expected = BUILD_NAMES['berserker+shadow-knight+warrior'];
+    expect(expected).toBeTruthy();
+    expect(buildName(['warrior', 'berserker', 'shadow-knight'])).toBe(expected);
+    expect(buildName(['shadow-knight', 'warrior', 'berserker'])).toBe(expected);
+    expect(buildName(['berserker', 'warrior', 'warrior', 'shadow-knight'])).toBe(expected);
+
+    expect(buildName(['shaman', 'cleric', 'druid'])).toBe(BUILD_NAMES['cleric+druid+shaman']);
   });
 
   it('has no name for partial builds', () => {
