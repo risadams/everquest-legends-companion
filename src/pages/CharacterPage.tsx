@@ -377,6 +377,16 @@ function AaAdvisor({ character }: { character: CharacterProfile }) {
     return { points, totalRanks, lines, hasUnknown };
   }, [character.aaRanks, classAas, shared]);
 
+  // the launch "Unbound" lines: already yours, so they are worth naming but
+  // never worth suggesting
+  const granted = useMemo(
+    () =>
+      (classAas ?? []).flatMap(({ className, aas }) =>
+        aas.filter((a) => a.autogranted).map((a) => ({ className, aa: a }))
+      ),
+    [classAas]
+  );
+
   const points = character.aaPoints ?? 0;
 
   return (
@@ -425,6 +435,21 @@ function AaAdvisor({ character }: { character: CharacterProfile }) {
             </li>
           ))}
         </ul>
+      )}
+      {granted.length > 0 && (
+        <p className="small" data-aa-granted>
+          <span className="badge good">granted</span> Your trio already carries{' '}
+          {granted.map(({ className, aa }, i) => (
+            <span key={aa.name}>
+              {i > 0 && (i === granted.length - 1 ? ' and ' : ', ')}
+              <strong style={{ color: 'var(--gold)' }} title={aa.description}>
+                {aa.name}
+              </strong>{' '}
+              <span className="muted">({className})</span>
+            </span>
+          ))}
+          {' '}— autogranted at launch, no points needed.
+        </p>
       )}
       <p className="small">
         Full tables on your class pages:{' '}

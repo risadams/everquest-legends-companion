@@ -177,7 +177,9 @@ try {
   });
   await new Promise((r) => setTimeout(r, 250));
   const dinged = await page.evaluate(() => document.body.innerText);
-  check('Ding! levels the character to 21', dinged.includes('level 21'));
+  // match the sheet's own subtitle rather than any incidental "at level 21"
+  // badge in the AA advisor, whose contents shift as AA data changes
+  check('Ding! levels the character to 21', /Level 21 Troll/.test(dinged));
   await page.screenshot({ path: join(SHOTS, 's23-character-aa.png') });
 
   // Nav wiring: grouped dropdowns

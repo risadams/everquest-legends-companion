@@ -2,7 +2,7 @@ import type { CharacterProfile, Tradeskill } from './types';
 
 // Curated tradeskill guide harvested from eqlwiki.com and classic-era guides,
 // which EQL's crafting recreates. Trivials follow the classic values the wiki
-// lists — expect small differences while the beta settles.
+// lists — expect small differences as the game patches.
 
 export const TRADESKILLS: Tradeskill[] = [
   // ── Crafts everyone can practice ──────────────────────────

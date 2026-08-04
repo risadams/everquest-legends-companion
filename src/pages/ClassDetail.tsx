@@ -88,9 +88,19 @@ function AaTable({
                     </button>
                   </td>
                 )}
-                <td style={{ color: 'var(--gold)', whiteSpace: 'nowrap' }}>{a.name}</td>
+                <td style={{ color: 'var(--gold)', whiteSpace: 'nowrap' }}>
+                  {a.name}
+                  {a.autogranted && (
+                    <>
+                      {' '}
+                      <span className="badge good" title="Granted by the game — no points to spend">
+                        granted
+                      </span>
+                    </>
+                  )}
+                </td>
                 <td>{a.ranks}</td>
-                <td style={{ whiteSpace: 'nowrap' }}>{a.cost}</td>
+                <td style={{ whiteSpace: 'nowrap' }}>{a.autogranted ? '—' : a.cost}</td>
                 <td className="small">{a.description}</td>
               </tr>
             );
@@ -400,7 +410,8 @@ export default function ClassDetail() {
         <a href="https://eqlwiki.com/" target="_blank" rel="noreferrer">
           EQL Wiki
         </a>{' '}
-        ({cls.name} page + Alternate Advancement) — beta values, refresh with{' '}
+        ({cls.name} page + Alternate Advancement), cross-checked against the live client — refresh
+        with{' '}
         <code>node scripts/import-classdata.mjs</code>.
       </p>
     </div>

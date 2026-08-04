@@ -186,7 +186,7 @@ export const MACROS: MacroDef[] = [
     forClasses: ['enchanter'],
     lines: ['/cast 1', '/g MEZZED >>> %t <<< DO NOT TOUCH IT'],
     description:
-      'The macro that saves camps. The warning matters as much as the spell — one stray arrow undoes everything.',
+      'The macro that saves camps. The warning matters as much as the spell — one stray arrow undoes everything. EQL caps loss-of-control effects at 30 seconds, so plan the re-mez rather than banking on one long sleep.',
   },
   {
     id: 'enc-charm',
@@ -194,7 +194,7 @@ export const MACROS: MacroDef[] = [
     category: 'pet',
     forClasses: ['enchanter'],
     lines: ['/g Charming %t — if it turns on me, HELP', '/cast 3'],
-    description: 'Charm is the best DPS in the game until it isn’t. Make sure the group knows the deal.',
+    description: 'Charm is the best DPS in the game until it isn’t. Make sure the group knows the deal — and note EQL’s 30-second cap on control effects means re-charming is a constant, not an emergency.',
   },
   // ── Magician ──────────────────────────────────────────────
   {

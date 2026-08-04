@@ -109,9 +109,11 @@ export function suggestAAs(
     });
   };
 
-  // class AAs: the combo's signature lines
+  // class AAs: the combo's signature lines. Autogranted lines are skipped —
+  // you already have them, so "buy now" would be wrong advice.
   for (const { className, aas } of classAas) {
     for (const aa of aas) {
+      if (aa.autogranted) continue;
       push(aa, className, `Signature ${className} line`, 50);
     }
   }

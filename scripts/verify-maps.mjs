@@ -90,9 +90,13 @@ try {
   check('Lower Guk dungeon geometry renders', gukPolys > 200, `${gukPolys} polylines`);
   await page.screenshot({ path: join(SHOTS, 'm4-lowerguk.png') });
 
-  // Attribution present
+  // Attribution present: client geometry, with Brewall credited for the
+  // fallback zones and the POI labels
   const attribution = await page.evaluate(() => document.body.innerText);
-  check('Brewall attribution shown', attribution.includes('Brewall'));
+  check(
+    'map source attribution shown',
+    attribution.includes('client') && attribution.includes('Brewall')
+  );
 } catch (err) {
   check('script completed', false, String(err));
 } finally {

@@ -36,6 +36,32 @@ export const TIER_LABELS: Record<GearTier, string> = {
 export const GEAR: GearItem[] = [
   // ── Starter (rough level 10-20) ────────────────────────────
   {
+    id: 'fishbone-earring',
+    name: 'Fishbone Earring',
+    slot: 'ears',
+    notable:
+      'A worn Enduring Breath plus DEX +3, wearable by every class from level 1. Permanent underwater breathing without spending a spell slot is worth more than the stat line suggests — it makes Kedge Keep, Dagnor’s Cauldron and every sunken corridor routine.',
+    levelMin: 1,
+    tier: 'starter',
+    zoneId: 'qeynos-hills',
+    monsterId: 'hadden',
+    source: 'Drops from Hadden, the fisherman who wanders the pond in Qeynos Hills.',
+    farm: 'Hadden is a low-level roamer on a slow timer near the water, and any character can take him — so the camp is contested. Find him on a quiet pick and check back between pulls.'
+  },
+  {
+    id: 'gorilla-hide-leggings',
+    name: 'Gorilla Hide Leggings',
+    slot: 'legs',
+    notable:
+      'AC 6 with STR +3 and DEX +4 for any class — the best leg slot a starting character is likely to see, at the cost of CHA −8. Hand it to someone who is not doing the merchant runs.',
+    levelMin: 10,
+    tier: 'starter',
+    zoneId: 'kerra-isle',
+    monsterId: 'lord-gongo',
+    source: 'Drops from Lord Gongo on Kerra Isle.',
+    farm: 'Gongo holds the island interior, well past the Kerran village. A duo in the low teens can take him; Kerran characters start in the zone, everyone else arrives through Toxxulia.'
+  },
+  {
     id: 'screaming-mace',
     name: 'Screaming Mace',
     slot: 'weapon',
@@ -71,6 +97,46 @@ export const GEAR: GearItem[] = [
   },
 
   // ── Mid-game (rough level 20-40) ───────────────────────────
+  {
+    id: 'collar-undead-protection',
+    name: 'Collar of Undead Protection',
+    slot: 'neck',
+    notable:
+      'AC 5 with Disease and Poison resist +7 each, usable by everyone. The neck slot is thin at this level and those resists are exactly what the Guks, Befallen, and every undead camp throw at you.',
+    levelMin: 20,
+    tier: 'mid',
+    zoneId: 'upper-guk',
+    source: 'Drops from a froglok gaz squire in Upper Guk.',
+    farm: 'Gaz squires spawn commonly through the upper tunnels, so this is a matter of clearing rather than holding one placeholder — a group grinding Upper Guk for experience will see one.'
+  },
+  {
+    id: 'bracer-of-the-forlorn',
+    name: 'Bracer of the Forlorn',
+    slot: 'wrist',
+    notable:
+      'AC 6 with WIS +3 and mana +5 for the plate and hybrid classes — an easy wrist upgrade off a named that a mid-teens group can already handle.',
+    levelMin: 15,
+    tier: 'mid',
+    classes: ['warrior', 'cleric', 'paladin', 'shadow-knight', 'bard'],
+    zoneId: 'the-warrens',
+    monsterId: 'prince-bragnar',
+    source: 'Drops from Prince Bragnar in The Warrens.',
+    farm: 'Bragnar holds a chamber in the kobold warrens under Paineel. The zone is small enough that a full sweep beats sitting on his placeholder.'
+  },
+  {
+    id: 'etched-chitin-shield',
+    name: 'Etched Chitin Shield',
+    slot: 'shield',
+    notable:
+      'AC 11 and a two-charge click of Rune I — a damage-absorb shield in the hands of a mid-game tank. NO DROP, and the clicky only fires while you are carrying a Cat’s Eye Agate.',
+    levelMin: 18,
+    tier: 'mid',
+    classes: ['warrior', 'cleric', 'paladin', 'ranger', 'shadow-knight', 'druid', 'shaman'],
+    zoneId: 'the-warrens',
+    monsterId: 'the-muglwump',
+    source: 'Drops from The Muglwump in The Warrens.',
+    farm: 'The Muglwump is the warrens’ signature named. Buy the Cat’s Eye Agate off any gem vendor before you go — without it you are carrying an AC 11 shield and nothing else.'
+  },
   {
     id: 'flowing-black-silk-sash',
     name: 'Flowing Black Silk Sash',
@@ -135,6 +201,72 @@ export const GEAR: GearItem[] = [
   },
 
   // ── Endgame (rough level 40-50) ────────────────────────────
+  {
+    id: 'dark-mail-gauntlets',
+    name: 'Dark Mail Gauntlets',
+    slot: 'hands',
+    notable:
+      'AC 10 with DEX +5 and mana +50. A mana pool that size on a melee hand slot is unusual, which makes these the gloves of choice for paladins, shadow knights, rangers and bards.',
+    levelMin: 35,
+    tier: 'endgame',
+    classes: ['warrior', 'paladin', 'ranger', 'shadow-knight', 'bard', 'rogue'],
+    zoneId: 'lower-guk',
+    source: 'Drops from a ghoul sentinel in Lower Guk.',
+    farm: 'Ghoul sentinels patrol the live side. A group holding a Lower Guk camp in the high 30s clears plenty of them — treat this as a bonus off the experience grind, not a dedicated camp.'
+  },
+  {
+    id: 'adamantite-band',
+    name: 'Adamantite Band',
+    slot: 'fingers',
+    notable:
+      'HP +75 on a ring, against MR −10. Flat health that large is a genuine tanking upgrade and the magic-resist hit only really bites in the planes.',
+    levelMin: 35,
+    tier: 'endgame',
+    zoneId: 'lower-guk',
+    source: 'Drops from a reanimated hand in Lower Guk; also a reward from the Call of Flame quest.',
+    farm: 'Reanimated hands spawn through the dead side. If the drop refuses to appear, the Call of Flame quest hands one over on a fixed path instead of a random one.'
+  },
+  {
+    id: 'imbued-shield-paineel',
+    name: 'Imbued Shield of Paineel',
+    slot: 'shield',
+    notable:
+      'AC 22 with STR +4, two resists, and a worn Enduring Breath — the best shield a classic-era tank will find outside a raid, and it comes off a named rather than a boss.',
+    levelMin: 45,
+    tier: 'endgame',
+    classes: ['warrior', 'cleric', 'paladin', 'shadow-knight', 'bard'],
+    zoneId: 'the-hole',
+    monsterId: 'dartain-the-lost',
+    source: 'Drops from Dartain the Lost in The Hole.',
+    farm: 'Everything in The Hole sees invisibility, so this is a fighting descent rather than a sneak. Dartain needs a real group at 45+, and the launch patch cut the zone’s respawn timers, so a wipe costs less time than it used to.'
+  },
+  {
+    id: 'loam-encrusted-choker',
+    name: 'Loam Encrusted Choker',
+    slot: 'neck',
+    notable:
+      'AC 3 with STR +4, CHA +3 and mana +10 for the four INT casters — part of the Loam Encrusted set that The Hole scatters across its named.',
+    levelMin: 45,
+    tier: 'endgame',
+    classes: ['necromancer', 'wizard', 'magician', 'enchanter'],
+    zoneId: 'the-hole',
+    monsterId: 'rocksoul',
+    source: 'Drops from Rocksoul in The Hole.',
+    farm: 'Rocksoul is one of the elemental named in the ruins. Bring a group that can see invisible and plan a full circuit — the Loam pieces drop across several named, so one run beats one camp.'
+  },
+  {
+    id: 'loam-encrusted-sleeves',
+    name: 'Loam Encrusted Sleeves',
+    slot: 'arms',
+    notable:
+      'AC 4 with INT +5, mana +5 and Fire resist +10 for the INT casters — the arm slot of the same Hole set, and the fire resist is exactly what the zone deals out.',
+    levelMin: 45,
+    tier: 'endgame',
+    classes: ['necromancer', 'wizard', 'magician', 'enchanter'],
+    zoneId: 'the-hole',
+    source: 'Drops from a Bejeweled Elemental in The Hole.',
+    farm: 'Bejeweled Elementals turn up among the ruins’ elemental pulls. Run them on the same trip as Rocksoul rather than making a second descent.'
+  },
   {
     id: 'fungi-tunic',
     name: 'Fungus Covered Scale Tunic',

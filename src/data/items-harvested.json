@@ -220,7 +220,7 @@
     "wt": 6,
     "size": "SMALL",
     "classesRaw": "PAL",
-    "racesRaw": "ALL except IKS",
+    "racesRaw": "ALL",
     "drops": {
       "zones": [
         "Old Sebilis"
@@ -295,7 +295,7 @@
     "wt": 2,
     "size": "SMALL",
     "classesRaw": "WAR CLR PAL RNG SHD DRU MNK BRD ROG SHM",
-    "racesRaw": "HUM BAR ERU ELF HIE DEF HEF DWF TRL OGR HFL GNM IKS",
+    "racesRaw": "ALL",
     "drops": {
       "zones": [
         "Old Sebilis"
@@ -399,7 +399,7 @@
     "wt": 6,
     "size": "LARGE",
     "classesRaw": "WAR CLR PAL RNG SHD BRD ROG SHM",
-    "racesRaw": "HUM BAR ERU ELF HIE DEF HEF DWF TRL OGR",
+    "racesRaw": "ALL",
     "drops": {
       "zones": [
         "Cazic Thule"

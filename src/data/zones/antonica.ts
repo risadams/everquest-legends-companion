@@ -505,15 +505,40 @@ export const ANTONICA_ZONES: Zone[] = [
     type: 'outdoor',
     levelMin: 1,
     levelMax: 10,
-    connections: ['freeport', 'oasis'],
+    connections: ['freeport', 'oasis', 'new-sebilis-expedition'],
     hotspots: [
-      { name: 'Iksar encampment', levels: '1-6', note: 'EQL: Iksar starting camp on the shore' },
-      { name: 'Orc camps & dunes', levels: '3-10' }
+      { name: 'Orc camps & dunes', levels: '3-10' },
+      { name: 'Expedition road', levels: '1-8', note: 'Runs to the Iksar camp zone line' }
     ],
     dangers: ['Sand giants wander up from the south at times'],
     notes:
-      'Northern desert of Ro below Freeport. In EverQuest Legends, the Iksar begin here at a shoreline encampment.',
+      'Northern desert of Ro below Freeport. The Iksar camp that opens onto it is its own zone — the New Sebilisian Expedition.',
     mapX: 59, mapY: 58
+  },
+  {
+    // Legends-original zone, live at launch. The July 28 patch pulled the
+    // Troopers' barricades down, opening the ruins past the camp.
+    id: 'new-sebilis-expedition',
+    name: 'New Sebilisian Expedition',
+    continent: 'antonica',
+    type: 'outdoor',
+    levelMin: 1,
+    levelMax: 12,
+    connections: ['north-ro'],
+    hotspots: [
+      {
+        name: 'Expedition camp',
+        levels: '1-6',
+        note: 'EQL: Iksar starting grounds — guildmasters, merchants, and Crusader Iktra'
+      },
+      { name: 'Ruins past the barricades', levels: '6-12', note: 'Opened by the launch patch' }
+    ],
+    dangers: [
+      'The Abomination of Ro and its bound spirits guard the ruins — well past starter difficulty'
+    ],
+    notes:
+      'A new Iksar expedition camped at the edge of the northern desert of Ro, and the Iksar starting zone in EverQuest Legends. Sand-golem experiments went badly wrong here long before the Expedition arrived.',
+    mapX: 56, mapY: 62
   },
   {
     id: 'oasis',

@@ -194,7 +194,7 @@ export default function Tradeskills() {
       <p className="muted">
         Every craft in EverQuest Legends: what it makes, who can practice it, the cheapest ladder
         from 0 to the cap, and the recipes worth making once you get there. Trivials follow the
-        classic values EQL recreates — expect small shifts while the beta settles.
+        classic values EQL recreates — expect small shifts as the game patches.
       </p>
 
       {active && fits && (

@@ -353,7 +353,7 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
         <span className="sheet-cartouche-sub"> — {band.focus}</span>
       </footer>
       <p className="char-caveat">
-        Attributes are classic-EverQuest creation values; EQL beta numbers may differ.
+        Attributes are classic-EverQuest creation values; EQL's live numbers may differ.
       </p>
     </section>
   );

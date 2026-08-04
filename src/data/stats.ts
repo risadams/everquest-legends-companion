@@ -2,7 +2,7 @@ import type { CharacterProfile } from './types';
 
 // Classic-EverQuest character-creation attribute values, which EQL's character
 // system recreates. Race bases and class bonuses follow the classic tables
-// (P99 wiki); expect small differences while the beta settles.
+// (P99 wiki); expect small differences from EQL’s live values.
 
 export type StatKey = 'str' | 'sta' | 'agi' | 'dex' | 'wis' | 'int' | 'cha';
 

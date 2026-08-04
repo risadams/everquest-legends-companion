@@ -61,6 +61,8 @@ export interface AaRow {
   ranks: string;
   cost: string;
   description: string;
+  /** granted by the game rather than purchased — the launch "Unbound" class lines */
+  autogranted?: boolean;
 }
 
 export interface ClassData {

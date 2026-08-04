@@ -187,6 +187,21 @@ export const FACTIONS: Faction[] = [
     description:
       'The guards of Highhold — corrupt like most human guard factions, paid off by the local mob boss Carson McCabe, and friendly with the Militia and Corrupt Qeynos Guards.',
     raise: ['Kill the gnolls infesting Highpass Hold', 'Smuggling errands for McCabe’s people']
+  },
+
+  // ── New Sebilisian Expedition (Legends-original, live at launch) ──
+  {
+    id: 'new-sebilisian-expedition',
+    name: 'New Sebilisian Expedition',
+    homeZoneIds: ['new-sebilis-expedition', 'north-ro'],
+    description:
+      'An Iksar expedition newly camped at the edge of the northern desert of Ro, and the faction every Iksar starts inside. Cautious toward outsiders, but they will deal with anyone who helps them dig.',
+    raise: [
+      'Supplies for the New Sebilisian Expedition, from Crusader Iktra',
+      'What Happened Here? — the class guildmaster task chain (250 faction)'
+    ],
+    warning:
+      'Crusader Iktra and Troopers Axlia, Kraer, and Tygin are each worth −100 faction if you kill them — do not clear the camp for experience.'
   }
 ];
 

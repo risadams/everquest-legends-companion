@@ -1,7 +1,13 @@
-// Shared app-zone-id -> ordered list of Brewall source {file, label} variants.
-// Used by both import-maps.mjs (2D SVG) and import-maps-3d.mjs (WebGL wireframe).
-// Per-zone entries pick the CLASSIC layout by hand (e.g. freportw/n/e, qeynos2/qeynos)
-// to match what the Legends client ships — do not bulk-glob the folder.
+// Shared app-zone-id -> ordered list of source {file, label} variants, keyed by
+// EQ zone shortname. Used by both import-maps.mjs (2D SVG) and
+// import-maps-3d.mjs (WebGL wireframe).
+//
+// The shortnames match the EQ Legends client's own maps/ folder, which is the
+// primary source. The client also ships longer-named duplicates for a few zones
+// (northro.txt alongside nro.txt, toxxulia.txt alongside tox.txt); those are
+// alternate packs, not what the engine loads — always key on the shortname.
+// Per-zone entries pick the CLASSIC layout by hand (e.g. freportw/n/e,
+// qeynos2/qeynos) — do not bulk-glob the folder.
 
 export const MAPPING = {
   qeynos: [
@@ -84,6 +90,8 @@ export const MAPPING = {
   paineel: [{ file: 'paineel', label: 'Paineel' }],
   toxxulia: [{ file: 'tox', label: 'Toxxulia Forest' }],
   'kerra-isle': [{ file: 'kerraridge', label: 'Kerra Isle' }],
+  // Legends-original zone — the client is the only source that has it
+  'new-sebilis-expedition': [{ file: 'newsebexp', label: 'New Sebilisian Expedition' }],
   'eruds-crossing': [{ file: 'erudsxing', label: 'Erud’s Crossing' }],
   'the-warrens': [{ file: 'warrens', label: 'The Warrens' }],
   stonebrunt: [{ file: 'stonebrunt', label: 'Stonebrunt Mountains' }],

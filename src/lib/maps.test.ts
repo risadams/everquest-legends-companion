@@ -8,7 +8,7 @@ const MAPS_DIR = join(__dirname, '..', 'data', 'maps');
 describe('imported map data', () => {
   const files = new Set(readdirSync(MAPS_DIR));
 
-  it('every zone has imported Brewall geometry', () => {
+  it('every zone has imported map geometry', () => {
     for (const z of ZONES) {
       expect(files.has(`${z.id}.json`), `missing map for ${z.id}`).toBe(true);
     }

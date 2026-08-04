@@ -1,11 +1,12 @@
 import type { Monster } from './types';
 
 // Curated classic-era notables. Loot and spawns follow classic EverQuest,
-// which EQL recreates — verify in-game while the beta shakes out.
+// which EQL recreates — verify in-game; live patches shift spawns and loot.
 
 export const MONSTERS: Monster[] = [
   // ── Antonica: Qeynos region ────────────────────────────────
   { id: 'fippy-darkpaw', name: 'Fippy Darkpaw', zoneId: 'qeynos-hills', lvlMin: 3, lvlMax: 5, kind: 'named', where: 'Charges the Qeynos gate on a timer', notes: 'The most famous gnoll in Norrath. Killing him is a Qeynos rite of passage.' },
+  { id: 'hadden', name: 'Hadden', zoneId: 'qeynos-hills', lvlMin: 5, lvlMax: 8, kind: 'named', where: 'Wanders the pond east of the Qeynos gates', loot: ['Fishbone Earring (worn Enduring Breath)'], notes: 'A fisherman worth killing exactly once — the earring makes every underwater zone routine.' },
   { id: 'holly-windstalker', name: 'Holly Windstalker', zoneId: 'qeynos-hills', lvlMin: 18, lvlMax: 22, kind: 'named', where: 'Roams near the druid ring and pond', notes: 'Guardian of wildlife — she attacks anyone who slaughters animals. Leave the bears alone or be ready.' },
   { id: 'lord-elgnub', name: 'Lord Elgnub', zoneId: 'blackburrow', lvlMin: 10, lvlMax: 12, kind: 'named', where: 'Bottom of the den, past the spiral', loot: ['Gnoll hide gear', 'Qeynos bounty trophies'], notes: 'Master of Blackburrow.' },
   { id: 'elite-gnoll-guard', name: 'Elite gnoll guardsmen', zoneId: 'blackburrow', lvlMin: 8, lvlMax: 12, kind: 'notable', where: 'Ledges above the central chasm', notes: 'Chain-pull them from the ledges — never fight at the chasm lip.' },
@@ -58,6 +59,13 @@ export const MONSTERS: Monster[] = [
   // ── Antonica: the Ro deserts & southern swamps ────────────
   { id: 'dorn', name: 'Dorn B`Dynn', zoneId: 'north-ro', lvlMin: 32, lvlMax: 36, kind: 'named', where: 'Wanders the dunes', loot: ['Heavy coin'], notes: 'A sand giant who flattens careless newbies on the Freeport road.' },
   { id: 'nro-orc-taskmaster', name: 'Dune orc taskmasters', zoneId: 'north-ro', lvlMin: 5, lvlMax: 10, kind: 'notable', where: 'Orc camps in the central desert' },
+
+  // New Sebilisian Expedition — Legends-original zone, opened past the
+  // barricades by the launch patch. Levels are estimates from the starter
+  // range and the What Happened Here? chain; verify in-game.
+  { id: 'abomination-of-ro', name: 'Abomination of Ro', zoneId: 'new-sebilis-expedition', lvlMin: 10, lvlMax: 14, kind: 'named', where: 'The ruins past the Troopers’ barricades', notes: 'What went wrong with the sand-golem experiments. The kill step of What Happened Here? — bring a group, not a starter trio.' },
+  { id: 'nse-bound-spirits', name: 'Spirit of Dessication, Flaming Wraith & a Vitrified Skeleton', zoneId: 'new-sebilis-expedition', lvlMin: 8, lvlMax: 13, kind: 'notable', where: 'Bound around the ruins', notes: 'The three spirits What Happened Here? sends you after, each tied to a failed experiment.' },
+  { id: 'nse-camp-wildlife', name: 'Desert scavengers & sand crawlers', zoneId: 'new-sebilis-expedition', lvlMin: 1, lvlMax: 6, kind: 'notable', where: 'Around the Expedition camp', notes: 'The Iksar starting fodder — safe pulls within sight of the guildmasters.' },
   { id: 'lockjaw', name: 'Lockjaw', zoneId: 'oasis', lvlMin: 18, lvlMax: 22, kind: 'named', where: 'Rare spawn among the crocodiles', notes: 'The giant crocodile of legend. Deceptively vicious.' },
   { id: 'oasis-giants', name: 'Sand giants of the Oasis', zoneId: 'oasis', lvlMin: 30, lvlMax: 36, kind: 'notable', where: 'Patrol the dunes between camps', loot: ['Heavy coin'], notes: 'The zone’s great equalizer — keep one eye on the horizon.' },
   { id: 'oasis-spectres', name: 'Spectres of the isle', zoneId: 'oasis', lvlMin: 28, lvlMax: 33, kind: 'notable', where: 'Specter isle offshore', loot: ['Rusty scythes, rare gems'] },
@@ -108,13 +116,18 @@ export const MONSTERS: Monster[] = [
 
   // ── Odus ──────────────────────────────────────────────────
   { id: 'tox-kobolds', name: 'Kobold shaman packs', zoneId: 'toxxulia', lvlMin: 4, lvlMax: 9, kind: 'notable', where: 'Camps along the river' },
+  { id: 'lord-gongo', name: 'Lord Gongo', zoneId: 'kerra-isle', lvlMin: 12, lvlMax: 16, kind: 'named', where: 'The island interior past the Kerran village', loot: ['Gorilla Hide Leggings'], notes: 'The best leg armor a starting character will find, guarded by the isle’s ape lord.' },
   { id: 'kerra-warleaders', name: 'Rogue kejek war-leaders', zoneId: 'kerra-isle', lvlMin: 8, lvlMax: 14, kind: 'notable', where: 'The wild north shore', notes: 'Outcast kerrans who reject the village’s peace.' },
   { id: 'ec-sharks', name: 'Bull sharks', zoneId: 'eruds-crossing', lvlMin: 12, lvlMax: 18, kind: 'notable', where: 'Open water off the boat route', notes: 'The reason you stay on the boat.' },
   { id: 'ec-kerran-shaman', name: 'The island kerran shaman', zoneId: 'eruds-crossing', lvlMin: 14, lvlMax: 18, kind: 'named', where: 'The mid-ocean isle' },
+  { id: 'prince-bragnar', name: 'Prince Bragnar', zoneId: 'the-warrens', lvlMin: 14, lvlMax: 18, kind: 'named', where: 'A side chamber off the main warren', loot: ['Bracer of the Forlorn'] },
+  { id: 'the-muglwump', name: 'The Muglwump', zoneId: 'the-warrens', lvlMin: 16, lvlMax: 20, kind: 'named', where: 'Deep in the kobold warrens', loot: ['Etched Chitin Shield (Rune I clicky)'], notes: 'Bring a Cat’s Eye Agate — the shield’s clicky needs one to fire.' },
   { id: 'warrens-king', name: 'The Kobold King', zoneId: 'the-warrens', lvlMin: 12, lvlMax: 16, kind: 'named', where: 'Throne cavern at the deepest point', loot: ['Kobold king regalia'] },
   { id: 'stonebrunt-panthers', name: 'Highland panthers', zoneId: 'stonebrunt', lvlMin: 18, lvlMax: 25, kind: 'notable', where: 'The misty slopes', notes: 'Silent stalkers of the fog line.' },
   { id: 'stonebrunt-gorillas', name: 'Highland gorillas', zoneId: 'stonebrunt', lvlMin: 22, lvlMax: 28, kind: 'notable', where: 'The high plateaus' },
   { id: 'master-yael', name: 'Master Yael', zoneId: 'the-hole', lvlMin: 50, lvlMax: 55, kind: 'raid', where: 'The deepest ruins', loot: ['Raid-tier weapons and armor'], notes: 'The elemental horror at the bottom of Old Paineel. A raid unto itself.' },
+  { id: 'dartain-the-lost', name: 'Dartain the Lost', zoneId: 'the-hole', lvlMin: 46, lvlMax: 50, kind: 'named', where: 'The ruined halls of Old Paineel', loot: ['Imbued Shield of Paineel (AC 22)'], notes: 'The best non-raid shield in the classic era.' },
+  { id: 'rocksoul', name: 'Rocksoul', zoneId: 'the-hole', lvlMin: 45, lvlMax: 49, kind: 'named', where: 'Among the elemental pulls in the ruins', loot: ['Loam Encrusted Choker'], notes: 'One of several named carrying the Loam Encrusted caster set — run the circuit, not the camp.' },
   { id: 'hole-caretakers', name: 'Ratmen caretakers', zoneId: 'the-hole', lvlMin: 42, lvlMax: 48, kind: 'notable', where: 'Upper ruins', notes: 'Everything down here sees invisibility.' },
 
   // ── The Planes ────────────────────────────────────────────

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 
-// Static game-systems reference harvested from eqlwiki.com (June 2026 beta):
-// Tradeskills, Alternate Advancement, Exaltations, and deities.
+// Static game-systems reference harvested from eqlwiki.com, with the launch
+// systems taken from the official patch notes of 2026-07-28 and 2026-07-29:
+// Tradeskills, Alternate Advancement, Exaltations, difficulty tiers, and deities.
 
 const TRADESKILLS: { name: string; makes: string; note?: string }[] = [
   { name: 'Alchemy', makes: 'Potions: haste, regen, illusions, stat buffs', note: 'Shaman-flavored; big money-maker.' },
@@ -181,6 +182,13 @@ export default function Handbook() {
             UI (<code>/pick</code>).
           </li>
           <li>
+            <strong>Difficulty tiers</strong> — the same UI sets how hard the copy is, and since
+            the July 29 hotfix that choice <em>is</em> your loot table: drops correspond to the
+            tier you are standing in, with a diminishing chance to roll higher. In D1 you roll +1
+            or better; in D4 you roll +4 or better. Running a camp at a tier you can hold is
+            worth more than farming a soft one quickly.
+          </li>
+          <li>
             <strong>Personal instances</strong> — a private copy of a dungeon for you (or your
             group) from the same Difficulty UI. Currently disabled for zones that are also raid
             zones: The Hole, Kedge Keep, Nagafen&rsquo;s Lair, Permafrost, and the Planes of Hate,
@@ -190,11 +198,12 @@ export default function Handbook() {
             <strong>Raid instances</strong> — requested from NPCs (e.g. the voidlings in Paineel
             open Master Yael raids in The Hole), with solo-scaled raid versions of dragon fights
             like Nagafen. Loot lockouts are per-NPC for you and your group, so separate raid
-            targets in one zone can be run on separate timers.
+            targets in one zone can be run on separate timers — and a boss on lockout is now
+            guaranteed to drop one unique treasure on top of its normal loot pool.
           </li>
         </ul>
         <p className="small muted">
-          Also new since the May 2026 beta patches: mounts are enabled (classic horse models with
+          Also live at launch: mounts are enabled (classic horse models with
           per-race riding animations), and point-blank AoE spells cap at 8 targets. Content
           arrives in <strong>eras</strong> — Classic now, with Sky, Temple, Chardok, Epic Quests,
           and eventually Kunark/Velious content gated behind future unlocks (the wiki tags pages
@@ -210,7 +219,70 @@ export default function Handbook() {
           <strong>Loadout Equipment Sets</strong> and the <strong>Bandolier</strong>) entire gear
           configurations, down to the exact exaltations each piece carried. Equipment and
           Augmentation keyrings hold 50 items each outside your bags. This system is still
-          churning patch to patch — treat specifics as beta.
+          churning patch to patch — re-check specifics against the patch notes.
+        </p>
+      </section>
+
+      <section>
+        <h2>Live at launch</h2>
+        <p className="small">
+          What the July 28 launch patch and its July 29 hotfix put in the game. These are the
+          rules most likely to catch out anyone who learned the game in beta.
+        </p>
+        <ul className="small" style={{ paddingLeft: '1.1rem' }}>
+          <li>
+            <strong>Void-touched Potential</strong> — a raid token earned from voidlings, capped
+            at <strong>3 per week</strong>. It merges the way motes do, pushing an item or a
+            spell up <strong>one rank</strong>. Weekly-capped and rank-defining, so decide what
+            you are upgrading before you spend it.
+          </li>
+          <li>
+            <strong>Autogranted class AAs</strong> — every class received a passive{' '}
+            <strong>Unbound</strong> line, granted rather than purchased. Your class page lists
+            yours with a <span className="badge good">granted</span> badge; it costs no points.
+          </li>
+          <li>
+            <strong>Tasks</strong> — the quest tracker, on <code>Alt+Q</code>. Guildmaster task
+            chains like <em>What Happened Here?</em> in the New Sebilisian Expedition run through
+            it, and hand out faction as well as gear.
+          </li>
+          <li>
+            <strong>Stun immunity</strong> — a stunned player gets a brief immunity afterwards, so
+            chain-stunning no longer locks anyone down.
+          </li>
+          <li>
+            <strong>Loss of control caps at 30 seconds</strong> — mez, charm, fear, and root all
+            fall under it. Long mez pulls are gone: a crowd-control trio has to plan around
+            re-application rather than one long sleep, and charm needs re-establishing far more
+            often than in classic.
+          </li>
+          <li>
+            <strong>Faster dungeons</strong> — placeholders were removed and respawn timers cut in{' '}
+            <Link to="/atlas/the-hole">The Hole</Link>,{' '}
+            <Link to="/atlas/nagafens-lair">Nagafen&rsquo;s Lair</Link>,{' '}
+            <Link to="/atlas/lower-guk">Lower Guk</Link>,{' '}
+            <Link to="/atlas/splitpaw">Splitpaw Lair</Link>,{' '}
+            <Link to="/atlas/the-warrens">The Warrens</Link>, and{' '}
+            <Link to="/atlas/mistmoore">Castle Mistmoore</Link>. Camping a named in these zones is
+            markedly faster than the classic experience suggests.
+          </li>
+          <li>
+            <strong>Kerra Isle and the New Sebilisian Expedition</strong> — the{' '}
+            <Link to="/atlas/kerra-isle">Kerran</Link> and{' '}
+            <Link to="/atlas/new-sebilis-expedition">Iksar</Link> starting zones, both rebuilt for
+            the starter level range and both opened up further by the launch patch.
+          </li>
+        </ul>
+        <p className="small muted">
+          Source:{' '}
+          <a
+            href="https://www.everquestlegends.com/patch-notes"
+            target="_blank"
+            rel="noreferrer"
+          >
+            official patch notes
+          </a>{' '}
+          for 2026-07-28 and 2026-07-29.
         </p>
       </section>
     </div>

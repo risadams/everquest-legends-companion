@@ -63,3 +63,36 @@ describe('harvested class data', () => {
     expect(auto.length).toBeGreaterThan(0);
   });
 });
+
+describe('autogranted Unbound class AAs', () => {
+  const read = (id: string) =>
+    JSON.parse(readFileSync(join(DATA_DIR, `${id}.json`), 'utf8')) as {
+      aas: Array<{ name: string; cost: string; autogranted?: boolean }>;
+    };
+
+  it('gives all 16 classes exactly one granted line', () => {
+    for (const c of CLASSES) {
+      const granted = read(c.id).aas.filter((a) => a.autogranted);
+      expect(granted.length, `${c.id} granted AAs`).toBe(1);
+      expect(granted[0].name, `${c.id} AA name`).toMatch(/^Unbound /);
+      expect(granted[0].cost, `${c.id} AA cost`).toBe('0');
+    }
+  });
+
+  it('never suggests a granted line as a purchase', async () => {
+    const { suggestAAs } = await import('./aa');
+    const monk = read('monk');
+    const shared = JSON.parse(readFileSync(join(DATA_DIR, 'shared-aa.json'), 'utf8'));
+    const character = {
+      id: 'x',
+      name: 'x',
+      raceId: 'human',
+      classIds: ['monk'],
+      level: 50,
+      aaPoints: 50
+    };
+    const out = suggestAAs(character, [{ className: 'Monk', aas: monk.aas as never }], shared, 50);
+    expect(out.some((s) => s.aa.autogranted)).toBe(false);
+    expect(out.length).toBeGreaterThan(0);
+  });
+});

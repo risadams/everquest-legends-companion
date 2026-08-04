@@ -1,7 +1,7 @@
 import type { Quest } from './types';
 
 // Curated classic-era quests. Names and details follow classic EverQuest,
-// which EQL recreates — expect small differences while the beta settles.
+// which EQL recreates — expect small differences as the game patches.
 
 export const QUESTS: Quest[] = [
   // ── Repeatable leveling turn-ins ──────────────────────────
@@ -290,6 +290,38 @@ export const QUESTS: Quest[] = [
       'Every class guild in every starting city runs an armor quest series — collect materials from your region’s hunting grounds and forge your first real set. Ask your guildmaster and check the combine recipes before you sell anything odd-looking.',
     reward: 'A full set of class-appropriate armor with stats',
     repeatable: false
+  },
+
+  // ── New Sebilisian Expedition (Legends-original, live at launch) ──
+  {
+    id: 'what-happened-here',
+    name: 'What Happened Here?',
+    type: 'class',
+    startZoneId: 'new-sebilis-expedition',
+    giver: 'Your class guildmaster, New Sebilisian Expedition',
+    levelMin: 1,
+    levelMax: 15,
+    forAlignments: ['evil'],
+    forClasses: [],
+    summary:
+      'The Expedition’s own origin story, and the first thing an Iksar should run. Question Orator Zikorisy, recover three ancient scrolls from around the ruins, hear out Defector Jabitzu on the sand-golem experiments that failed here, then put down the Abomination of Ro and the three spirits bound to it — Spirit of Dessication, the Flaming Wraith, and a Vitrified Skeleton — before reporting back.',
+    reward: 'New Sebilisian Bindings and 250 New Sebilisian Expedition faction',
+    repeatable: false
+  },
+  {
+    id: 'supplies-for-the-expedition',
+    name: 'Supplies for the New Sebilisian Expedition',
+    type: 'turn-in',
+    startZoneId: 'new-sebilis-expedition',
+    giver: 'Crusader Iktra',
+    levelMin: 1,
+    levelMax: 15,
+    forAlignments: ['evil'],
+    forClasses: [],
+    summary:
+      'Crusader Iktra takes supply runs off anyone willing to make them. The reliable way to raise standing with the Expedition if you soured it, and worth doing early either way.',
+    reward: 'New Sebilisian Expedition faction',
+    repeatable: true
   }
 ];
 

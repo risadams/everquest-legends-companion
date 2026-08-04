@@ -22,7 +22,7 @@ export const CLASSES: ClassDef[] = [
       '1-9': 'Lean on your animation pet and early mez. Practice pulling singles with lull lines.',
       '10-19': 'Haste and breeze-style buffs make you welcome anywhere. Start practicing charm on cheap mobs.',
       '20-34': 'Clarity-tier mana regen is transformative for any caster trio. CC makes dungeons like Unrest and Mistmoore safe.',
-      '35-50': 'Charm DPS dominates if you can manage it. You are the difference between chaos and control in Lower Guk and the planes.'
+      '35-50': 'Charm DPS dominates if you can manage it — EQL caps control effects at 30 seconds, so charm is a rhythm of re-application, not a set-and-forget pet. You are the difference between chaos and control in Lower Guk and the planes.'
     }
   },
   {

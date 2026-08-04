@@ -282,8 +282,10 @@ function RealZoneMap({ zone, data }: { zone: Zone; data: ZoneMapData }) {
         />
       </div>
       <p className="small muted" style={{ marginTop: '0.35rem' }}>
-        Drag to pan · scroll to zoom · blue underlined markers jump to the connected zone. Map data
-        by Brewall (<a href="https://www.eqmaps.info/" target="_blank" rel="noreferrer">eqmaps.info</a>).
+        Drag to pan · scroll to zoom · blue underlined markers jump to the connected zone. Geometry
+        comes from the EverQuest Legends client's own map files; a few dungeons the client ships no
+        map for, plus most POI labels, come from Brewall (
+        <a href="https://www.eqmaps.info/" target="_blank" rel="noreferrer">eqmaps.info</a>).
       </p>
     </div>
   );

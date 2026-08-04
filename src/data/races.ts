@@ -130,11 +130,11 @@ export const RACES: Race[] = [
     id: 'iksar',
     name: 'Iksar',
     alignment: 'evil',
-    startingCity: 'North Ro encampment',
-    startingZoneId: 'north-ro',
+    startingCity: 'New Sebilisian Expedition',
+    startingZoneId: 'new-sebilis-expedition',
     traits: ['Enhanced HP regeneration', 'Superior natural AC', 'Forage & strong swimming'],
     description:
-      'In EverQuest Legends the lizardfolk begin at a new encampment on the shores of North Ro. Hated nearly everywhere — even other evil races distrust them — but their regeneration is unmatched.',
+      'In EverQuest Legends the lizardfolk begin at the New Sebilisian Expedition, a camp of their own on the edge of the northern desert of Ro. Hated nearly everywhere — even other evil races distrust them — but their regeneration is unmatched.',
     allowedPrimaryClasses: ['warrior', 'shadow-knight', 'shaman', 'monk', 'necromancer', 'beastlord']
   },
   {
