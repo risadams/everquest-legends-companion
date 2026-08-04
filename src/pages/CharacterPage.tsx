@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { RACES, RACE_BY_ID } from '../data/races';
 import { CLASSES, CLASS_BY_ID } from '../data/classes';
+import { buildName } from '../data/buildNames';
 import { LORE_DEITIES } from '../data/lore';
 import { useCharacters } from '../context/CharacterContext';
 import { newCharacterId } from '../lib/storage';
@@ -291,6 +292,12 @@ function CharacterForm({
           Primary: <strong>{CLASS_BY_ID[primary].name}</strong>
           {classIds.length > 1 &&
             ` · also ${classIds.slice(1).map((c) => CLASS_BY_ID[c].name).join(' and ')}`}
+        </p>
+      )}
+      {/* the trio's name updates live as classes are picked */}
+      {buildName(classIds) && (
+        <p className="small" data-build-preview>
+          Build: <strong style={{ color: 'var(--gold)' }}>{buildName(classIds)}</strong>
         </p>
       )}
       <div className="filter-bar">

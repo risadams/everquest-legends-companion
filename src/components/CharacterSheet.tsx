@@ -10,6 +10,7 @@ import { roleCoverage } from '../lib/advisor';
 import { bandForLevel } from '../data/progression';
 import { DEITY_BY_ID } from '../data/lore';
 import { GEAR, SLOT_LABELS } from '../data/gear';
+import { buildName } from '../data/buildNames';
 import type { GearSlot } from '../data/types';
 import { Markdown } from '../lib/markdown';
 import { ClassPortrait, RacePortrait } from './ClassPortrait';
@@ -223,6 +224,9 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
     .slice(1)
     .map((id) => CLASS_BY_ID[id]?.name ?? id);
 
+  // every full trio has a name of its own; partial builds haven't earned one yet
+  const build = buildName(character.classIds);
+
   return (
     <section className="char-sheet" aria-label={`Character sheet: ${character.name}`}>
       <div className="map-frame" aria-hidden="true" />
@@ -239,9 +243,40 @@ export function CharacterSheet({ character }: { character: CharacterProfile }) {
 
         <header className="char-nameplate">
           <h2 className="char-name">{character.name}</h2>
+          {build ? (
+            <div className="char-build" data-build-name>
+              <span className="char-build-eyebrow">Build</span>
+              <strong className="char-build-name">{build}</strong>
+              <span className="char-build-trio">
+                {character.classIds.map((id, i) => (
+                  <span key={id}>
+                    {i > 0 && <span className="char-build-sep">·</span>}
+                    <Link
+                      className={`char-build-class${i === 0 ? ' char-build-primary' : ''}`}
+                      to={`/classes/${id}`}
+                      title={i === 0 ? 'Primary class' : undefined}
+                    >
+                      {CLASS_BY_ID[id]?.name ?? id}
+                    </Link>
+                  </span>
+                ))}
+              </span>
+            </div>
+          ) : (
+            <p className="char-build-hint">
+              Pick a third class to earn your build name — all 560 trios have one.
+            </p>
+          )}
+          {/* the build banner already names the trio, so it isn't repeated here */}
           <p className="char-subtitle">
-            Level {character.level} {race?.name ?? character.raceId} {primary?.name ?? ''}
-            {secondaries.length > 0 && <> · {secondaries.join(' · ')}</>}
+            Level {character.level} {race?.name ?? character.raceId}
+            {!build && (
+              <>
+                {' '}
+                {primary?.name ?? ''}
+                {secondaries.length > 0 && <> · {secondaries.join(' · ')}</>}
+              </>
+            )}
           </p>
           <p className="char-meta">
             {race && ALIGNMENT_LABELS[race.alignment]}

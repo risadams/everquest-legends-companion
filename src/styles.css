@@ -565,6 +565,69 @@ table.data tbody tr:nth-child(even) td {
   border-radius: 2px;
   background: linear-gradient(90deg, #7b5f38, rgba(123, 95, 56, 0.12));
 }
+/* the trio's build name — the headline identity of the sheet */
+.char-build {
+  margin: 0.55rem 0 0.35rem;
+  padding: 0.35rem 0.8rem 0.45rem;
+  display: inline-block;
+  background: rgba(243, 232, 205, 0.92);
+  border: 1px solid #7b5f38;
+  box-shadow:
+    0 0 0 2px rgba(243, 232, 205, 0.92),
+    0 0 0 3px rgba(123, 95, 56, 0.55);
+}
+.char-build-eyebrow {
+  display: block;
+  font-variant: small-caps;
+  letter-spacing: 0.22em;
+  font-size: 0.66rem;
+  color: var(--ink-soft);
+}
+.char-build-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #6d4a17;
+}
+.char-build-trio {
+  display: block;
+  margin-top: 0.15rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.char-sheet .char-build-class {
+  color: var(--ink-soft);
+  text-decoration-color: rgba(109, 74, 23, 0.35);
+}
+.char-sheet .char-build-class:hover {
+  color: #6d4a17;
+}
+.char-build-primary::after {
+  content: '★';
+  margin-left: 0.25rem;
+  font-size: 0.7em;
+  color: var(--gold-dim);
+}
+.char-build-sep {
+  margin: 0 0.4rem;
+  color: rgba(90, 64, 32, 0.6);
+}
+.char-build-hint {
+  margin: 0.5rem 0 0.2rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+@media (max-width: 640px) {
+  .char-build-name {
+    font-size: 1.2rem;
+  }
+}
 .char-subtitle {
   font-variant: small-caps;
   letter-spacing: 0.08em;
